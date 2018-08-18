@@ -1,0 +1,21 @@
+if Lights Off
+  Lights On
+  LitOffice in background
+
+  Jeff (relieved):
+    Phew!
+
+  Evelyn (smirking):
+    You always were afraid of the dark.
+
+  Jeff (annoyed):
+    That's not true!  It's an acquired phobia!
+else
+  Lights Off
+  UnlitOffice in background
+  Evelyn is smirking
+
+  Jeff (annoyed):
+    Hey!  What'd you do that for!
+
+visit MainMenu

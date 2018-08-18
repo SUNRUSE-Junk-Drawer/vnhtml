@@ -20,42 +20,7 @@ label MainMenu
 
 menu
   Change Scene
-    Evelyn (moving):
-      Let's see what we've got for you!
-
-    Jeff leaves
-    Mountains in background
-
-    Evelyn (neutral):
-      Jeff prefers the indoors.
-
-    Evelyn (serene):
-      This is nice, though, right?
-
-    Evelyn (moving):
-      Let's go back.
-
-    visit Start
+    include changeScene
 
   Toggle Lights
-    if Lights Off
-      Lights On
-      LitOffice in background
-
-      Jeff (relieved):
-        Phew!
-
-      Evelyn (smirking):
-        You always were afraid of the dark.
-
-      Jeff (annoyed):
-        That's not true!  It's an acquired phobia!
-    else
-      Lights Off
-      UnlitOffice in background
-      Evelyn is smirking
-
-      Jeff (annoyed):
-        Hey!  What'd you do that for!
-
-    visit MainMenu
+    include toggleLights
