@@ -13,6 +13,7 @@ script:
 - npm run-script mkdirp
 - npm run-script compileBabel
 - npm run-script compileUglifyJs
+- npm run-script compileZipJs
 - npm run-script compilePkg
 - npm run-script compileZipPkg
 - npm run-script example
@@ -21,7 +22,7 @@ deploy:
     api_key:
       secure: Uuexxmz+Q3usIL7Jh067QDCcom3QvlKg4y/6xeGjG7P3bRhAfHfZi35xkxXX+patqUNNziYJR+hCoN5rnfFK+PcJG+c0AYUOewD/KK9eGzHbSKpRsBaqghiH7H5Sk6CNEYb0acAlciXuihElUWgbaYvXWaHVpM2x7v0LLG8PmZrIZm4uHuAcdc2/oQrazshm5S4qFWJzoKfHz/8dvqc9b/J7o9bVlLYZ9KzEdftbNATSCXJFxkNdcrEKuJfP5+M3zE1QwoGhq/pxBRlV2jsfJiyNlTNqgqFfITpwaj4+8x5J5OacGHowGzJRgrr0GrGwXk+Mmn1qFoxyW6aMt5bbVu+WATYW5mRwJI6Et5eHOOU74bwIpkzQ/0Hg6WIqXAGgKSHGHNtERH2MurCE9u7h2+tALveS4qSg6vTRJ216yBtNht23Lmpkrh6e9nccgfmk8sYbVaSbVzI8vcpOdZVcuHZF3I88qpaIYVSttXKQPUx9CScAJ+Td0PqdHi5W7FNkWGFumI4r0IPguqeXY5v8yu2CW42gZ3+5mGs260RUE3ppSXZPtOxQ52H6/jJhlbGEsM5zK/uJrzjQIS3OcbljCTHMpX+BS0KlpEb/2TAlrVfJb+zg8cI/D1YAyYz/rHnfo4Rkj84Va9tN0pDcxBnnQci9qVCxKP1bpS7kLleM0u4=
     file_glob: true
-    file: dist/*
+    file: dist/*.zip
     skip_cleanup: true
     on:
       tags: true

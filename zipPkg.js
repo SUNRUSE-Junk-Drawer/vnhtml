@@ -13,6 +13,10 @@ recursiveReaddir(`dist`, (error, files) => {
       continue
     }
 
+    if (file.endsWith(`.zip`)) {
+      continue
+    }
+
     const archive = archiver(`zip`)
     archive.append(fs.createReadStream(file), { name: path.relative(`dist`, file) })
     const output = fs.createWriteStream(`${file}.zip`)
