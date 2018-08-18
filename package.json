@@ -1,7 +1,7 @@
 {
   "name": "vnhtml",
   "description": "A command-line application which generates HTML/CSS visual novels from a basic scripting language.",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "bin": "dist/vnhtml.js",
   "files": [
     "dist/**/*.js"
