@@ -15,7 +15,7 @@ recursiveReaddir(`dist`, (error, files) => {
       continue
     }
 
-    archive.append(fs.createReadStream(file), { name: path.relative(`dist`, file) })
+    archive.file(file, { name: path.relative(`dist`, file) })
   }
 
   const output = fs.createWriteStream(`dist/javaScript.zip`)

@@ -18,7 +18,7 @@ recursiveReaddir(`dist`, (error, files) => {
     }
 
     const archive = archiver(`zip`)
-    archive.append(fs.createReadStream(file), { name: path.relative(`dist`, file) })
+    archive.file(file, { name: path.relative(`dist`, file) })
     const output = fs.createWriteStream(`${file}.zip`)
     output.on(`error`, error => {
       throw error
