@@ -4,8 +4,7 @@
   "version": "0.0.6",
   "bin": "dist/bin.js",
   "files": [
-    "dist/bin.js",
-    "dist/vnhtml.min.js"
+    "dist/**/*.js"
   ],
   "scripts": {
     "rimraf": "rimraf dist",
