@@ -1,5 +1,5 @@
 if Lights Off
-  Lights On
+  set Lights On
   LitOffice in background
 
   Jeff (relieved):
@@ -11,7 +11,7 @@ if Lights Off
   Jeff (annoyed):
     That's not true!  It's an acquired phobia!
 else
-  Lights Off
+  set Lights Off
   UnlitOffice in background
   Evelyn is smirking
 
