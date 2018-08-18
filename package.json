@@ -10,12 +10,12 @@
     "rimraf": "rimraf dist",
     "mkdirp": "mkdirp dist",
     "compile": "npm-run-all rimraf mkdirp compileBabel compileUglifyJs compilePkg compileBin",
-    "compileBabel": "babel src/vnhtml.js --out-file dist/vnhtml.js",
+    "compileBabel": "babel src --out-dir dist",
     "compileUglifyJs": "uglifyjs --compress --mangle --toplevel dist/vnhtml.js --output dist/vnhtml.min.js",
     "compilePkg": "pkg dist/vnhtml.min.js --output dist/vnhtml --targets node8-win-x64,node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86",
     "compileBin": "node generateBin",
     "watch": "npm-run-all rimraf mkdirp compileBabel watchBabel",
-    "watchBabel": "babel src/vnhtml.js --watch --out-file dist/vnhtml.js",
+    "watchBabel": "babel src --watch --out-dir dist",
     "example": "node dist/vnhtml.js example/main.vnh --html dist/example.html --zip dist/example.zip"
   },
   "devDependencies": {
