@@ -16,7 +16,8 @@
     "compilePkg": "pkg dist/vnhtml.min.js --output dist/vnhtml --targets node8-win-x64,node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86",
     "compileBin": "node generateBin",
     "watch": "npm-run-all rimraf mkdirp compileBabel watchBabel",
-    "watchBabel": "babel src/vnhtml.js --watch --out-file dist/vnhtml.js"
+    "watchBabel": "babel src/vnhtml.js --watch --out-file dist/vnhtml.js",
+    "example": "node dist/vnhtml.js example/main.vnh --html dist/example.html --zip dist/example.zip"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-rc.1",
