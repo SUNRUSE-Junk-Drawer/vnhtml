@@ -3,6 +3,11 @@ dist: trusty
 language: node_js
 node_js:
   - "node"
+addons:
+  apt:
+    packages:
+      - libc6:i386
+      - libstdc++6:i386
 script:
 - npm run-script rimraf
 - npm run-script mkdirp
