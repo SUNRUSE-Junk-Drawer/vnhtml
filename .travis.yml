@@ -3,11 +3,11 @@ dist: trusty
 language: node_js
 node_js:
   - "node"
-addons:
-  apt:
-    packages:
-      - libc6:i386
-      - libstdc++6:i386
+before_install:
+- sudo rm /etc/apt/sources.list.d/google-chrome.list
+- sudo dpkg --add-architecture i386
+- sudo apt-get update
+- sudo apt-get install libc6:i386 libstdc++6:i386
 script:
 - npm run-script rimraf
 - npm run-script mkdirp
