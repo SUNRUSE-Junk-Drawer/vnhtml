@@ -3,6 +3,10 @@
   "description": "A command-line application which generates HTML/CSS visual novels from a basic scripting language.",
   "version": "0.0.0",
   "bin": "dist/bin.js",
+  "files": [
+    "dist/stub.js",
+    "dist/vnhtml.min.js"
+  ],
   "scripts": {
     "rimraf": "rimraf dist",
     "mkdirp": "mkdirp dist",
