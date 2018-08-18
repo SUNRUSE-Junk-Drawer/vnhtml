@@ -2,13 +2,15 @@
   "name": "vnhtml",
   "description": "A command-line application which generates HTML/CSS visual novels from a basic scripting language.",
   "version": "0.0.0",
+  "bin": "dist/bin.js",
   "scripts": {
     "rimraf": "rimraf dist",
     "mkdirp": "mkdirp dist",
-    "compile": "npm-run-all rimraf mkdirp compileBabel compileUglifyJs compilePkg",
+    "compile": "npm-run-all rimraf mkdirp compileBabel compileUglifyJs compilePkg compileStub",
     "compileBabel": "babel src/vnhtml.js --out-file dist/vnhtml.js",
     "compileUglifyJs": "uglifyjs --compress --mangle --toplevel dist/vnhtml.js --output dist/vnhtml.min.js",
     "compilePkg": "pkg dist/vnhtml.min.js --output dist/vnhtml --targets node8-win-x64,node8-win-x86,node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86",
+    "compileStub": "node generateStub",
     "watch": "npm-run-all rimraf mkdirp compileBabel watchBabel",
     "watchBabel": "babel src/vnhtml.js --watch --out-file dist/vnhtml.js"
   },
