@@ -14,7 +14,6 @@ script:
 - npm run-script compileBabel
 - npm run-script compileUglifyJs
 - npm run-script compilePkg
-- npm run-script compileBin
 - npm run-script example
 deploy:
   - provider: releases
