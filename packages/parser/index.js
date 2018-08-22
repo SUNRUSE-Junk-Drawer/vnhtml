@@ -17,13 +17,8 @@ const classifyCharacter = character => {
 const createParser = () => ({
   line: 1,
   whiteSpaceCharacter: null,
-  text: null,
-  stack: [{
-    indentation: -1,
-    statements: [],
-    expectsIndentation: 0,
-    onLine: onLineForStatement
-  }]
+  indentation: 0,
+  text: null
 })
 
 const onLineForStatement = () => { }
