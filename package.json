@@ -6,6 +6,9 @@
   "files": [
     "dist/**/*.js"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "rimraf": "rimraf dist",
     "mkdirp": "mkdirp dist",
