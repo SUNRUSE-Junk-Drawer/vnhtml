@@ -1,4 +1,4 @@
-# vnhtml
+# @vnhtml/cli
 
 A command-line application which generates HTML/CSS visual novels from a basic
 scripting language.

@@ -8,6 +8,9 @@ before_install:
 - sudo dpkg --add-architecture i386
 - sudo apt-get update
 - sudo apt-get install libc6:i386 libstdc++6:i386
+- cd packages/cli
+install:
+- npm install
 script:
 - npm run-script rimraf
 - npm run-script mkdirp
@@ -36,3 +39,5 @@ deploy:
       tags: true
       branch: master
       repo: jameswilddev/vnhtml
+after_deploy:
+- cd ../../

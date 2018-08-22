@@ -2,16 +2,16 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Watch",
+      "label": "@vnhtml/cli - Watch",
       "type": "shell",
-      "command": "npm run-script watch",
+      "command": "npm run-script watch --prefix packages/cli",
       "group": "build",
       "problemMatcher": []
     },
     {
-      "label": "Compile",
+      "label": "@vnhtml/cli - Compile",
       "type": "shell",
-      "command": "npm run-script compile",
+      "command": "npm run-script compile --prefix packages/cli",
       "group": "build",
       "problemMatcher": []
     }
