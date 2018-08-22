@@ -3,7 +3,7 @@ import * as path from "path"
 import recursiveReaddir from "recursive-readdir"
 import archiver from "archiver"
 
-recursiveReaddir(`dist`, (error, files) => {
+recursiveReaddir(process.argv[2], (error, files) => {
   if (error) {
     throw error
   }
@@ -18,7 +18,7 @@ recursiveReaddir(`dist`, (error, files) => {
     archive.file(file, { name: path.relative(`dist`, file) })
   }
 
-  const output = fs.createWriteStream(`dist/javaScript.zip`)
+  const output = fs.createWriteStream(process.argv[3])
   output.on(`error`, error => {
     throw error
   })
