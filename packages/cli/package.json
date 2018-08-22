@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/cli",
   "description": "A command-line application which generates HTML/CSS visual novels from a basic scripting language.",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "license": "MIT",
   "bin": "index.min.js",
   "files": [
