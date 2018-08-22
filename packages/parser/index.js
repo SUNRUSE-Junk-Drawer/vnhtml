@@ -18,7 +18,8 @@ const createParser = () => ({
   line: 1,
   whiteSpaceCharacter: null,
   indentation: 0,
-  text: null
+  text: null,
+  ignoreRestOfLine: false
 })
 
 const onLineForStatement = () => { }

@@ -40,5 +40,6 @@ describe(`createParser`, () => {
   it(`returns whiteSpaceCharacter, null`, () => expect(get(`createParser`)().whiteSpaceCharacter).toBeNull())
   it(`returns indentation, 0`, () => expect(get(`createParser`)().indentation).toEqual(0))
   it(`returns text, null`, () => expect(get(`createParser`)().text).toBeNull())
+  it(`returns ignoreRestOfLine, false`, () => expect(get(`createParser`)().ignoreRestOfLine).toBe(false))
   it(`returns a new object every call`, () => expect(get(`createParser`)()).not.toBe(get(`createParser`)()))
 })
