@@ -3,9 +3,9 @@
   "description": "A command-line application which generates HTML/CSS visual novels from a basic scripting language.",
   "version": "0.0.11",
   "license": "MIT",
-  "bin": "dist/vnhtml.js",
+  "bin": "index.min.js",
   "files": [
-    "dist/**/*.js"
+    "index.min.js"
   ],
   "publishConfig": {
     "access": "public"
@@ -14,13 +14,13 @@
     "rimraf": "rimraf dist",
     "mkdirp": "mkdirp dist",
     "compile": "npm-run-all rimraf mkdirp compileBabel compileUglifyJs compilePkg compileZipPkg",
-    "compileBabel": "babel src --out-dir dist",
-    "compileUglifyJs": "babel-node uglify",
-    "compilePkg": "pkg dist/vnhtml.js --output dist/vnhtml-cli --targets node8-win-x64,node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86",
+    "compileBabel": "babel index.js --out-file index.min.js",
+    "compileUglifyJs": "uglifyjs index.min.js --compress --mangle --toplevel --output index.min.js",
+    "compilePkg": "pkg index.min.js --output dist/vnhtml-cli --targets node8-win-x64,node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86",
     "compileZipPkg": "babel-node zipPkg",
-    "watch": "npm-run-all rimraf mkdirp watchBabel",
-    "watchBabel": "babel src --watch --out-dir dist",
-    "example": "node dist/vnhtml.js example/main.vnh --html dist/example.html --zip dist/example.zip"
+    "watch": "npm-run-all watchBabel",
+    "watchBabel": "babel index.js --watch --out-file index.min.js",
+    "example": "node index.min.js example/main.vnh --html dist/example.html --zip dist/example.zip"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-rc.1",
