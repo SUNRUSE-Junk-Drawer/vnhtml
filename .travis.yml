@@ -35,10 +35,8 @@ jobs:
             tags: true
             branch: master
             repo: jameswilddev/vnhtml
-        - provider: npm
-          email: jameswilddev@outlook.com
-          api_key:
-            secure: sHJr/ZAaF9iyLQ0gNcnrm0r/USBIJ+LMyPExPrFGhyeP+UN2ENkVL7Kh/SvJ9Agy0RCJe9YuCLPTf+R/drxEsfoyEZZ9xehC5xbVp+eMbrCUMGnYYViSPbmowRqXZnZ/3SWibE660JQm/sDd+b5NnkpgPn64LDiHncXoexaZ78k9KLQ1r0nfhDbJjxUYTDsWN236b2DjPgalpiDcZRMQYa4mFma7S99Fzx7Oun6NxHz+Ahj4/vrkB7s31YUxjW2m0FL0MgyT3iPISaCAzJXrGEPd/FGQkpjt1oP9ejNJCP4LqtVKmK7f2NJ7CGiA3A8K4jwGdDoZMIULpOQKc4QPC+XjBD8GwPp094GQ7bH+oK6iSUCSprP2Y7hFxFzBlKRX6PnS/sWsUbJGUImibHKDk4aRW7xA3H879RXofIQ5Tvpsu312tswLoGNlN6xRP6oxUQEf300E7FOCMmr7NCVopCbrQah6k3xpNdIHE21oMKfWcgzneyCmPnj90qYEJ9d8fpn2Q88xw0dF3MqNi1MWPeNehqhjkLh1ha2n0jdq/PfSojRu+CIzliLlOBLqbtqiGNX5ebWln6IzTM8c7xxPV3+2t/n+2rovYDaZ99lD7I9l9qAuycwDIKZnwNr4l7MzhX4u6DsygiYFV0lq4mwWAw0dBBqtBLDxwIQ7AYiwKe4=
+        - provider: script
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/cli
           skip_cleanup: true
           on:
             tags: true
@@ -55,10 +53,8 @@ jobs:
       before_deploy:
       - cd packages/parser
       deploy:
-        - provider: npm
-          email: jameswilddev@outlook.com
-          api_key:
-            secure: sHJr/ZAaF9iyLQ0gNcnrm0r/USBIJ+LMyPExPrFGhyeP+UN2ENkVL7Kh/SvJ9Agy0RCJe9YuCLPTf+R/drxEsfoyEZZ9xehC5xbVp+eMbrCUMGnYYViSPbmowRqXZnZ/3SWibE660JQm/sDd+b5NnkpgPn64LDiHncXoexaZ78k9KLQ1r0nfhDbJjxUYTDsWN236b2DjPgalpiDcZRMQYa4mFma7S99Fzx7Oun6NxHz+Ahj4/vrkB7s31YUxjW2m0FL0MgyT3iPISaCAzJXrGEPd/FGQkpjt1oP9ejNJCP4LqtVKmK7f2NJ7CGiA3A8K4jwGdDoZMIULpOQKc4QPC+XjBD8GwPp094GQ7bH+oK6iSUCSprP2Y7hFxFzBlKRX6PnS/sWsUbJGUImibHKDk4aRW7xA3H879RXofIQ5Tvpsu312tswLoGNlN6xRP6oxUQEf300E7FOCMmr7NCVopCbrQah6k3xpNdIHE21oMKfWcgzneyCmPnj90qYEJ9d8fpn2Q88xw0dF3MqNi1MWPeNehqhjkLh1ha2n0jdq/PfSojRu+CIzliLlOBLqbtqiGNX5ebWln6IzTM8c7xxPV3+2t/n+2rovYDaZ99lD7I9l9qAuycwDIKZnwNr4l7MzhX4u6DsygiYFV0lq4mwWAw0dBBqtBLDxwIQ7AYiwKe4=
+        - provider: script
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/parser
           skip_cleanup: true
           on:
             tags: true
