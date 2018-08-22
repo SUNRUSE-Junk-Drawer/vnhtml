@@ -13,7 +13,6 @@ script:
 - npm run-script mkdirp
 - npm run-script compileBabel
 - npm run-script compileUglifyJs
-- npm run-script compileZipJs
 - npm run-script compilePkg
 - npm run-script compileZipPkg
 - npm run-script example
