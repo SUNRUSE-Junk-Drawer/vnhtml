@@ -14,6 +14,20 @@
       "command": "npm run-script compile --prefix packages/cli",
       "group": "build",
       "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/parser - Watch",
+      "type": "shell",
+      "command": "npm run-script watch --prefix packages/parser",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/parser - Compile",
+      "type": "shell",
+      "command": "npm run-script compile --prefix packages/parser",
+      "group": "build",
+      "problemMatcher": []
     }
   ]
 }

@@ -3,42 +3,66 @@ dist: trusty
 language: node_js
 node_js:
   - "node"
-before_install:
-- sudo rm /etc/apt/sources.list.d/google-chrome.list
-- sudo dpkg --add-architecture i386
-- sudo apt-get update
-- sudo apt-get install libc6:i386 libstdc++6:i386
-install:
-- npm install --prefix packages/cli
-script:
-- npm run-script rimraf --prefix packages/cli
-- npm run-script mkdirp --prefix packages/cli
-- npm run-script compileBabel --prefix packages/cli
-- npm run-script compileUglifyJs --prefix packages/cli
-- npm run-script compilePkg --prefix packages/cli
-- npm run-script compileZipPkg --prefix packages/cli
-- npm run-script example --prefix packages/cli
-before_deploy:
-- cd packages/cli
-deploy:
-  - provider: releases
-    api_key:
-      secure: Uuexxmz+Q3usIL7Jh067QDCcom3QvlKg4y/6xeGjG7P3bRhAfHfZi35xkxXX+patqUNNziYJR+hCoN5rnfFK+PcJG+c0AYUOewD/KK9eGzHbSKpRsBaqghiH7H5Sk6CNEYb0acAlciXuihElUWgbaYvXWaHVpM2x7v0LLG8PmZrIZm4uHuAcdc2/oQrazshm5S4qFWJzoKfHz/8dvqc9b/J7o9bVlLYZ9KzEdftbNATSCXJFxkNdcrEKuJfP5+M3zE1QwoGhq/pxBRlV2jsfJiyNlTNqgqFfITpwaj4+8x5J5OacGHowGzJRgrr0GrGwXk+Mmn1qFoxyW6aMt5bbVu+WATYW5mRwJI6Et5eHOOU74bwIpkzQ/0Hg6WIqXAGgKSHGHNtERH2MurCE9u7h2+tALveS4qSg6vTRJ216yBtNht23Lmpkrh6e9nccgfmk8sYbVaSbVzI8vcpOdZVcuHZF3I88qpaIYVSttXKQPUx9CScAJ+Td0PqdHi5W7FNkWGFumI4r0IPguqeXY5v8yu2CW42gZ3+5mGs260RUE3ppSXZPtOxQ52H6/jJhlbGEsM5zK/uJrzjQIS3OcbljCTHMpX+BS0KlpEb/2TAlrVfJb+zg8cI/D1YAyYz/rHnfo4Rkj84Va9tN0pDcxBnnQci9qVCxKP1bpS7kLleM0u4=
-    file_glob: true
-    file: dist/*.zip
-    skip_cleanup: true
-    on:
-      tags: true
-      branch: master
-      repo: jameswilddev/vnhtml
-  - provider: npm
-    email: jameswilddev@outlook.com
-    api_key:
-      secure: sHJr/ZAaF9iyLQ0gNcnrm0r/USBIJ+LMyPExPrFGhyeP+UN2ENkVL7Kh/SvJ9Agy0RCJe9YuCLPTf+R/drxEsfoyEZZ9xehC5xbVp+eMbrCUMGnYYViSPbmowRqXZnZ/3SWibE660JQm/sDd+b5NnkpgPn64LDiHncXoexaZ78k9KLQ1r0nfhDbJjxUYTDsWN236b2DjPgalpiDcZRMQYa4mFma7S99Fzx7Oun6NxHz+Ahj4/vrkB7s31YUxjW2m0FL0MgyT3iPISaCAzJXrGEPd/FGQkpjt1oP9ejNJCP4LqtVKmK7f2NJ7CGiA3A8K4jwGdDoZMIULpOQKc4QPC+XjBD8GwPp094GQ7bH+oK6iSUCSprP2Y7hFxFzBlKRX6PnS/sWsUbJGUImibHKDk4aRW7xA3H879RXofIQ5Tvpsu312tswLoGNlN6xRP6oxUQEf300E7FOCMmr7NCVopCbrQah6k3xpNdIHE21oMKfWcgzneyCmPnj90qYEJ9d8fpn2Q88xw0dF3MqNi1MWPeNehqhjkLh1ha2n0jdq/PfSojRu+CIzliLlOBLqbtqiGNX5ebWln6IzTM8c7xxPV3+2t/n+2rovYDaZ99lD7I9l9qAuycwDIKZnwNr4l7MzhX4u6DsygiYFV0lq4mwWAw0dBBqtBLDxwIQ7AYiwKe4=
-    skip_cleanup: true
-    on:
-      tags: true
-      branch: master
-      repo: jameswilddev/vnhtml
-after_deploy:
-- cd ../../
+
+jobs:
+  include:
+    - stage: "@vnhtml/cli"
+      before_install:
+      - sudo rm /etc/apt/sources.list.d/google-chrome.list
+      - sudo dpkg --add-architecture i386
+      - sudo apt-get update
+      - sudo apt-get install libc6:i386 libstdc++6:i386
+      install:
+      - npm install --prefix packages/cli
+      script:
+      - npm run-script rimraf --prefix packages/cli
+      - npm run-script mkdirp --prefix packages/cli
+      - npm run-script compileBabel --prefix packages/cli
+      - npm run-script compileUglifyJs --prefix packages/cli
+      - npm run-script compilePkg --prefix packages/cli
+      - npm run-script compileZipPkg --prefix packages/cli
+      - npm run-script example --prefix packages/cli
+      before_deploy:
+      - cd packages/cli
+      deploy:
+        - provider: releases
+          api_key:
+            secure: Uuexxmz+Q3usIL7Jh067QDCcom3QvlKg4y/6xeGjG7P3bRhAfHfZi35xkxXX+patqUNNziYJR+hCoN5rnfFK+PcJG+c0AYUOewD/KK9eGzHbSKpRsBaqghiH7H5Sk6CNEYb0acAlciXuihElUWgbaYvXWaHVpM2x7v0LLG8PmZrIZm4uHuAcdc2/oQrazshm5S4qFWJzoKfHz/8dvqc9b/J7o9bVlLYZ9KzEdftbNATSCXJFxkNdcrEKuJfP5+M3zE1QwoGhq/pxBRlV2jsfJiyNlTNqgqFfITpwaj4+8x5J5OacGHowGzJRgrr0GrGwXk+Mmn1qFoxyW6aMt5bbVu+WATYW5mRwJI6Et5eHOOU74bwIpkzQ/0Hg6WIqXAGgKSHGHNtERH2MurCE9u7h2+tALveS4qSg6vTRJ216yBtNht23Lmpkrh6e9nccgfmk8sYbVaSbVzI8vcpOdZVcuHZF3I88qpaIYVSttXKQPUx9CScAJ+Td0PqdHi5W7FNkWGFumI4r0IPguqeXY5v8yu2CW42gZ3+5mGs260RUE3ppSXZPtOxQ52H6/jJhlbGEsM5zK/uJrzjQIS3OcbljCTHMpX+BS0KlpEb/2TAlrVfJb+zg8cI/D1YAyYz/rHnfo4Rkj84Va9tN0pDcxBnnQci9qVCxKP1bpS7kLleM0u4=
+          file_glob: true
+          file: dist/*.zip
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+            repo: jameswilddev/vnhtml
+        - provider: npm
+          email: jameswilddev@outlook.com
+          api_key:
+            secure: sHJr/ZAaF9iyLQ0gNcnrm0r/USBIJ+LMyPExPrFGhyeP+UN2ENkVL7Kh/SvJ9Agy0RCJe9YuCLPTf+R/drxEsfoyEZZ9xehC5xbVp+eMbrCUMGnYYViSPbmowRqXZnZ/3SWibE660JQm/sDd+b5NnkpgPn64LDiHncXoexaZ78k9KLQ1r0nfhDbJjxUYTDsWN236b2DjPgalpiDcZRMQYa4mFma7S99Fzx7Oun6NxHz+Ahj4/vrkB7s31YUxjW2m0FL0MgyT3iPISaCAzJXrGEPd/FGQkpjt1oP9ejNJCP4LqtVKmK7f2NJ7CGiA3A8K4jwGdDoZMIULpOQKc4QPC+XjBD8GwPp094GQ7bH+oK6iSUCSprP2Y7hFxFzBlKRX6PnS/sWsUbJGUImibHKDk4aRW7xA3H879RXofIQ5Tvpsu312tswLoGNlN6xRP6oxUQEf300E7FOCMmr7NCVopCbrQah6k3xpNdIHE21oMKfWcgzneyCmPnj90qYEJ9d8fpn2Q88xw0dF3MqNi1MWPeNehqhjkLh1ha2n0jdq/PfSojRu+CIzliLlOBLqbtqiGNX5ebWln6IzTM8c7xxPV3+2t/n+2rovYDaZ99lD7I9l9qAuycwDIKZnwNr4l7MzhX4u6DsygiYFV0lq4mwWAw0dBBqtBLDxwIQ7AYiwKe4=
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+            repo: jameswilddev/vnhtml
+      after_deploy:
+      - cd ../../
+    - stage: "@vnhtml/parser"
+      install:
+      - npm install --prefix packages/parser
+      script:
+      - npm run-script compileBabel --prefix packages/parser
+      - npm run-script compileUglifyJs --prefix packages/parser
+      before_deploy:
+      - cd packages/parser
+      deploy:
+        - provider: npm
+          email: jameswilddev@outlook.com
+          api_key:
+            secure: sHJr/ZAaF9iyLQ0gNcnrm0r/USBIJ+LMyPExPrFGhyeP+UN2ENkVL7Kh/SvJ9Agy0RCJe9YuCLPTf+R/drxEsfoyEZZ9xehC5xbVp+eMbrCUMGnYYViSPbmowRqXZnZ/3SWibE660JQm/sDd+b5NnkpgPn64LDiHncXoexaZ78k9KLQ1r0nfhDbJjxUYTDsWN236b2DjPgalpiDcZRMQYa4mFma7S99Fzx7Oun6NxHz+Ahj4/vrkB7s31YUxjW2m0FL0MgyT3iPISaCAzJXrGEPd/FGQkpjt1oP9ejNJCP4LqtVKmK7f2NJ7CGiA3A8K4jwGdDoZMIULpOQKc4QPC+XjBD8GwPp094GQ7bH+oK6iSUCSprP2Y7hFxFzBlKRX6PnS/sWsUbJGUImibHKDk4aRW7xA3H879RXofIQ5Tvpsu312tswLoGNlN6xRP6oxUQEf300E7FOCMmr7NCVopCbrQah6k3xpNdIHE21oMKfWcgzneyCmPnj90qYEJ9d8fpn2Q88xw0dF3MqNi1MWPeNehqhjkLh1ha2n0jdq/PfSojRu+CIzliLlOBLqbtqiGNX5ebWln6IzTM8c7xxPV3+2t/n+2rovYDaZ99lD7I9l9qAuycwDIKZnwNr4l7MzhX4u6DsygiYFV0lq4mwWAw0dBBqtBLDxwIQ7AYiwKe4=
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+            repo: jameswilddev/vnhtml
+      after_deploy:
+      - cd ../../

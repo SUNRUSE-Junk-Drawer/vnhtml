@@ -1,0 +1,28 @@
+{
+  "name": "@vnhtml/parser",
+  "description": "A module which parses a basic scripting language for visual novels.",
+  "version": "0.0.12",
+  "license": "MIT",
+  "bin": "index.min.js",
+  "files": [
+    "index.min.js"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "compile": "npm-run-all compileBabel compileUglifyJs",
+    "compileBabel": "babel index.js --out-file index.min.js",
+    "compileUglifyJs": "uglifyjs index.min.js --compress --mangle --toplevel --output index.min.js",
+    "watch": "npm-run-all watchBabel",
+    "watchBabel": "babel index.js --watch --out-file index.min.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-rc.1",
+    "@babel/core": "^7.0.0-rc.1",
+    "@babel/node": "^7.0.0-rc.1",
+    "@babel/preset-env": "^7.0.0-rc.1",
+    "npm-run-all": "^4.1.3",
+    "uglify-js": "^3.4.7"
+  }
+}
