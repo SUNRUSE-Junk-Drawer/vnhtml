@@ -13,7 +13,7 @@
     "compileBabel": "babel src --out-dir dist",
     "compileUglifyJs": "babel-node uglify",
     "compileZipJs": "babel-node zipJs",
-    "compilePkg": "pkg dist/vnhtml.js --output dist/vnhtml --targets node8-win-x64,node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86",
+    "compilePkg": "pkg dist/vnhtml.js --output dist/vnhtml-cli --targets node8-win-x64,node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86",
     "compileZipPkg": "babel-node zipPkg",
     "watch": "npm-run-all rimraf mkdirp watchBabel",
     "watchBabel": "babel src --watch --out-dir dist",
