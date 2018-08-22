@@ -1,4 +1,8 @@
 const classifyCharacter = character => {
+  if (character == `#`) {
+    return `lineComment`
+  }
+
   if (character.trim()) {
     return `glyph`
   }

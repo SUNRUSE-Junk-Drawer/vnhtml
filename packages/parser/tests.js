@@ -31,6 +31,7 @@ describe(`classifyCharacter`, () => {
   run(`\t`, `whiteSpace`)
   run(`\r`, `newLine`)
   run(`\n`, `newLine`)
+  run(`#`, `lineComment`)
 })
 
 describe(`createParser`, () => {
