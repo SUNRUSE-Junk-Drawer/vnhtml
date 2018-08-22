@@ -50,6 +50,7 @@ jobs:
       script:
       - npm run-script compileBabel --prefix packages/parser
       - npm run-script compileUglifyJs --prefix packages/parser
+      - npm test --prefix packages/parser
       before_deploy:
       - cd packages/parser
       deploy:
