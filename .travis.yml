@@ -34,7 +34,7 @@ jobs:
             branch: master
             repo: jameswilddev/vnhtml
         - provider: script
-          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/cli
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/cli
           skip_cleanup: true
           on:
             tags: true
@@ -49,7 +49,7 @@ jobs:
       - npm test --prefix packages/collector
       deploy:
         - provider: script
-          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/collector
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/collector
           skip_cleanup: true
           on:
             tags: true
@@ -64,7 +64,7 @@ jobs:
       - npm test --prefix packages/finite-state-machine-generator
       deploy:
         - provider: script
-          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/finite-state-machine-generator
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/finite-state-machine-generator
           skip_cleanup: true
           on:
             tags: true
@@ -79,7 +79,7 @@ jobs:
       - npm test --prefix packages/html-generator
       deploy:
         - provider: script
-          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/html-generator
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/html-generator
           skip_cleanup: true
           on:
             tags: true
@@ -94,7 +94,7 @@ jobs:
       - npm test --prefix packages/lexer
       deploy:
         - provider: script
-          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/lexer
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/lexer
           skip_cleanup: true
           on:
             tags: true
@@ -109,7 +109,7 @@ jobs:
       - npm test --prefix packages/parser
       deploy:
         - provider: script
-          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/parser
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/parser
           skip_cleanup: true
           on:
             tags: true
@@ -124,7 +124,7 @@ jobs:
       - npm test --prefix packages/pretty-printer
       deploy:
         - provider: script
-          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/pretty-printer
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/pretty-printer
           skip_cleanup: true
           on:
             tags: true
