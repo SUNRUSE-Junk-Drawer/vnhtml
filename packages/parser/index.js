@@ -84,3 +84,46 @@ const indenterCheckWhiteSpace = indentation => {
   
   return indentation[0]
 }
+
+const indenterLine = (indenter, lineNumber, lineText) => {
+  const indentation = indenterExtractIndentation(lineText)
+  const type = indenterCheckWhiteSpace(indentation)
+  switch (type) {
+    case `none`:
+      while (indenter.stack.length > 1) {
+        indenter.stack.pop()
+        indenter.onOutdent(indenter.context, lineNumber)
+      }
+      indenter.onLine(indenter.context, lineNumber, indenterExtractText(lineText))
+      break
+      
+    case `inconsistent`:
+      indenter.onError(indenter.context, lineNumber, `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`)
+      break
+      
+    default:
+      if (!indenter.indentationCharacter) {
+        indenter.indentationCharacter = type
+      } else if (type != indenter.indentationCharacter) {
+        indenter.onError(indenter.context, lineNumber, `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`)
+        return
+      }
+    
+      if (type.length > indenter.stack[indenter.stack.length - 1]) {
+        indenter.stack.push(type.length)
+        indenter.onIndent(indenter.context, lineNumber)
+      } else {
+        if (indenter.stack.indexOf(type.length) == -1) {
+          indenter.onError(indenter.context, lineNumber, `Outdent to level not previously indented to`)
+          return
+        } else {
+          while (type.length < indenter.stack[indenter.stack.length - 1]) {
+            indenter.stack.pop()
+            indenter.onOutdent(indenter.context, lineNumber)
+          }
+        }
+      }
+      indenter.onLine(indenter.context, lineNumber, indenterExtractText(lineText))
+      break
+  }
+}
