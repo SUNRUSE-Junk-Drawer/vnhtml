@@ -16,6 +16,62 @@
       "problemMatcher": []
     },
     {
+      "label": "@vnhtml/collector - Watch",
+      "type": "shell",
+      "command": "npm run-script watch --prefix packages/collector",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/collector - Compile",
+      "type": "shell",
+      "command": "npm run-script compile --prefix packages/collector",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/finite-state-machine-generator - Watch",
+      "type": "shell",
+      "command": "npm run-script watch --prefix packages/finite-state-machine-generator",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/finite-state-machine-generator - Compile",
+      "type": "shell",
+      "command": "npm run-script compile --prefix packages/finite-state-machine-generator",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/html-generator - Watch",
+      "type": "shell",
+      "command": "npm run-script watch --prefix packages/html-generator",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/html-generator - Compile",
+      "type": "shell",
+      "command": "npm run-script compile --prefix packages/html-generator",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/lexer - Watch",
+      "type": "shell",
+      "command": "npm run-script watch --prefix packages/lexer",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/lexer - Compile",
+      "type": "shell",
+      "command": "npm run-script compile --prefix packages/lexer",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/parser - Watch",
       "type": "shell",
       "command": "npm run-script watch --prefix packages/parser",
@@ -26,6 +82,20 @@
       "label": "@vnhtml/parser - Compile",
       "type": "shell",
       "command": "npm run-script compile --prefix packages/parser",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/pretty-printer - Watch",
+      "type": "shell",
+      "command": "npm run-script watch --prefix packages/pretty-printer",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/pretty-printer - Compile",
+      "type": "shell",
+      "command": "npm run-script compile --prefix packages/pretty-printer",
       "group": "build",
       "problemMatcher": []
     }

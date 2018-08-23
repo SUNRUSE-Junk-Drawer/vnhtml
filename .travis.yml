@@ -40,6 +40,66 @@ jobs:
             tags: true
             branch: master
             repo: jameswilddev/vnhtml
+    - stage: "@vnhtml/collector"
+      install:
+      - npm install --prefix packages/collector
+      script:
+      - npm run-script compileBabel --prefix packages/collector
+      - npm run-script compileUglifyJs --prefix packages/collector
+      - npm test --prefix packages/collector
+      deploy:
+        - provider: script
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/collector
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+            repo: jameswilddev/vnhtml
+    - stage: "@vnhtml/finite-state-machine-generator"
+      install:
+      - npm install --prefix packages/finite-state-machine-generator
+      script:
+      - npm run-script compileBabel --prefix packages/finite-state-machine-generator
+      - npm run-script compileUglifyJs --prefix packages/finite-state-machine-generator
+      - npm test --prefix packages/finite-state-machine-generator
+      deploy:
+        - provider: script
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/finite-state-machine-generator
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+            repo: jameswilddev/vnhtml
+    - stage: "@vnhtml/html-generator"
+      install:
+      - npm install --prefix packages/html-generator
+      script:
+      - npm run-script compileBabel --prefix packages/html-generator
+      - npm run-script compileUglifyJs --prefix packages/html-generator
+      - npm test --prefix packages/html-generator
+      deploy:
+        - provider: script
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/html-generator
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+            repo: jameswilddev/vnhtml
+    - stage: "@vnhtml/lexer"
+      install:
+      - npm install --prefix packages/lexer
+      script:
+      - npm run-script compileBabel --prefix packages/lexer
+      - npm run-script compileUglifyJs --prefix packages/lexer
+      - npm test --prefix packages/lexer
+      deploy:
+        - provider: script
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/lexer
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+            repo: jameswilddev/vnhtml
     - stage: "@vnhtml/parser"
       install:
       - npm install --prefix packages/parser
@@ -50,6 +110,21 @@ jobs:
       deploy:
         - provider: script
           script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/parser
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+            repo: jameswilddev/vnhtml
+    - stage: "@vnhtml/pretty-printer"
+      install:
+      - npm install --prefix packages/pretty-printer
+      script:
+      - npm run-script compileBabel --prefix packages/pretty-printer
+      - npm run-script compileUglifyJs --prefix packages/pretty-printer
+      - npm test --prefix packages/pretty-printer
+      deploy:
+        - provider: script
+          script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/pretty-printer
           skip_cleanup: true
           on:
             tags: true
