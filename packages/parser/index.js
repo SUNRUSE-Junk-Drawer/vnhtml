@@ -1,3 +1,11 @@
+const linerCreate = (context, onLine) => ({
+  line: 1,
+  text: ``,
+  ignoreRestOfLine: false,
+  context,
+  onLine
+})
+
 const linerClassifyCharacter = character => {
   switch (character) {
     case `#`:
@@ -11,13 +19,5 @@ const linerClassifyCharacter = character => {
       return `partOfLine`
   }
 }
-
-const linerCreate = (context, onLine) => ({
-  line: 1,
-  text: ``,
-  ignoreRestOfLine: false,
-  context,
-  onLine
-})
 
 const linerTextNotEmpty = text => !text.trim()
