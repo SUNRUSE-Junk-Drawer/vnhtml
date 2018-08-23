@@ -19,5 +19,3 @@ const linerCreate = (context, onLine) => ({
   context,
   onLine
 })
-
-const onLineForStatement = () => { }
