@@ -438,10 +438,10 @@ describe(`indenterLine`, () => {
     onOutdent,
     onError
   })
-  
+
   describe(`when no indentation character has been found`, () => {
     beforeEach(() => indenter.indentationCharacter = null)
-    
+
     describe(`when the given line does not have indentation`, () => {
       beforeEach(() => {
         indenterCheckWhiteSpace.and.returnValue(`none`)
@@ -468,7 +468,7 @@ describe(`indenterLine`, () => {
       it(`does not call onOutdent`, () => expect(onOutdent).not.toHaveBeenCalled())
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
     })
-    
+
     describe(`when the given line has inconsistent indentation`, () => {
       beforeEach(() => {
         indenterCheckWhiteSpace.and.returnValue(`inconsistent`)
@@ -494,7 +494,7 @@ describe(`indenterLine`, () => {
       it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
       it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
     })
-    
+
     describe(`when the given line has indentation`, () => {
       beforeEach(() => {
         indenterCheckWhiteSpace.and.returnValue(`Test Indentation Character`)
@@ -525,10 +525,10 @@ describe(`indenterLine`, () => {
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
     })
   })
-  
+
   describe(`when an indentation character has been found`, () => {
     beforeEach(() => indenter.indentationCharacter = `Test Indentation Character`)
-    
+
     describe(`when the given line does not have indentation`, () => {
       beforeEach(() => {
         indenter.stack = [0, 14, 27, 36, 42]
@@ -569,7 +569,7 @@ describe(`indenterLine`, () => {
       it(`calls onOutdent before onLine`, () => expect(numberOfOnOutdentCallsAtTimeOfCallingOnLine).toEqual(4))
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
     })
-    
+
     describe(`when the given line has inconsistent indentation`, () => {
       beforeEach(() => {
         indenter.stack = [0, 14, 27, 36, 42]
@@ -596,7 +596,7 @@ describe(`indenterLine`, () => {
       it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
       it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
     })
-    
+
     describe(`when the given line has indentation inconsistent with the rest of the file`, () => {
       beforeEach(() => indenterCheckWhiteSpace.and.returnValue(`Test Other Indentation Character`))
       describe(`when the indentation is greater than the top of the stack`, () => {
@@ -624,7 +624,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
       })
-      
+
       describe(`when the indentation matches the top of the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 10, 26]
@@ -650,7 +650,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
       })
-      
+
       describe(`when the indentation is between the top and first under on the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 10, 28]
@@ -676,7 +676,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
       })
-      
+
       describe(`when the indentation is the first under on the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 26, 31]
@@ -702,7 +702,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
       })
-      
+
       describe(`when the indentation is between the first and second under on the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 29, 31]
@@ -728,7 +728,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
       })
-      
+
       describe(`when the indentation is the second under on the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 26, 29, 31]
@@ -755,12 +755,12 @@ describe(`indenterLine`, () => {
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
       })
     })
-    
+
     describe(`when the given line has indentation`, () => {
       beforeEach(() => {
         indenterCheckWhiteSpace.and.returnValue(`Test Indentation Character`)
       })
-      
+
       describe(`when the indentation is greater than the top of the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 10, 24]
@@ -790,7 +790,7 @@ describe(`indenterLine`, () => {
         it(`does not call onOutdent`, () => expect(onOutdent).not.toHaveBeenCalled())
         it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
       })
-      
+
       describe(`when the indentation matches the top of the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 10, 26]
@@ -817,7 +817,7 @@ describe(`indenterLine`, () => {
         it(`does not call onOutdent`, () => expect(onOutdent).not.toHaveBeenCalled())
         it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
       })
-      
+
       describe(`when the indentation is between the top and first under on the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 10, 28]
@@ -843,7 +843,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot outdent to a level they have not previously indented to`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Outdent to level not previously indented to`))
       })
-      
+
       describe(`when the indentation is the first under on the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 26, 31]
@@ -873,7 +873,7 @@ describe(`indenterLine`, () => {
         it(`calls onOutdent before onLine`, () => expect(numberOfOnOutdentCallsAtTimeOfCallingOnLine).toEqual(1))
         it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
       })
-      
+
       describe(`when the indentation is between the first and second under on the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 29, 31]
@@ -899,7 +899,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot outdent to a level they have not previously indented to`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Outdent to level not previously indented to`))
       })
-      
+
       describe(`when the indentation is the second under on the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 26, 29, 31]
