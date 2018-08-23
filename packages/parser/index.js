@@ -59,6 +59,7 @@ const linerEndOfFile = liner => {
 
 const indenterCreate = (context, onLine, onIndent, onOutdent, onError) => ({
   stack: [0],
+  indentationCharacter: null,
   context,
   onLine,
   onIndent,
