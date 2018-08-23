@@ -1,7 +1,7 @@
 const linerCreate = (context, onLine) => ({
   line: 1,
   text: ``,
-  ignoreRestOfLine: false,
+  lineComment: null,
   context,
   onLine
 })
@@ -25,7 +25,11 @@ const linerTextNotEmpty = text => !text.trim()
 const linerCharacter = (liner, character) => {
   switch (linerClassifyCharacter(character)) {
     case `lineComment`:
-      liner.ignoreRestOfLine = true
+      if (liner.lineComment == null) {
+        liner.lineComment = character
+      } else {
+        liner.lineComment += character
+      }
       break
 
     case `newLine`:
@@ -34,12 +38,14 @@ const linerCharacter = (liner, character) => {
       }
       liner.line++
       liner.text = ``
-      liner.ignoreRestOfLine = false
+      liner.lineComment = null
       break
 
     case `partOfLine`:
-      if (!liner.ignoreRestOfLine) {
+      if (liner.lineComment == null) {
         liner.text += character
+      } else {
+        liner.lineComment += character
       }
       break
   }

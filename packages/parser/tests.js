@@ -41,7 +41,7 @@ describe(`linerCreate`, () => {
   it(`returns an object`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(jasmine.any(Object)))
   it(`returns line, 1`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).line).toEqual(1))
   it(`returns text, empty`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).text).toEqual(``))
-  it(`returns ignoreRestOfLine, false`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).ignoreRestOfLine).toBe(false))
+  it(`returns lineComment, null`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).lineComment).toBeNull())
   it(`returns context, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).context).toEqual(`Test Context`))
   it(`returns onLine, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).onLine).toEqual(`Test On Line`))
   it(`returns a new object every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).not.toBe(get(`linerCreate`)(`Test Context`, `Test On Line`)))
@@ -93,8 +93,8 @@ describe(`linerCharacter`, () => {
     onLine
   })
 
-  describe(`when not ignoring the rest of the line`, () => {
-    beforeEach(() => liner.ignoreRestOfLine = false)
+  describe(`when not inside a line comment`, () => {
+    beforeEach(() => liner.lineComment = null)
     describe(`when given a line comment`, () => {
       beforeEach(() => {
         linerClassifyCharacter.and.returnValue(`lineComment`)
@@ -102,7 +102,7 @@ describe(`linerCharacter`, () => {
       })
       it(`does not change line`, () => expect(liner.line).toEqual(2368))
       it(`does not change text`, () => expect(liner.text).toEqual(`Test Text`))
-      it(`starts ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(true))
+      it(`starts a line comment`, () => expect(liner.lineComment).toEqual(`Test Character`))
       it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
       it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
@@ -120,7 +120,7 @@ describe(`linerCharacter`, () => {
         })
         it(`increments line`, () => expect(liner.line).toEqual(2369))
         it(`empties text`, () => expect(liner.text).toEqual(``))
-        it(`does not start ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+        it(`does not start a line comment`, () => expect(liner.lineComment).toBeNull())
         it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
         it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
@@ -137,7 +137,7 @@ describe(`linerCharacter`, () => {
         })
         it(`increments line`, () => expect(liner.line).toEqual(2369))
         it(`empties text`, () => expect(liner.text).toEqual(``))
-        it(`does not start ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+        it(`does not start a line comment`, () => expect(liner.lineComment).toBeNull())
         it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
         it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
@@ -158,7 +158,7 @@ describe(`linerCharacter`, () => {
       })
       it(`does not change line`, () => expect(liner.line).toEqual(2368))
       it(`appends it to the end of text`, () => expect(liner.text).toEqual(`Test TextTest Character`))
-      it(`does not start ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+      it(`does not start a line comment`, () => expect(liner.lineComment).toBeNull())
       it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
       it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
@@ -168,8 +168,8 @@ describe(`linerCharacter`, () => {
     })
   })
 
-  describe(`when ignoring the rest of the line`, () => {
-    beforeEach(() => liner.ignoreRestOfLine = true)
+  describe(`when in a line comment`, () => {
+    beforeEach(() => liner.lineComment = `Test Line Comment`)
     describe(`when given a line comment`, () => {
       beforeEach(() => {
         linerClassifyCharacter.and.returnValue(`lineComment`)
@@ -177,7 +177,7 @@ describe(`linerCharacter`, () => {
       })
       it(`does not change line`, () => expect(liner.line).toEqual(2368))
       it(`does not change text`, () => expect(liner.text).toEqual(`Test Text`))
-      it(`continues ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(true))
+      it(`appends it to the end of the line comment`, () => expect(liner.lineComment).toEqual(`Test Line CommentTest Character`))
       it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
       it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
@@ -195,7 +195,7 @@ describe(`linerCharacter`, () => {
         })
         it(`increments line`, () => expect(liner.line).toEqual(2369))
         it(`empties text`, () => expect(liner.text).toEqual(``))
-        it(`stops ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+        it(`ends the line comment`, () => expect(liner.lineComment).toBeNull())
         it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
         it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
@@ -212,7 +212,7 @@ describe(`linerCharacter`, () => {
         })
         it(`increments line`, () => expect(liner.line).toEqual(2369))
         it(`empties text`, () => expect(liner.text).toEqual(``))
-        it(`stops ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+        it(`ends the line comment`, () => expect(liner.lineComment).toBeNull())
         it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
         it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
@@ -233,7 +233,7 @@ describe(`linerCharacter`, () => {
       })
       it(`does not change line`, () => expect(liner.line).toEqual(2368))
       it(`does not change text`, () => expect(liner.text).toEqual(`Test Text`))
-      it(`continues ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(true))
+      it(`appends it to the end of the line comment`, () => expect(liner.lineComment).toEqual(`Test Line CommentTest Character`))
       it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
       it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
@@ -261,8 +261,8 @@ describe(`linerEndOfFile`, () => {
     onLine
   })
 
-  describe(`when not ignoring the rest of the line`, () => {
-    beforeEach(() => liner.ignoreRestOfLine = false)
+  describe(`when not in a line comment`, () => {
+    beforeEach(() => liner.lineComment = null)
 
     describe(`when the accumulated text is empty`, () => {
       beforeEach(() => {
@@ -290,8 +290,8 @@ describe(`linerEndOfFile`, () => {
     })
   })
 
-  describe(`when ignoring the rest of the line`, () => {
-    beforeEach(() => liner.ignoreRestOfLine = true)
+  describe(`when in a line comment`, () => {
+    beforeEach(() => liner.lineComment = `Test Line Comment`)
 
     describe(`when the accumulated text is empty`, () => {
       beforeEach(() => {
