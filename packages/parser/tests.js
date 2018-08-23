@@ -319,3 +319,16 @@ describe(`linerEndOfFile`, () => {
     })
   })
 })
+
+describe(`indenterCreate`, () => {
+  it(`returns an object`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)).toEqual(jasmine.any(Object)))
+  it(`returns stack, an array containing zero`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).stack).toEqual([0]))
+  it(`returns context, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).context).toEqual(`Test Context`))
+  it(`returns onLine, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).onLine).toEqual(`Test On Line`))
+  it(`returns onIndent, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).onIndent).toEqual(`Test On Indent`))
+  it(`returns onOutdent, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).onOutdent).toEqual(`Test On Outdent`))
+  it(`returns onError, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).onError).toEqual(`Test On Error`))
+  it(`returns a new object every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)).not.toBe(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)))
+  it(`returns a new stack every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).stack).not.toBe(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).stack))
+  it(`returns the same value every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)).toEqual(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)))
+})

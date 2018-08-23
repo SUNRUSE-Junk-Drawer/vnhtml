@@ -56,3 +56,12 @@ const linerEndOfFile = liner => {
     liner.onLine(liner.context, liner.line, liner.text)
   }
 }
+
+const indenterCreate = (context, onLine, onIndent, onOutdent, onError) => ({
+  stack: [0],
+  context,
+  onLine,
+  onIndent,
+  onOutdent,
+  onError
+})
