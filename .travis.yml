@@ -22,14 +22,12 @@ jobs:
       - npm run-script compilePkg --prefix packages/cli
       - npm run-script compileZipPkg --prefix packages/cli
       - npm run-script example --prefix packages/cli
-      before_deploy:
-      - cd packages/cli
       deploy:
         - provider: releases
           api_key:
             secure: Uuexxmz+Q3usIL7Jh067QDCcom3QvlKg4y/6xeGjG7P3bRhAfHfZi35xkxXX+patqUNNziYJR+hCoN5rnfFK+PcJG+c0AYUOewD/KK9eGzHbSKpRsBaqghiH7H5Sk6CNEYb0acAlciXuihElUWgbaYvXWaHVpM2x7v0LLG8PmZrIZm4uHuAcdc2/oQrazshm5S4qFWJzoKfHz/8dvqc9b/J7o9bVlLYZ9KzEdftbNATSCXJFxkNdcrEKuJfP5+M3zE1QwoGhq/pxBRlV2jsfJiyNlTNqgqFfITpwaj4+8x5J5OacGHowGzJRgrr0GrGwXk+Mmn1qFoxyW6aMt5bbVu+WATYW5mRwJI6Et5eHOOU74bwIpkzQ/0Hg6WIqXAGgKSHGHNtERH2MurCE9u7h2+tALveS4qSg6vTRJ216yBtNht23Lmpkrh6e9nccgfmk8sYbVaSbVzI8vcpOdZVcuHZF3I88qpaIYVSttXKQPUx9CScAJ+Td0PqdHi5W7FNkWGFumI4r0IPguqeXY5v8yu2CW42gZ3+5mGs260RUE3ppSXZPtOxQ52H6/jJhlbGEsM5zK/uJrzjQIS3OcbljCTHMpX+BS0KlpEb/2TAlrVfJb+zg8cI/D1YAyYz/rHnfo4Rkj84Va9tN0pDcxBnnQci9qVCxKP1bpS7kLleM0u4=
           file_glob: true
-          file: dist/*.zip
+          file: packages/cli/dist/*.zip
           skip_cleanup: true
           on:
             tags: true
@@ -42,8 +40,6 @@ jobs:
             tags: true
             branch: master
             repo: jameswilddev/vnhtml
-      after_deploy:
-      - cd ../../
     - stage: "@vnhtml/parser"
       install:
       - npm install --prefix packages/parser
@@ -51,8 +47,6 @@ jobs:
       - npm run-script compileBabel --prefix packages/parser
       - npm run-script compileUglifyJs --prefix packages/parser
       - npm test --prefix packages/parser
-      before_deploy:
-      - cd packages/parser
       deploy:
         - provider: script
           script: echo $NPM_AUTH > ~/.npmrc && npm publish --prefix packages/parser
@@ -61,5 +55,3 @@ jobs:
             tags: true
             branch: master
             repo: jameswilddev/vnhtml
-      after_deploy:
-      - cd ../../
