@@ -16,6 +16,17 @@ const set = (name, value) => {
 
 const setSpy = name => set(name, jasmine.createSpy(name))
 
+describe(`linerCreate`, () => {
+  it(`returns an object`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(jasmine.any(Object)))
+  it(`returns line, 1`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).line).toEqual(1))
+  it(`returns text, empty`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).text).toEqual(``))
+  it(`returns lineComment, null`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).lineComment).toBeNull())
+  it(`returns context, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).context).toEqual(`Test Context`))
+  it(`returns onLine, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).onLine).toEqual(`Test On Line`))
+  it(`returns a new object every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).not.toBe(get(`linerCreate`)(`Test Context`, `Test On Line`)))
+  it(`returns the same value every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(get(`linerCreate`)(`Test Context`, `Test On Line`)))
+})
+
 describe(`linerClassifyCharacter`, () => {
   const run = (input, output) => describe(`given "${input}"`, () => it(`returns "${output}"`, () => get(`linerClassifyCharacter`)(input)))
   run(`a`, `partOfLine`)
@@ -35,17 +46,6 @@ describe(`linerClassifyCharacter`, () => {
   run(`\r`, `newLine`)
   run(`\n`, `newLine`)
   run(`#`, `lineComment`)
-})
-
-describe(`linerCreate`, () => {
-  it(`returns an object`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(jasmine.any(Object)))
-  it(`returns line, 1`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).line).toEqual(1))
-  it(`returns text, empty`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).text).toEqual(``))
-  it(`returns lineComment, null`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).lineComment).toBeNull())
-  it(`returns context, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).context).toEqual(`Test Context`))
-  it(`returns onLine, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).onLine).toEqual(`Test On Line`))
-  it(`returns a new object every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).not.toBe(get(`linerCreate`)(`Test Context`, `Test On Line`)))
-  it(`returns the same value every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(get(`linerCreate`)(`Test Context`, `Test On Line`)))
 })
 
 describe(`linerTextNotEmpty`, () => {
