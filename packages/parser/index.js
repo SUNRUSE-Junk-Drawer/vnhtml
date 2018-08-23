@@ -44,3 +44,9 @@ const linerCharacter = (liner, character) => {
       break
   }
 }
+
+const linerEndOfFile = liner => {
+  if (linerTextNotEmpty(liner.text)) {
+    liner.onLine(liner.context, liner.line, liner.text)
+  }
+}

@@ -243,3 +243,79 @@ describe(`linerCharacter`, () => {
     })
   })
 })
+
+describe(`linerEndOfFile`, () => {
+  const linerClassifyCharacter = setSpy(`linerClassifyCharacter`)
+  const linerTextNotEmpty = setSpy(`linerTextNotEmpty`)
+  const onLine = jasmine.createSpy(`onLine`)
+  afterEach(() => {
+    linerClassifyCharacter.calls.reset()
+    linerTextNotEmpty.calls.reset()
+    onLine.calls.reset()
+  })
+  let liner
+  beforeEach(() => liner = {
+    line: 2368,
+    text: `Test Text`,
+    context: `Test Context`,
+    onLine
+  })
+
+  describe(`when not ignoring the rest of the line`, () => {
+    beforeEach(() => liner.ignoreRestOfLine = false)
+
+    describe(`when the accumulated text is empty`, () => {
+      beforeEach(() => {
+        linerTextNotEmpty.and.returnValue(false)
+        get(`linerEndOfFile`)(liner)
+      })
+      it(`does not call linerClassifyCharacter`, () => expect(linerClassifyCharacter).not.toHaveBeenCalled())
+      it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
+      it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
+      it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+    })
+
+    describe(`when the accumulated text is not empty`, () => {
+      beforeEach(() => {
+        linerTextNotEmpty.and.returnValue(true)
+        get(`linerEndOfFile`)(liner)
+      })
+      it(`does not call linerClassifyCharacter`, () => expect(linerClassifyCharacter).not.toHaveBeenCalled())
+      it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
+      it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
+      it(`calls onLine once`, () => expect(onLine).toHaveBeenCalledTimes(1))
+      it(`calls onLine with the context`, () => expect(onLine).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
+      it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
+      it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
+    })
+  })
+
+  describe(`when ignoring the rest of the line`, () => {
+    beforeEach(() => liner.ignoreRestOfLine = true)
+
+    describe(`when the accumulated text is empty`, () => {
+      beforeEach(() => {
+        linerTextNotEmpty.and.returnValue(false)
+        get(`linerEndOfFile`)(liner)
+      })
+      it(`does not call linerClassifyCharacter`, () => expect(linerClassifyCharacter).not.toHaveBeenCalled())
+      it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
+      it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
+      it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+    })
+
+    describe(`when the accumulated text is not empty`, () => {
+      beforeEach(() => {
+        linerTextNotEmpty.and.returnValue(true)
+        get(`linerEndOfFile`)(liner)
+      })
+      it(`does not call linerClassifyCharacter`, () => expect(linerClassifyCharacter).not.toHaveBeenCalled())
+      it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
+      it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
+      it(`calls onLine once`, () => expect(onLine).toHaveBeenCalledTimes(1))
+      it(`calls onLine with the context`, () => expect(onLine).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
+      it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
+      it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
+    })
+  })
+})
