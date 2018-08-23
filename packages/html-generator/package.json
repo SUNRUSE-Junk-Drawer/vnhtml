@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/html-generator",
   "description": "A module which generates self-contained HTML files from vnhtml scripts.",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "license": "MIT",
   "repository": {
     "type": "git",

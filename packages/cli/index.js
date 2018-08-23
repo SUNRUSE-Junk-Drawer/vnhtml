@@ -3,7 +3,7 @@
 import commander from "commander"
 
 const command = commander
-  .version(`0.0.14`)
+  .version(`0.0.15`)
   .description(`Generates HTML/CSS visual novels from a basic scripting language`)
   .option(`-w --watch`, `recompile on changes`)
   .option(`-s --script [path]`, `the script to parse`)
