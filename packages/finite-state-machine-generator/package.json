@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/finite-state-machine-generator",
   "description": "A module which generates a finite state machine describing every state a vnhtml script can be in.",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "license": "MIT",
   "repository": {
     "type": "git",

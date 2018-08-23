@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/parser",
   "description": "A module which parses a basic scripting language for visual novels.",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "license": "MIT",
   "repository": {
     "type": "git",
