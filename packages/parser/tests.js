@@ -11,6 +11,7 @@ const set = (name, value) => {
   afterEach(() => {
     index.__set__(name, replaced)
   })
+  return value
 }
 
 describe(`linerClassifyCharacter`, () => {
