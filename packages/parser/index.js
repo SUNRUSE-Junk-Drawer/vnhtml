@@ -21,3 +21,26 @@ const linerClassifyCharacter = character => {
 }
 
 const linerTextNotEmpty = text => !text.trim()
+
+const linerCharacter = (liner, character) => {
+  switch (linerClassifyCharacter(character)) {
+    case `lineComment`:
+      liner.ignoreRestOfLine = true
+      break
+
+    case `newLine`:
+      if (linerTextNotEmpty(liner.text)) {
+        liner.onLine(liner.context, liner.line, liner.text)
+      }
+      liner.line++
+      liner.text = ``
+      liner.ignoreRestOfLine = false
+      break
+
+    case `partOfLine`:
+      if (!liner.ignoreRestOfLine) {
+        liner.text += character
+      }
+      break
+  }
+}

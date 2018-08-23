@@ -75,3 +75,171 @@ describe(`linerTextNotEmpty`, () => {
   run(`  \t \t  \t  awdhk\tauwdh iyi\t`, true)
   run(`  \t \t  \t  awdhk\tauwdh iyi   \t     \t  `, true)
 })
+
+describe(`linerCharacter`, () => {
+  const linerClassifyCharacter = setSpy(`linerClassifyCharacter`)
+  const linerTextNotEmpty = setSpy(`linerTextNotEmpty`)
+  const onLine = jasmine.createSpy(`onLine`)
+  afterEach(() => {
+    linerClassifyCharacter.calls.reset()
+    linerTextNotEmpty.calls.reset()
+    onLine.calls.reset()
+  })
+  let liner
+  beforeEach(() => liner = {
+    line: 2368,
+    text: `Test Text`,
+    context: `Test Context`,
+    onLine
+  })
+
+  describe(`when not ignoring the rest of the line`, () => {
+    beforeEach(() => liner.ignoreRestOfLine = false)
+    describe(`when given a line comment`, () => {
+      beforeEach(() => {
+        linerClassifyCharacter.and.returnValue(`lineComment`)
+        get(`linerCharacter`)(liner, `Test Character`)
+      })
+      it(`does not change line`, () => expect(liner.line).toEqual(2368))
+      it(`does not change text`, () => expect(liner.text).toEqual(`Test Text`))
+      it(`starts ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(true))
+      it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
+      it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+      it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
+      it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
+      it(`does not call linerTextNotEmpty`, () => expect(linerTextNotEmpty).not.toHaveBeenCalled())
+      it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+    })
+
+    describe(`when given a new line`, () => {
+      beforeEach(() => linerClassifyCharacter.and.returnValue(`newLine`))
+      describe(`when the accumulated text is empty`, () => {
+        beforeEach(() => {
+          linerTextNotEmpty.and.returnValue(false)
+          get(`linerCharacter`)(liner, `Test Character`)
+        })
+        it(`increments line`, () => expect(liner.line).toEqual(2369))
+        it(`empties text`, () => expect(liner.text).toEqual(``))
+        it(`does not start ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+        it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
+        it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+        it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
+        it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
+        it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
+        it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
+        it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+      })
+
+      describe(`when the accumulated text is not empty`, () => {
+        beforeEach(() => {
+          linerTextNotEmpty.and.returnValue(true)
+          get(`linerCharacter`)(liner, `Test Character`)
+        })
+        it(`increments line`, () => expect(liner.line).toEqual(2369))
+        it(`empties text`, () => expect(liner.text).toEqual(``))
+        it(`does not start ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+        it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
+        it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+        it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
+        it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
+        it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
+        it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
+        it(`calls onLine once`, () => expect(onLine).toHaveBeenCalledTimes(1))
+        it(`calls onLine with the context`, () => expect(onLine).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
+        it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
+        it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
+      })
+    })
+
+    describe(`when given a part of line`, () => {
+      beforeEach(() => {
+        linerClassifyCharacter.and.returnValue(`partOfLine`)
+        get(`linerCharacter`)(liner, `Test Character`)
+      })
+      it(`does not change line`, () => expect(liner.line).toEqual(2368))
+      it(`appends it to the end of text`, () => expect(liner.text).toEqual(`Test TextTest Character`))
+      it(`does not start ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+      it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
+      it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+      it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
+      it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
+      it(`does not call linerTextNotEmpty`, () => expect(linerTextNotEmpty).not.toHaveBeenCalled())
+      it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+    })
+  })
+
+  describe(`when ignoring the rest of the line`, () => {
+    beforeEach(() => liner.ignoreRestOfLine = true)
+    describe(`when given a line comment`, () => {
+      beforeEach(() => {
+        linerClassifyCharacter.and.returnValue(`lineComment`)
+        get(`linerCharacter`)(liner, `Test Character`)
+      })
+      it(`does not change line`, () => expect(liner.line).toEqual(2368))
+      it(`does not change text`, () => expect(liner.text).toEqual(`Test Text`))
+      it(`continues ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(true))
+      it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
+      it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+      it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
+      it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
+      it(`does not call linerTextNotEmpty`, () => expect(linerTextNotEmpty).not.toHaveBeenCalled())
+      it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+    })
+
+    describe(`when given a new line`, () => {
+      beforeEach(() => linerClassifyCharacter.and.returnValue(`newLine`))
+      describe(`when the accumulated text is empty`, () => {
+        beforeEach(() => {
+          linerTextNotEmpty.and.returnValue(false)
+          get(`linerCharacter`)(liner, `Test Character`)
+        })
+        it(`increments line`, () => expect(liner.line).toEqual(2369))
+        it(`empties text`, () => expect(liner.text).toEqual(``))
+        it(`stops ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+        it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
+        it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+        it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
+        it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
+        it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
+        it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
+        it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+      })
+
+      describe(`when the accumulated text is not empty`, () => {
+        beforeEach(() => {
+          linerTextNotEmpty.and.returnValue(true)
+          get(`linerCharacter`)(liner, `Test Character`)
+        })
+        it(`increments line`, () => expect(liner.line).toEqual(2369))
+        it(`empties text`, () => expect(liner.text).toEqual(``))
+        it(`stops ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(false))
+        it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
+        it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+        it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
+        it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
+        it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
+        it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
+        it(`calls onLine once`, () => expect(onLine).toHaveBeenCalledTimes(1))
+        it(`calls onLine with the context`, () => expect(onLine).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
+        it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
+        it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
+      })
+    })
+
+    describe(`when given a part of line`, () => {
+      beforeEach(() => {
+        linerClassifyCharacter.and.returnValue(`partOfLine`)
+        get(`linerCharacter`)(liner, `Test Character`)
+      })
+      it(`does not change line`, () => expect(liner.line).toEqual(2368))
+      it(`does not change text`, () => expect(liner.text).toEqual(`Test Text`))
+      it(`continues ignoring the rest of the line`, () => expect(liner.ignoreRestOfLine).toBe(true))
+      it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
+      it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+      it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
+      it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
+      it(`does not call linerTextNotEmpty`, () => expect(linerTextNotEmpty).not.toHaveBeenCalled())
+      it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+    })
+  })
+})
