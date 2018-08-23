@@ -4,8 +4,8 @@
   "version": "0.0.14",
   "license": "MIT",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/jameswilddev/vnhtml.git"
+    "type": "git",
+    "url": "https://github.com/jameswilddev/vnhtml.git"
   },
   "bin": "index.min.js",
   "files": [
