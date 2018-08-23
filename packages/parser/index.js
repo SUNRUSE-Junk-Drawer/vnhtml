@@ -67,3 +67,5 @@ const indenterCreate = (context, onLine, onIndent, onOutdent, onError) => ({
 })
 
 const indenterExtractIndentation = text => /^\s*/.exec(text)[0]
+
+const indenterExtractText = text => text.trim(0)
