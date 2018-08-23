@@ -14,6 +14,8 @@ const set = (name, value) => {
   return value
 }
 
+const setSpy = name => set(name, jasmine.createSpy(name))
+
 describe(`linerClassifyCharacter`, () => {
   const run = (input, output) => describe(`given "${input}"`, () => it(`returns "${output}"`, () => get(`linerClassifyCharacter`)(input)))
   run(`a`, `partOfLine`)
