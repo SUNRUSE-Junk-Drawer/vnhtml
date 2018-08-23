@@ -12,12 +12,12 @@ const linerClassifyCharacter = character => {
   }
 }
 
-const createParser = () => ({
+const linerCreate = (context, onLine) => ({
   line: 1,
-  whiteSpaceCharacter: null,
-  indentation: 0,
-  text: null,
-  ignoreRestOfLine: false
+  text: ``,
+  ignoreRestOfLine: false,
+  context,
+  onLine
 })
 
 const onLineForStatement = () => { }
