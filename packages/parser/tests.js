@@ -45,7 +45,7 @@ describe(`linerCreate`, () => {
   it(`returns context, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).context).toEqual(`Test Context`))
   it(`returns onLine, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).onLine).toEqual(`Test On Line`))
   it(`returns a new object every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).not.toBe(get(`linerCreate`)(`Test Context`, `Test On Line`)))
-  it(`returns a the same value every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(get(`linerCreate`)(`Test Context`, `Test On Line`)))
+  it(`returns the same value every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(get(`linerCreate`)(`Test Context`, `Test On Line`)))
 })
 
 describe(`linerTextNotEmpty`, () => {
