@@ -21,7 +21,7 @@ line will be ignored following a backtick.
 
 ### Lines and emotes
 
-See "Art file structure" for details on how these map to files.
+See [Art](#art) for details on how these map to files.
 
 ```vnhtml
 Jeff is amazed
@@ -52,7 +52,7 @@ Greg:
 
 ### Backgrounds
 
-See "Art file structure" for details on how this maps to a file.
+See [Art](#art) for details on how this maps to a file.
 
 ```vnhtml
 office in background
