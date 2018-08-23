@@ -19,3 +19,5 @@ const linerCreate = (context, onLine) => ({
   context,
   onLine
 })
+
+const linerTextNotEmpty = text => !text.trim()
