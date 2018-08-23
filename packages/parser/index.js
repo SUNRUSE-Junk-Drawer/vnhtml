@@ -1,17 +1,15 @@
-const classifyCharacter = character => {
-  if (character == `#`) {
-    return `lineComment`
-  }
+const linerClassifyCharacter = character => {
+  switch (character) {
+    case `#`:
+      return `lineComment`
 
-  if (character.trim()) {
-    return `glyph`
-  }
+    case `\r`:
+    case `\n`:
+      return `newLine`
 
-  if (character == `\r` || character == `\n`) {
-    return `newLine`
+    default:
+      return `partOfLine`
   }
-
-  return `whiteSpace`
 }
 
 const createParser = () => ({
