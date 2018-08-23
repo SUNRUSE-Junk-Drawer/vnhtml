@@ -28,10 +28,10 @@ Jeff is amazed
 James: This is a line of dialog.
 
 Jeff and Greeta are bored
-James and Jeff: This is another line of dialogue, but spoken in unison.
+James and Jeff: This is another line of dialog, but spoken in unison.
 
 Jeff Greeta and Fred are bewildered
-James Jeff and Jess: This is another line of dialogue, but spoken in unison by three people.
+James Jeff and Jess: This is another line of dialog, but spoken in unison by three people.
 
 James (contemplative): So this is the same as an emote, then a line?
 
