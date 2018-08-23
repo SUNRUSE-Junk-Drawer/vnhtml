@@ -388,3 +388,17 @@ describe(`indenterExtractText`, () => {
   run(`  \t \t  \t  awdhk\tauwdh iyi\t`, `awdhk\tauwdh iyi`)
   run(`  \t \t  \t  awdhk\tauwdh iyi   \t     \t  `, `awdhk\tauwdh iyi`)
 })
+
+describe(`indenterCheckWhiteSpace`, () => {
+  const run = (input, output) => describe(`given "${input}"`, () => it(`returns ${output}`, () => get(`indenterCheckWhiteSpace`)(input)))
+  run(``, `none`)
+  run(`a`, `a`)
+  run(`aa`, `aa`)
+  run(`aaa`, `aaa`)
+  run(`aaaa`, `aaaa`)
+  run(`ab`, `inconsistent`)
+  run(`baa`, `inconsistent`)
+  run(`aba`, `inconsistent`)
+  run(`aab`, `inconsistent`)
+  run(`abc`, `inconsistent`)
+})

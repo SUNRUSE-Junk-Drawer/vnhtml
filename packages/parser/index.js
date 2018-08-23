@@ -69,3 +69,17 @@ const indenterCreate = (context, onLine, onIndent, onOutdent, onError) => ({
 const indenterExtractIndentation = text => /^\s*/.exec(text)[0]
 
 const indenterExtractText = text => text.trim(0)
+
+const indenterCheckWhiteSpace = indentation => {
+  if (!indentation) {
+    return `none`
+  }
+  
+  for (let i = 1; i < indentation.length; i++) {
+    if (indentation[i] != indentation[0]) {
+      return `inconsistent`
+    }
+  }
+  
+  return indentation[0]
+}
