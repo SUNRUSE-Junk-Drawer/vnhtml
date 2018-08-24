@@ -932,3 +932,13 @@ describe(`indenterLine`, () => {
     })
   })
 })
+
+describe(`matcherSplitByWhiteSpace`, () => {
+  const run = (input, output) => describe(`given "${input}"`, () => it(`returns the expected "${JSON.stringify(output)}"`, () => expect(get(`matcherSplitByWhiteSpace`)(input)).toEqual(output)))
+  run(`a`, [`a`])
+  run(`abc`, [`abc`])
+  run(`a b`, [`a`, `b`])
+  run(`abc defghi`, [`abc`, `defghi`])
+  run(`abc  \t   \t defghi`, [`abc`, `defghi`])
+  run(`abc  \t   \t defg  \t hi`, [`abc`, `defg`, `hi`])
+})

@@ -127,3 +127,5 @@ const indenterLine = (indenter, lineNumber, lineText) => {
       break
   }
 }
+
+const matcherSplitByWhiteSpace = text => text.split(/\s+/)
