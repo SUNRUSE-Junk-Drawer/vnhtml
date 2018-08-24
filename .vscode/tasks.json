@@ -2,6 +2,13 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "@vnhtml/cli - Install",
+      "type": "shell",
+      "command": "cd packages/cli && npm install",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/cli - Watch",
       "type": "shell",
       "command": "npm run-script watch --prefix packages/cli",
@@ -12,6 +19,13 @@
       "label": "@vnhtml/cli - Compile",
       "type": "shell",
       "command": "npm run-script compile --prefix packages/cli",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/collector - Install",
+      "type": "shell",
+      "command": "cd packages/collector && npm install",
       "group": "build",
       "problemMatcher": []
     },
@@ -30,6 +44,13 @@
       "problemMatcher": []
     },
     {
+      "label": "@vnhtml/finite-state-machine-generator - Install",
+      "type": "shell",
+      "command": "cd packages/finite-state-machine-generator && npm install",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/finite-state-machine-generator - Watch",
       "type": "shell",
       "command": "npm run-script watch --prefix packages/finite-state-machine-generator",
@@ -40,6 +61,13 @@
       "label": "@vnhtml/finite-state-machine-generator - Compile",
       "type": "shell",
       "command": "npm run-script compile --prefix packages/finite-state-machine-generator",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/html-generator - Install",
+      "type": "shell",
+      "command": "cd packages/html-generator && npm install",
       "group": "build",
       "problemMatcher": []
     },
@@ -58,6 +86,13 @@
       "problemMatcher": []
     },
     {
+      "label": "@vnhtml/lexer - Install",
+      "type": "shell",
+      "command": "cd packages/lexer && npm install",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/lexer - Watch",
       "type": "shell",
       "command": "npm run-script watch --prefix packages/lexer",
@@ -72,6 +107,13 @@
       "problemMatcher": []
     },
     {
+      "label": "@vnhtml/parser - Install",
+      "type": "shell",
+      "command": "cd packages/parser && npm install",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/parser - Watch",
       "type": "shell",
       "command": "npm run-script watch --prefix packages/parser",
@@ -82,6 +124,13 @@
       "label": "@vnhtml/parser - Compile",
       "type": "shell",
       "command": "npm run-script compile --prefix packages/parser",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/pretty-printer - Install",
+      "type": "shell",
+      "command": "cd packages/pretty-printer && npm install",
       "group": "build",
       "problemMatcher": []
     },
