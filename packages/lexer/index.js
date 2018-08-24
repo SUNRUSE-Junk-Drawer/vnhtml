@@ -128,4 +128,4 @@ const indenterLine = (indenter, lineNumber, lineText) => {
   }
 }
 
-const matcherSplitByWhiteSpace = text => text.split(/\s+/)
+const matcherNormalizeWhiteSpace = text => text.split(/\s+/).join(` `)
