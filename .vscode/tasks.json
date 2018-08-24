@@ -23,6 +23,13 @@
       "problemMatcher": []
     },
     {
+      "label": "@vnhtml/cli - Test",
+      "type": "shell",
+      "command": "npm test --prefix packages/cli",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/collector - Install",
       "type": "shell",
       "command": "cd packages/collector && npm install",
@@ -40,6 +47,13 @@
       "label": "@vnhtml/collector - Compile",
       "type": "shell",
       "command": "npm run-script compile --prefix packages/collector",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/collector - Test",
+      "type": "shell",
+      "command": "npm test --prefix packages/collector",
       "group": "build",
       "problemMatcher": []
     },
@@ -65,6 +79,13 @@
       "problemMatcher": []
     },
     {
+      "label": "@vnhtml/finite-state-machine-generator - Test",
+      "type": "shell",
+      "command": "npm test --prefix packages/finite-state-machine-generator",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/html-generator - Install",
       "type": "shell",
       "command": "cd packages/html-generator && npm install",
@@ -82,6 +103,13 @@
       "label": "@vnhtml/html-generator - Compile",
       "type": "shell",
       "command": "npm run-script compile --prefix packages/html-generator",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/html-generator - Test",
+      "type": "shell",
+      "command": "npm test --prefix packages/html-generator",
       "group": "build",
       "problemMatcher": []
     },
@@ -107,6 +135,13 @@
       "problemMatcher": []
     },
     {
+      "label": "@vnhtml/lexer - Test",
+      "type": "shell",
+      "command": "npm test --prefix packages/lexer",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/parser - Install",
       "type": "shell",
       "command": "cd packages/parser && npm install",
@@ -128,6 +163,13 @@
       "problemMatcher": []
     },
     {
+      "label": "@vnhtml/parser - Test",
+      "type": "shell",
+      "command": "npm test --prefix packages/parser",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "@vnhtml/pretty-printer - Install",
       "type": "shell",
       "command": "cd packages/pretty-printer && npm install",
@@ -145,6 +187,13 @@
       "label": "@vnhtml/pretty-printer - Compile",
       "type": "shell",
       "command": "npm run-script compile --prefix packages/pretty-printer",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "@vnhtml/pretty-printer - Test",
+      "type": "shell",
+      "command": "npm test --prefix packages/pretty-printer",
       "group": "build",
       "problemMatcher": []
     }
