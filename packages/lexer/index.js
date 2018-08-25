@@ -112,15 +112,15 @@ const indenterLine = (indenter, lineNumber, lineText) => {
         return
       }
 
-      if (type.length > indenter.stack[indenter.stack.length - 1]) {
-        indenter.stack.push(type.length)
+      if (indentation.length > indenter.stack[indenter.stack.length - 1]) {
+        indenter.stack.push(indentation.length)
         indenter.onIndent(indenter.context, lineNumber)
       } else {
-        if (indenter.stack.indexOf(type.length) == -1) {
+        if (indenter.stack.indexOf(indentation.length) == -1) {
           indenter.onError(indenter.context, lineNumber, `Outdent to level not previously indented to`)
           return
         } else {
-          while (type.length < indenter.stack[indenter.stack.length - 1]) {
+          while (indentation.length < indenter.stack[indenter.stack.length - 1]) {
             indenter.stack.pop()
             indenter.onOutdent(indenter.context, lineNumber)
           }
