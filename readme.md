@@ -67,10 +67,10 @@ Flags are global multiple-choice values which can be set and checked throughout
 the script.
 
 ```vnhtml
-flag window locked closed opened
+set window locked
 
 if window locked
-  James: This will be shown as "window" defaults to "locked".
+  James: This will be shown as "window" was set to "locked".
   James: You can put multiple statements in here by indenting multiple lines.
 else if window closed
   James: This won't be shown.
