@@ -50,7 +50,7 @@ describe(`linerClassifyCharacter`, () => {
 })
 
 describe(`linerTextNotEmpty`, () => {
-  const run = (input, output) => describe(`given "${input}"`, () => it(`returns ${output}`, () => get(`linerTextNotEmpty`)(input)))
+  const run = (input, output) => describe(`given "${input}"`, () => it(`returns ${output}`, () => expect(get(`linerTextNotEmpty`)(input)).toBe(output)))
   run(``, false)
   run(` `, false)
   run(`\t`, false)

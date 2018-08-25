@@ -20,7 +20,7 @@ const linerClassifyCharacter = character => {
   }
 }
 
-const linerTextNotEmpty = text => !text.trim()
+const linerTextNotEmpty = text => !!text.trim()
 
 const linerCharacter = (liner, character) => {
   switch (linerClassifyCharacter(character)) {
