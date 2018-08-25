@@ -11,23 +11,23 @@ var state = lexer.create(
   "A context for the lexing",
   function onLine(context, line, text, lexed) {
     console.log(
-      "Line; context " + JSON.stringify(context)
+      "Line; context " + nicePrint(context)
       + ", line " + line
-      + ", text " + JSON.stringify(text)
-      + ", lexed " + JSON.stringify(lexed)
+      + ", text " + nicePrint(text)
+      + ", lexed " + nicePrint(lexed)
     )
   },
   function onIndent(context) {
-    console.log("Indent; context " + JSON.stringify(context))
+    console.log("Indent; context " + nicePrint(context))
   },
   function onOutdent(context) {
-    console.log("Outdent; context " + JSON.stringify(context))
+    console.log("Outdent; context " + nicePrint(context))
   },
   function onError(context, line, message) {
     console.log(
-      "Error; context " + JSON.stringify(context)
+      "Error; context " + nicePrint(context)
       + ", line " + line
-      + ", message " + JSON.stringify(message)
+      + ", message " + nicePrint(message)
     )
   },
   function onEndOfFile(context) {
@@ -53,6 +53,14 @@ for (var i = 0; i < finalLine.length; i++) {
 }
 
 lexer.endOfFile(state)
+
+function nicePrint(json) {
+  return JSON
+    .stringify(json, null, 1)
+    .split(/\s+/)
+    .join(" ")
+}
+
 ```
 
 ### Output
