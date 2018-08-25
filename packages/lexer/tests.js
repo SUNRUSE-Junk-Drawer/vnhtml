@@ -392,12 +392,12 @@ describe(`indenterExtractText`, () => {
 })
 
 describe(`indenterCheckWhiteSpace`, () => {
-  const run = (input, output) => describe(`given "${input}"`, () => it(`returns ${output}`, () => get(`indenterCheckWhiteSpace`)(input)))
+  const run = (input, output) => describe(`given "${input}"`, () => it(`returns ${output}`, () => expect(get(`indenterCheckWhiteSpace`)(input)).toEqual(output)))
   run(``, `none`)
   run(`a`, `a`)
-  run(`aa`, `aa`)
-  run(`aaa`, `aaa`)
-  run(`aaaa`, `aaaa`)
+  run(`aa`, `a`)
+  run(`aaa`, `a`)
+  run(`aaaa`, `a`)
   run(`ab`, `inconsistent`)
   run(`baa`, `inconsistent`)
   run(`aba`, `inconsistent`)
