@@ -22,6 +22,7 @@ jobs:
       - npm run-script compilePkg --prefix packages/cli
       - npm run-script compileZipPkg --prefix packages/cli
       - npm run-script example --prefix packages/cli
+      - npm test --prefix packages/cli
       deploy:
         - provider: releases
           api_key:
