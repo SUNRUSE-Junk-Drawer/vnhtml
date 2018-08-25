@@ -538,11 +538,11 @@ describe(`indenterLine`, () => {
 
     describe(`when the given line has indentation`, () => {
       beforeEach(() => {
-        indenterCheckWhiteSpace.and.returnValue(`Test Indentation Character`)
+        indenterCheckWhiteSpace.and.returnValue(`Test Indentation Character A`)
         get(`indenterLine`)(indenter, 3897, `Test Line Text`)
       })
       it(`appends the length of the indentation to the stack`, () => expect(indenter.stack).toEqual([0, 26]))
-      it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+      it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
       it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
       it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -571,7 +571,7 @@ describe(`indenterLine`, () => {
   })
 
   describe(`when an indentation character has been found`, () => {
-    beforeEach(() => indenter.indentationCharacter = `Test Indentation Character`)
+    beforeEach(() => indenter.indentationCharacter = `Test Indentation Character A`)
 
     describe(`when the given line does not have indentation`, () => {
       beforeEach(() => {
@@ -580,7 +580,7 @@ describe(`indenterLine`, () => {
         get(`indenterLine`)(indenter, 3897, `Test Line Text`)
       })
       it(`clears the stack`, () => expect(indenter.stack).toEqual([0]))
-      it(`does not change the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+      it(`does not change the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
       it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
       it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -624,7 +624,7 @@ describe(`indenterLine`, () => {
         get(`indenterLine`)(indenter, 3897, `Test Line Text`)
       })
       it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 14, 27, 36, 42]))
-      it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+      it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
       it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
       it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -646,14 +646,14 @@ describe(`indenterLine`, () => {
     })
 
     describe(`when the given line has indentation inconsistent with the rest of the file`, () => {
-      beforeEach(() => indenterCheckWhiteSpace.and.returnValue(`Test Other Indentation Character`))
+      beforeEach(() => indenterCheckWhiteSpace.and.returnValue(`Test Indentation Character B`))
       describe(`when the indentation is greater than the top of the stack`, () => {
         beforeEach(() => {
           indenter.stack = [0, 4, 6, 10, 24]
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 10, 24]))
-        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -680,7 +680,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 10, 26]))
-        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -707,7 +707,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 10, 28]))
-        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -734,7 +734,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 26, 31]))
-        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -761,7 +761,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 29, 31]))
-        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -788,7 +788,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 4, 26, 29, 31]))
-        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -812,7 +812,7 @@ describe(`indenterLine`, () => {
 
     describe(`when the given line has indentation`, () => {
       beforeEach(() => {
-        indenterCheckWhiteSpace.and.returnValue(`Test Indentation Character`)
+        indenterCheckWhiteSpace.and.returnValue(`Test Indentation Character A`)
       })
 
       describe(`when the indentation is greater than the top of the stack`, () => {
@@ -821,7 +821,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`appends the length of the indentation to the stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 10, 24, 26]))
-        it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -854,7 +854,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change the stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 10, 26]))
-        it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -884,7 +884,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 10, 28]))
-        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -911,7 +911,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`removes the last item on the stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 26]))
-        it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -944,7 +944,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`does not change stack`, () => expect(indenter.stack).toEqual([0, 4, 6, 29, 31]))
-        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`does not change indentationCharacter`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
@@ -971,7 +971,7 @@ describe(`indenterLine`, () => {
           get(`indenterLine`)(indenter, 3897, `Test Line Text`)
         })
         it(`removes the subsequent items on the stack`, () => expect(indenter.stack).toEqual([0, 4, 26]))
-        it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character`))
+        it(`sets indentationCharacter to the indentation character`, () => expect(indenter.indentationCharacter).toEqual(`Test Indentation Character A`))
         it(`does not change context`, () => expect(indenter.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(indenter.onLine).toBe(onLine))
         it(`does not change onIndent`, () => expect(indenter.onIndent).toBe(onIndent))
