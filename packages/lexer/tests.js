@@ -336,7 +336,7 @@ describe(`indenterCreate`, () => {
 })
 
 describe(`indenterExtractIndentation`, () => {
-  const run = (input, output) => describe(`given "${input}"`, () => it(`returns ${output}`, () => get(`indenterExtractIndentation`)(input)))
+  const run = (input, output) => describe(`given "${input}"`, () => it(`returns ${output}`, () => expect(get(`indenterExtractIndentation`)(input)).toEqual(output)))
   run(``, ``)
   run(` `, ` `)
   run(`\t`, `\t`)
