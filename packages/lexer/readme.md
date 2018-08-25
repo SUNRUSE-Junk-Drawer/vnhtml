@@ -66,7 +66,20 @@ function nicePrint(json) {
 ### Output
 
 ```
-TODO
+Line; context "A context for the lexing", line 1, text "James: This is example script.", lexed { "lineWithText": { "characters": [ "James" ], "text": "This is example script." } }
+Line; context "A context for the lexing", line 2, text "A free-text line looks like this.", lexed null
+Line; context "A context for the lexing", line 3, text "if exampleFlag exampleValue", lexed { "if": { "flag": "exampleFlag", "value": "exampleValue" } }
+Indent; context "A context for the lexing"
+Line; context "A context for the lexing", line 4, text "James: exampleFlag is exampleValue!", lexed { "lineWithText": { "characters": [ "James" ], "text": "exampleFlag is exampleValue!" } }
+Line; context "A context for the lexing", line 5, text "James: A subsequent line.", lexed { "lineWithText": { "characters": [ "James" ], "text": "A subsequent line." } }
+Error; context "A context for the lexing", line 6, message "Outdent to level not previously indented to"
+Line; context "A context for the lexing", line 7, text "James: However, errors do not block parsing.", lexed { "lineWithText": { "characters": [ "James" ], "text": "However, errors do not block parsing." } }
+Outdent; context "A context for the lexing"
+Line; context "A context for the lexing", line 8, text "James: See?", lexed { "lineWithText": { "characters": [ "James" ], "text": "See?" } }
+Indent; context "A context for the lexing"
+Line; context "A context for the lexing", line 9, text "Characters can also be supplied one-by-one.", lexed null
+Outdent; context "A context for the lexing"
+End of file
 ```
 
 ## Exception handling
