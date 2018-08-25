@@ -17,14 +17,15 @@ const set = (name, value) => {
 const setSpy = name => set(name, jasmine.createSpy(name))
 
 describe(`linerCreate`, () => {
-  it(`returns an object`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(jasmine.any(Object)))
-  it(`returns line, 1`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).line).toEqual(1))
-  it(`returns text, empty`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).text).toEqual(``))
-  it(`returns lineComment, null`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).lineComment).toBeNull())
-  it(`returns context, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).context).toEqual(`Test Context`))
-  it(`returns onLine, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`).onLine).toEqual(`Test On Line`))
-  it(`returns a new object every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).not.toBe(get(`linerCreate`)(`Test Context`, `Test On Line`)))
-  it(`returns the same value every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`)).toEqual(get(`linerCreate`)(`Test Context`, `Test On Line`)))
+  it(`returns an object`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`)).toEqual(jasmine.any(Object)))
+  it(`returns line, 1`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`).line).toEqual(1))
+  it(`returns text, empty`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`).text).toEqual(``))
+  it(`returns lineComment, null`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`).lineComment).toBeNull())
+  it(`returns context, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`).context).toEqual(`Test Context`))
+  it(`returns onLine, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`).onLine).toEqual(`Test On Line`))
+  it(`returns onEndOfFile, given`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`).onEndOfFile).toEqual(`Test On End Of File`))
+  it(`returns a new object every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`)).not.toBe(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`)))
+  it(`returns the same value every call`, () => expect(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`)).toEqual(get(`linerCreate`)(`Test Context`, `Test On Line`, `Test On End Of File`)))
 })
 
 describe(`linerClassifyCharacter`, () => {
@@ -81,17 +82,20 @@ describe(`linerCharacter`, () => {
   const linerClassifyCharacter = setSpy(`linerClassifyCharacter`)
   const linerTextNotEmpty = setSpy(`linerTextNotEmpty`)
   const onLine = jasmine.createSpy(`onLine`)
+  const onEndOfFile = jasmine.createSpy(`onEndOfFile`)
   afterEach(() => {
     linerClassifyCharacter.calls.reset()
     linerTextNotEmpty.calls.reset()
     onLine.calls.reset()
+    onEndOfFile.calls.reset()
   })
   let liner
   beforeEach(() => liner = {
     line: 2368,
     text: `Test Text`,
     context: `Test Context`,
-    onLine
+    onLine,
+    onEndOfFile
   })
 
   describe(`when not inside a line comment`, () => {
@@ -106,10 +110,12 @@ describe(`linerCharacter`, () => {
       it(`starts a line comment`, () => expect(liner.lineComment).toEqual(`Test Character`))
       it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+      it(`does not change onEndOfFile`, () => expect(liner.onEndOfFile).toBe(onEndOfFile))
       it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
       it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
       it(`does not call linerTextNotEmpty`, () => expect(linerTextNotEmpty).not.toHaveBeenCalled())
       it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
 
     describe(`when given a new line`, () => {
@@ -124,11 +130,13 @@ describe(`linerCharacter`, () => {
         it(`does not start a line comment`, () => expect(liner.lineComment).toBeNull())
         it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+        it(`does not change onEndOfFile`, () => expect(liner.onEndOfFile).toBe(onEndOfFile))
         it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
         it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
         it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
         it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
         it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the accumulated text is not empty`, () => {
@@ -141,6 +149,7 @@ describe(`linerCharacter`, () => {
         it(`does not start a line comment`, () => expect(liner.lineComment).toBeNull())
         it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+        it(`does not change onEndOfFile`, () => expect(liner.onEndOfFile).toBe(onEndOfFile))
         it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
         it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
         it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
@@ -149,6 +158,7 @@ describe(`linerCharacter`, () => {
         it(`calls onLine with the context`, () => expect(onLine).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
         it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
     })
 
@@ -162,10 +172,12 @@ describe(`linerCharacter`, () => {
       it(`does not start a line comment`, () => expect(liner.lineComment).toBeNull())
       it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+      it(`does not change onEndOfFile`, () => expect(liner.onEndOfFile).toBe(onEndOfFile))
       it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
       it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
       it(`does not call linerTextNotEmpty`, () => expect(linerTextNotEmpty).not.toHaveBeenCalled())
       it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
   })
 
@@ -181,10 +193,12 @@ describe(`linerCharacter`, () => {
       it(`appends it to the end of the line comment`, () => expect(liner.lineComment).toEqual(`Test Line CommentTest Character`))
       it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+      it(`does not change onEndOfFile`, () => expect(liner.onEndOfFile).toBe(onEndOfFile))
       it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
       it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
       it(`does not call linerTextNotEmpty`, () => expect(linerTextNotEmpty).not.toHaveBeenCalled())
       it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
 
     describe(`when given a new line`, () => {
@@ -199,11 +213,13 @@ describe(`linerCharacter`, () => {
         it(`ends the line comment`, () => expect(liner.lineComment).toBeNull())
         it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+        it(`does not change onEndOfFile`, () => expect(liner.onEndOfFile).toBe(onEndOfFile))
         it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
         it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
         it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
         it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
         it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the accumulated text is not empty`, () => {
@@ -216,6 +232,7 @@ describe(`linerCharacter`, () => {
         it(`ends the line comment`, () => expect(liner.lineComment).toBeNull())
         it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
         it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+        it(`does not change onEndOfFile`, () => expect(liner.onEndOfFile).toBe(onEndOfFile))
         it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
         it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
         it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
@@ -224,6 +241,7 @@ describe(`linerCharacter`, () => {
         it(`calls onLine with the context`, () => expect(onLine).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
         it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
     })
 
@@ -237,10 +255,12 @@ describe(`linerCharacter`, () => {
       it(`appends it to the end of the line comment`, () => expect(liner.lineComment).toEqual(`Test Line CommentTest Character`))
       it(`does not change the context`, () => expect(liner.context).toEqual(`Test Context`))
       it(`does not change onLine`, () => expect(liner.onLine).toBe(onLine))
+      it(`does not change onEndOfFile`, () => expect(liner.onEndOfFile).toBe(onEndOfFile))
       it(`calls linerClassifyCharacter once`, () => expect(linerClassifyCharacter).toHaveBeenCalledTimes(1))
       it(`calls linerClassifyCharacter with the given character`, () => expect(linerClassifyCharacter).toHaveBeenCalledWith(`Test Character`))
       it(`does not call linerTextNotEmpty`, () => expect(linerTextNotEmpty).not.toHaveBeenCalled())
       it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
   })
 })
@@ -249,17 +269,24 @@ describe(`linerEndOfFile`, () => {
   const linerClassifyCharacter = setSpy(`linerClassifyCharacter`)
   const linerTextNotEmpty = setSpy(`linerTextNotEmpty`)
   const onLine = jasmine.createSpy(`onLine`)
+  const onEndOfFile = jasmine.createSpy(`onEndOfFile`)
+  let numberOfOnLineCallsAtTimeOfCallingOnEndOfFile
+  onEndOfFile.and.callFake(() => {
+    numberOfOnLineCallsAtTimeOfCallingOnEndOfFile = onLine.calls.count()
+  })
   afterEach(() => {
     linerClassifyCharacter.calls.reset()
     linerTextNotEmpty.calls.reset()
     onLine.calls.reset()
+    onEndOfFile.calls.reset()
   })
   let liner
   beforeEach(() => liner = {
     line: 2368,
     text: `Test Text`,
     context: `Test Context`,
-    onLine
+    onLine,
+    onEndOfFile
   })
 
   describe(`when not in a line comment`, () => {
@@ -274,6 +301,7 @@ describe(`linerEndOfFile`, () => {
       it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
       it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
       it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+      it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
     })
 
     describe(`when the accumulated text is not empty`, () => {
@@ -288,6 +316,8 @@ describe(`linerEndOfFile`, () => {
       it(`calls onLine with the context`, () => expect(onLine).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
       it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
       it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
+      it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
+      it(`calls onEndOfFile before onLine`, () => expect(numberOfOnLineCallsAtTimeOfCallingOnEndOfFile).toEqual(1))
     })
   })
 
@@ -303,6 +333,7 @@ describe(`linerEndOfFile`, () => {
       it(`calls linerTextNotEmpty once`, () => expect(linerTextNotEmpty).toHaveBeenCalledTimes(1))
       it(`calls linerTextNotEmpty with the text`, () => expect(linerTextNotEmpty).toHaveBeenCalledWith(`Test Text`))
       it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+      it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
     })
 
     describe(`when the accumulated text is not empty`, () => {
@@ -317,6 +348,8 @@ describe(`linerEndOfFile`, () => {
       it(`calls onLine with the context`, () => expect(onLine).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
       it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
       it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
+      it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
+      it(`calls onEndOfFile before onLine`, () => expect(numberOfOnLineCallsAtTimeOfCallingOnEndOfFile).toEqual(1))
     })
   })
 })

@@ -1,9 +1,10 @@
-const linerCreate = (context, onLine) => ({
+const linerCreate = (context, onLine, onEndOfFile) => ({
   line: 1,
   text: ``,
   lineComment: null,
   context,
-  onLine
+  onLine,
+  onEndOfFile
 })
 
 const linerClassifyCharacter = character => {
@@ -55,6 +56,7 @@ const linerEndOfFile = liner => {
   if (linerTextNotEmpty(liner.text)) {
     liner.onLine(liner.context, liner.line, liner.text)
   }
+  liner.onEndOfFile(liner.context)
 }
 
 const indenterCreate = (context, onLine, onIndent, onOutdent, onError) => ({
