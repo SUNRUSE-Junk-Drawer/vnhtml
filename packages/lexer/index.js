@@ -127,3 +127,99 @@ const indenterLine = (indenter, lineNumber, lineText) => {
       break
   }
 }
+
+const indenterMatch = text => {
+  const lineWithEmote = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
+  if (lineWithEmote) {
+    return {
+      lineWithEmote: {
+        characters: [lineWithEmote[1]],
+        emote: lineWithEmote[2]
+      }
+    }
+  }
+
+  const lineWithEmoteAndMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
+  if (lineWithEmoteAndMultipleCharacters) {
+    return {
+      lineWithEmote: {
+        characters: lineWithEmoteAndMultipleCharacters[1]
+          .trim()
+          .split(/\s+/)
+          .concat([lineWithEmoteAndMultipleCharacters[2]]),
+        emote: lineWithEmoteAndMultipleCharacters[3]
+      }
+    }
+  }
+
+  const line = /^(\S+)\s*:$/i.exec(text)
+  if (line) {
+    return {
+      line: {
+        characters: [line[1]]
+      }
+    }
+  }
+
+  const lineWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:$/i.exec(text)
+  if (lineWithMultipleCharacters) {
+    return {
+      line: {
+        characters: lineWithMultipleCharacters[1]
+          .trim()
+          .split(/\s+/)
+          .concat([lineWithMultipleCharacters[2]])
+      }
+    }
+  }
+
+  const lineWithEmoteAndText = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
+  if (lineWithEmoteAndText) {
+    return {
+      lineWithEmoteAndText: {
+        characters: [lineWithEmoteAndText[1]],
+        emote: lineWithEmoteAndText[2],
+        text: lineWithEmoteAndText[3]
+      }
+    }
+  }
+
+  const lineWithEmoteAndMultipleCharactersAndText = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
+  if (lineWithEmoteAndMultipleCharactersAndText) {
+    return {
+      lineWithEmoteAndText: {
+        characters: lineWithEmoteAndMultipleCharactersAndText[1]
+          .trim()
+          .split(/\s+/)
+          .concat([lineWithEmoteAndMultipleCharactersAndText[2]]),
+        emote: lineWithEmoteAndMultipleCharactersAndText[3],
+        text: lineWithEmoteAndMultipleCharactersAndText[4]
+      }
+    }
+  }
+
+  const lineWithText = /^(\S+)\s*:\s*(\S.*)$/i.exec(text)
+  if (lineWithText) {
+    return {
+      lineWithText: {
+        characters: [lineWithText[1]],
+        text: lineWithText[2]
+      }
+    }
+  }
+
+  const lineWithTextWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:\s*(\S.*)$/i.exec(text)
+  if (lineWithTextWithMultipleCharacters) {
+    return {
+      lineWithText: {
+        characters: lineWithTextWithMultipleCharacters[1]
+          .trim()
+          .split(/\s+/)
+          .concat([lineWithTextWithMultipleCharacters[2]]),
+        text: lineWithTextWithMultipleCharacters[3]
+      }
+    }
+  }
+
+  return null
+}
