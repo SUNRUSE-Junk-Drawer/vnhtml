@@ -355,17 +355,18 @@ describe(`linerEndOfFile`, () => {
 })
 
 describe(`indenterCreate`, () => {
-  it(`returns an object`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)).toEqual(jasmine.any(Object)))
-  it(`returns stack, an array containing zero`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).stack).toEqual([0]))
-  it(`returns indentationCharacter, null`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).indentationCharacter).toBeNull())
-  it(`returns context, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).context).toEqual(`Test Context`))
-  it(`returns onLine, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).onLine).toEqual(`Test On Line`))
-  it(`returns onIndent, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).onIndent).toEqual(`Test On Indent`))
-  it(`returns onOutdent, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).onOutdent).toEqual(`Test On Outdent`))
-  it(`returns onError, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).onError).toEqual(`Test On Error`))
-  it(`returns a new object every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)).not.toBe(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)))
-  it(`returns a new stack every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).stack).not.toBe(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`).stack))
-  it(`returns the same value every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)).toEqual(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`)))
+  it(`returns an object`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`)).toEqual(jasmine.any(Object)))
+  it(`returns stack, an array containing zero`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).stack).toEqual([0]))
+  it(`returns indentationCharacter, null`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).indentationCharacter).toBeNull())
+  it(`returns context, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).context).toEqual(`Test Context`))
+  it(`returns onLine, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).onLine).toEqual(`Test On Line`))
+  it(`returns onIndent, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).onIndent).toEqual(`Test On Indent`))
+  it(`returns onOutdent, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).onOutdent).toEqual(`Test On Outdent`))
+  it(`returns onError, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).onError).toEqual(`Test On Error`))
+  it(`returns onEndOfFile, given`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).onEndOfFile).toEqual(`Test On End Of File`))
+  it(`returns a new object every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`)).not.toBe(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`)))
+  it(`returns a new stack every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).stack).not.toBe(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`).stack))
+  it(`returns the same value every call`, () => expect(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`)).toEqual(get(`indenterCreate`)(`Test Context`, `Test On Line`, `Test On Indent`, `Test On Outdent`, `Test On Error`, `Test On End Of File`)))
 })
 
 describe(`indenterExtractIndentation`, () => {
@@ -456,6 +457,7 @@ describe(`indenterLine`, () => {
   const onIndent = jasmine.createSpy(`onIndent`)
   const onOutdent = jasmine.createSpy(`onOutdent`)
   const onError = jasmine.createSpy(`onError`)
+  const onEndOfFile = jasmine.createSpy(`onEndOfFile`)
   afterEach(() => {
     indenterExtractIndentation.calls.reset()
     indenterExtractText.calls.reset()
@@ -465,6 +467,7 @@ describe(`indenterLine`, () => {
     onIndent.calls.reset()
     onOutdent.calls.reset()
     onError.calls.reset()
+    onEndOfFile.calls.reset()
   })
   let indenter
   beforeEach(() => indenter = {
@@ -473,7 +476,8 @@ describe(`indenterLine`, () => {
     onLine,
     onIndent,
     onOutdent,
-    onError
+    onError,
+    onEndOfFile
   })
 
   describe(`when no indentation character has been found`, () => {
@@ -507,6 +511,7 @@ describe(`indenterLine`, () => {
       it(`does not call onIndent`, () => expect(onIndent).not.toHaveBeenCalled())
       it(`does not call onOutdent`, () => expect(onOutdent).not.toHaveBeenCalled())
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
 
     describe(`when the given line has inconsistent indentation`, () => {
@@ -534,6 +539,7 @@ describe(`indenterLine`, () => {
       it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
       it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
       it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
 
     describe(`when the given line has indentation`, () => {
@@ -567,6 +573,7 @@ describe(`indenterLine`, () => {
       it(`calls onIndent before onLine`, () => expect(numberOfOnIndentCallsAtTimeOfCallingOnLine).toEqual(1))
       it(`does not call onOutdent`, () => expect(onOutdent).not.toHaveBeenCalled())
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
   })
 
@@ -615,6 +622,7 @@ describe(`indenterLine`, () => {
       })
       it(`calls onOutdent before onLine`, () => expect(numberOfOnOutdentCallsAtTimeOfCallingOnLine).toEqual(4))
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
 
     describe(`when the given line has inconsistent indentation`, () => {
@@ -643,6 +651,7 @@ describe(`indenterLine`, () => {
       it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
       it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
       it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
+      it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
     })
 
     describe(`when the given line has indentation inconsistent with the rest of the file`, () => {
@@ -672,6 +681,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation matches the top of the stack`, () => {
@@ -699,6 +709,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation is between the top and first under on the stack`, () => {
@@ -726,6 +737,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation is the first under on the stack`, () => {
@@ -753,6 +765,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation is between the first and second under on the stack`, () => {
@@ -780,6 +793,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation is the second under on the stack`, () => {
@@ -807,6 +821,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot mix indentation white space`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Inconsistent indenting white space characters; it is likely that both spaces and tabs are being used to indent within the same file`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
     })
 
@@ -846,6 +861,7 @@ describe(`indenterLine`, () => {
         it(`calls onIndent before onLine`, () => expect(numberOfOnIndentCallsAtTimeOfCallingOnLine).toEqual(1))
         it(`does not call onOutdent`, () => expect(onOutdent).not.toHaveBeenCalled())
         it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation matches the top of the stack`, () => {
@@ -876,6 +892,7 @@ describe(`indenterLine`, () => {
         it(`does not call onIndent`, () => expect(onIndent).not.toHaveBeenCalled())
         it(`does not call onOutdent`, () => expect(onOutdent).not.toHaveBeenCalled())
         it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation is between the top and first under on the stack`, () => {
@@ -903,6 +920,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot outdent to a level they have not previously indented to`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Outdent to level not previously indented to`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation is the first under on the stack`, () => {
@@ -936,6 +954,7 @@ describe(`indenterLine`, () => {
         it(`calls onOutdent with the line number`, () => expect(onOutdent).toHaveBeenCalledWith(jasmine.anything(), 3897))
         it(`calls onOutdent before onLine`, () => expect(numberOfOnOutdentCallsAtTimeOfCallingOnLine).toEqual(1))
         it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation is between the first and second under on the stack`, () => {
@@ -963,6 +982,7 @@ describe(`indenterLine`, () => {
         it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
         it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
         it(`calls onError with a message informing the user that they cannot outdent to a level they have not previously indented to`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Outdent to level not previously indented to`))
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
 
       describe(`when the indentation is the second under on the stack`, () => {
@@ -996,6 +1016,7 @@ describe(`indenterLine`, () => {
         it(`calls onOutdent with the line number`, () => expect(onOutdent).toHaveBeenCalledWith(jasmine.anything(), 3897))
         it(`calls onOutdent before onLine`, () => expect(numberOfOnOutdentCallsAtTimeOfCallingOnLine).toEqual(2))
         it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+        it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
       })
     })
   })

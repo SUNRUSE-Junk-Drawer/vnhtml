@@ -59,14 +59,15 @@ const linerEndOfFile = liner => {
   liner.onEndOfFile(liner.context)
 }
 
-const indenterCreate = (context, onLine, onIndent, onOutdent, onError) => ({
+const indenterCreate = (context, onLine, onIndent, onOutdent, onError, onEndOfFile) => ({
   stack: [0],
   indentationCharacter: null,
   context,
   onLine,
   onIndent,
   onOutdent,
-  onError
+  onError,
+  onEndOfFile
 })
 
 const indenterExtractIndentation = text => /^\s*/.exec(text)[0]
