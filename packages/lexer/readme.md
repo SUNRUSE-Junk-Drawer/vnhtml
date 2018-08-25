@@ -17,17 +17,11 @@ var state = lexer.create(
       + ", lexed " + JSON.stringify(lexed)
     )
   },
-  function onIndent(context, line) {
-    console.log(
-      "Indent; context " + JSON.stringify(context)
-      + ", line " + line
-    )
+  function onIndent(context) {
+    console.log("Indent; context " + JSON.stringify(context))
   },
-  function onOutdent(context, line) {
-    console.log(
-      "Outdent; context " + JSON.stringify(context)
-      + ", line " + line
-    )
+  function onOutdent(context) {
+    console.log("Outdent; context " + JSON.stringify(context))
   },
   function onError(context, line, message) {
     console.log(
