@@ -28,7 +28,7 @@ describe(`linerCreate`, () => {
 })
 
 describe(`linerClassifyCharacter`, () => {
-  const run = (input, output) => describe(`given "${input}"`, () => it(`returns "${output}"`, () => get(`linerClassifyCharacter`)(input)))
+  const run = (input, output) => describe(`given "${input}"`, () => it(`returns "${output}"`, () => expect(get(`linerClassifyCharacter`)(input)).toEqual(output)))
   run(`a`, `partOfLine`)
   run(`d`, `partOfLine`)
   run(`q`, `partOfLine`)
