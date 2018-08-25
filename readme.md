@@ -1,5 +1,8 @@
 # vnhtml
 
+[![Travis](https://img.shields.io/travis/jameswilddev/vnhtml.svg)](https://travis-ci.org/jameswilddev/vnhtml)
+[![license](https://img.shields.io/github/license/jameswilddev/vnhtml.svg)](https://github.com/jameswilddev/vnhtml/blob/master/licence)
+
 A basic scripting language for visual novels, which compiles to a single HTML
 file.
 
