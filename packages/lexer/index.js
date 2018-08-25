@@ -8,7 +8,7 @@ const linerCreate = (context, onLine) => ({
 
 const linerClassifyCharacter = character => {
   switch (character) {
-    case `#`:
+    case `\``:
       return `lineComment`
 
     case `\r`:

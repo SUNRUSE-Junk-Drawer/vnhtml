@@ -40,12 +40,13 @@ describe(`linerClassifyCharacter`, () => {
   run(`!`, `partOfLine`)
   run(`$`, `partOfLine`)
   run(`?`, `partOfLine`)
+  run(`#`, `partOfLine`)
   run(`か`, `partOfLine`)
   run(` `, `partOfLine`)
   run(`\t`, `partOfLine`)
   run(`\r`, `newLine`)
   run(`\n`, `newLine`)
-  run(`#`, `lineComment`)
+  run(`\``, `lineComment`)
 })
 
 describe(`linerTextNotEmpty`, () => {
