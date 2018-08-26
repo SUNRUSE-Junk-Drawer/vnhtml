@@ -1400,6 +1400,10 @@ describe(`indenterMatch`, () => {
     run(`LABel \t\t \ta`, { label: { name: `a` } })
     run(`lABEl \t\t \tABc`, { label: { name: `ABc` } })
   })
+  describe(`go to`, () => {
+    run(`gO\t\t \ttO \t\t \ta`, { goTo: { label: `a` } })
+    run(`GO\t\t \tTo \t\t \tABc`, { goTo: { label: `ABc` } })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {

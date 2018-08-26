@@ -321,6 +321,15 @@ const indenterMatch = text => {
         }
       }
 
+      const goTo = /^go\s+to\s+(\S+)$/i.exec(text)
+      if (goTo) {
+        return {
+          goTo: {
+            label: goTo[1]
+          }
+        }
+      }
+
       return null
   }
 }
