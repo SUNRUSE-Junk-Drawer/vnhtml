@@ -1,5 +1,5 @@
 const rewire = require(`rewire`)
-const index = rewire(`./index`)
+const index = rewire(`./index.babel.js`)
 
 const get = name => index.__get__(name)
 const set = (name, value) => {

@@ -16,17 +16,17 @@
   },
   "scripts": {
     "test": "npm-run-all jasmineUnit jasmineIntegration",
-    "jasmineUnit": "nyc --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --include index.js jasmine JASMINE_CONFIG_PATH=unit.jasmine.json",
-    "jasmineIntegration": "nyc --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --include index.js jasmine JASMINE_CONFIG_PATH=integration.jasmine.json",
+    "jasmineUnit": "nyc --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --include index.babel.js jasmine JASMINE_CONFIG_PATH=unit.jasmine.json",
+    "jasmineIntegration": "nyc --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --include index.min.js jasmine JASMINE_CONFIG_PATH=integration.jasmine.json",
     "rimraf": "rimraf dist",
     "mkdirp": "mkdirp dist",
     "compile": "npm-run-all rimraf mkdirp compileBabel compileUglifyJs compilePkg compileZipPkg",
-    "compileBabel": "babel index.js --out-file index.min.js",
-    "compileUglifyJs": "uglifyjs index.min.js --compress --mangle --toplevel --output index.min.js",
+    "compileBabel": "babel index.js --out-file index.babel.js",
+    "compileUglifyJs": "uglifyjs index.babel.js --compress --mangle --toplevel --output index.min.js",
     "compilePkg": "pkg index.min.js --output dist/vnhtml-cli --targets node8-win-x64,node8-linux-x64,node8-linux-x86,node8-macos-x64,node8-macos-x86",
     "compileZipPkg": "babel-node zipPkg",
     "watch": "npm-run-all watchBabel",
-    "watchBabel": "babel index.js --watch --out-file index.min.js",
+    "watchBabel": "babel index.js --watch --out-file index.babel.js",
     "example": "node index.min.js example/main.vnh --html dist/example.html --zip dist/example.zip"
   },
   "devDependencies": {
