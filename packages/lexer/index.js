@@ -226,6 +226,29 @@ const indenterMatch = text => {
     }
   }
 
+  const emote = /^(\S+)\s+is\s+(\S+)$/i.exec(text)
+  if (emote) {
+    return {
+      emote: {
+        characters: [emote[1]],
+        emote: emote[2]
+      }
+    }
+  }
+
+  const emoteWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s+are\s+(\S+)$/i.exec(text)
+  if (emoteWithMultipleCharacters) {
+    return {
+      emote: {
+        characters: emoteWithMultipleCharacters[1]
+          .trim()
+          .split(/\s+/)
+          .concat(emoteWithMultipleCharacters[2]),
+        emote: emoteWithMultipleCharacters[3]
+      }
+    }
+  }
+
   return null
 }
 
