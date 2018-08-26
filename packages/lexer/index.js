@@ -272,3 +272,10 @@ export const character = (state, character) => {
       throw new Error(`Cannot append characters after an error has occurred`)
   }
 }
+
+export const text = (state, text) => {
+  Array
+    .from(text)
+    .forEach(textCharacter => character(state, textCharacter))
+  }
+}
