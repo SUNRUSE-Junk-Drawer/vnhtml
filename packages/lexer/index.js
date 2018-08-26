@@ -339,6 +339,15 @@ const indenterMatch = text => {
         }
       }
 
+      const include = /^include\s+(\S+)$/i.exec(text)
+      if (include) {
+        return {
+          include: {
+            name: include[1]
+          }
+        }
+      }
+
       return null
   }
 }

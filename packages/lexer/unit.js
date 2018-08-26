@@ -1408,6 +1408,10 @@ describe(`indenterMatch`, () => {
     run(`a\t\t \tIn \t\t \tBACKGRound`, { background: { name: `a` } })
     run(`ABc\t\t \tiN \t\t \tbaCKgrOUND`, { background: { name: `ABc` } })
   })
+  describe(`include`, () => {
+    run(`INcludE \t\t \ta`, { include: { name: `a` } })
+    run(`inCLUDe \t\t \tABc`, { include: { name: `ABc` } })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {
