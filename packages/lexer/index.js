@@ -134,173 +134,181 @@ const indenterLine = (indenter, lineNumber, lineText) => {
 }
 
 const indenterMatch = text => {
-  const lineWithEmote = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
-  if (lineWithEmote) {
-    return {
-      lineWithEmote: {
-        characters: [lineWithEmote[1]],
-        emote: lineWithEmote[2]
+  switch (text.toLowerCase()) {
+    case `else`:
+      return {
+        else: {}
       }
-    }
-  }
 
-  const lineWithEmoteAndMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
-  if (lineWithEmoteAndMultipleCharacters) {
-    return {
-      lineWithEmote: {
-        characters: lineWithEmoteAndMultipleCharacters[1]
-          .trim()
-          .split(/\s+/)
-          .concat([lineWithEmoteAndMultipleCharacters[2]]),
-        emote: lineWithEmoteAndMultipleCharacters[3]
+    default:
+      const lineWithEmote = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
+      if (lineWithEmote) {
+        return {
+          lineWithEmote: {
+            characters: [lineWithEmote[1]],
+            emote: lineWithEmote[2]
+          }
+        }
       }
-    }
-  }
 
-  const line = /^(\S+)\s*:$/i.exec(text)
-  if (line) {
-    return {
-      line: {
-        characters: [line[1]]
+      const lineWithEmoteAndMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
+      if (lineWithEmoteAndMultipleCharacters) {
+        return {
+          lineWithEmote: {
+            characters: lineWithEmoteAndMultipleCharacters[1]
+              .trim()
+              .split(/\s+/)
+              .concat([lineWithEmoteAndMultipleCharacters[2]]),
+            emote: lineWithEmoteAndMultipleCharacters[3]
+          }
+        }
       }
-    }
-  }
 
-  const lineWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:$/i.exec(text)
-  if (lineWithMultipleCharacters) {
-    return {
-      line: {
-        characters: lineWithMultipleCharacters[1]
-          .trim()
-          .split(/\s+/)
-          .concat([lineWithMultipleCharacters[2]])
+      const line = /^(\S+)\s*:$/i.exec(text)
+      if (line) {
+        return {
+          line: {
+            characters: [line[1]]
+          }
+        }
       }
-    }
-  }
 
-  const lineWithEmoteAndText = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
-  if (lineWithEmoteAndText) {
-    return {
-      lineWithEmoteAndText: {
-        characters: [lineWithEmoteAndText[1]],
-        emote: lineWithEmoteAndText[2],
-        text: lineWithEmoteAndText[3]
+      const lineWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:$/i.exec(text)
+      if (lineWithMultipleCharacters) {
+        return {
+          line: {
+            characters: lineWithMultipleCharacters[1]
+              .trim()
+              .split(/\s+/)
+              .concat([lineWithMultipleCharacters[2]])
+          }
+        }
       }
-    }
-  }
 
-  const lineWithEmoteAndMultipleCharactersAndText = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
-  if (lineWithEmoteAndMultipleCharactersAndText) {
-    return {
-      lineWithEmoteAndText: {
-        characters: lineWithEmoteAndMultipleCharactersAndText[1]
-          .trim()
-          .split(/\s+/)
-          .concat([lineWithEmoteAndMultipleCharactersAndText[2]]),
-        emote: lineWithEmoteAndMultipleCharactersAndText[3],
-        text: lineWithEmoteAndMultipleCharactersAndText[4]
+      const lineWithEmoteAndText = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
+      if (lineWithEmoteAndText) {
+        return {
+          lineWithEmoteAndText: {
+            characters: [lineWithEmoteAndText[1]],
+            emote: lineWithEmoteAndText[2],
+            text: lineWithEmoteAndText[3]
+          }
+        }
       }
-    }
-  }
 
-  const lineWithText = /^(\S+)\s*:\s*(\S.*)$/i.exec(text)
-  if (lineWithText) {
-    return {
-      lineWithText: {
-        characters: [lineWithText[1]],
-        text: lineWithText[2]
+      const lineWithEmoteAndMultipleCharactersAndText = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
+      if (lineWithEmoteAndMultipleCharactersAndText) {
+        return {
+          lineWithEmoteAndText: {
+            characters: lineWithEmoteAndMultipleCharactersAndText[1]
+              .trim()
+              .split(/\s+/)
+              .concat([lineWithEmoteAndMultipleCharactersAndText[2]]),
+            emote: lineWithEmoteAndMultipleCharactersAndText[3],
+            text: lineWithEmoteAndMultipleCharactersAndText[4]
+          }
+        }
       }
-    }
-  }
 
-  const lineWithTextWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:\s*(\S.*)$/i.exec(text)
-  if (lineWithTextWithMultipleCharacters) {
-    return {
-      lineWithText: {
-        characters: lineWithTextWithMultipleCharacters[1]
-          .trim()
-          .split(/\s+/)
-          .concat([lineWithTextWithMultipleCharacters[2]]),
-        text: lineWithTextWithMultipleCharacters[3]
+      const lineWithText = /^(\S+)\s*:\s*(\S.*)$/i.exec(text)
+      if (lineWithText) {
+        return {
+          lineWithText: {
+            characters: [lineWithText[1]],
+            text: lineWithText[2]
+          }
+        }
       }
-    }
-  }
 
-  const emote = /^(\S+)\s+is\s+(\S+)$/i.exec(text)
-  if (emote) {
-    return {
-      emote: {
-        characters: [emote[1]],
-        emote: emote[2]
+      const lineWithTextWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:\s*(\S.*)$/i.exec(text)
+      if (lineWithTextWithMultipleCharacters) {
+        return {
+          lineWithText: {
+            characters: lineWithTextWithMultipleCharacters[1]
+              .trim()
+              .split(/\s+/)
+              .concat([lineWithTextWithMultipleCharacters[2]]),
+            text: lineWithTextWithMultipleCharacters[3]
+          }
+        }
       }
-    }
-  }
 
-  const emoteWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s+are\s+(\S+)$/i.exec(text)
-  if (emoteWithMultipleCharacters) {
-    return {
-      emote: {
-        characters: emoteWithMultipleCharacters[1]
-          .trim()
-          .split(/\s+/)
-          .concat(emoteWithMultipleCharacters[2]),
-        emote: emoteWithMultipleCharacters[3]
+      const emote = /^(\S+)\s+is\s+(\S+)$/i.exec(text)
+      if (emote) {
+        return {
+          emote: {
+            characters: [emote[1]],
+            emote: emote[2]
+          }
+        }
       }
-    }
-  }
 
-  const leaves = /^(\S+)\s+leaves$/i.exec(text)
-  if (leaves) {
-    return {
-      leave: {
-        characters: [leaves[1]]
+      const emoteWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s+are\s+(\S+)$/i.exec(text)
+      if (emoteWithMultipleCharacters) {
+        return {
+          emote: {
+            characters: emoteWithMultipleCharacters[1]
+              .trim()
+              .split(/\s+/)
+              .concat(emoteWithMultipleCharacters[2]),
+            emote: emoteWithMultipleCharacters[3]
+          }
+        }
       }
-    }
-  }
 
-  const leave = /^(\S.*)\s+and\s+(\S+)\s+leave$/i.exec(text)
-  if (leave) {
-    return {
-      leave: {
-        characters: leave[1]
-          .trim()
-          .split(/\s+/)
-          .concat([leave[2]])
+      const leaves = /^(\S+)\s+leaves$/i.exec(text)
+      if (leaves) {
+        return {
+          leave: {
+            characters: [leaves[1]]
+          }
+        }
       }
-    }
-  }
 
-  const set = /^set\s+(\S+)\s+(\S+)$/i.exec(text)
-  if (set) {
-    return {
-      set: {
-        flag: set[1],
-        value: set[2]
+      const leave = /^(\S.*)\s+and\s+(\S+)\s+leave$/i.exec(text)
+      if (leave) {
+        return {
+          leave: {
+            characters: leave[1]
+              .trim()
+              .split(/\s+/)
+              .concat([leave[2]])
+          }
+        }
       }
-    }
-  }
 
-  const _if = /^if\s+(\S+)\s+(\S+)$/i.exec(text)
-  if (_if) {
-    return {
-      if: {
-        flag: _if[1],
-        value: _if[2]
+      const set = /^set\s+(\S+)\s+(\S+)$/i.exec(text)
+      if (set) {
+        return {
+          set: {
+            flag: set[1],
+            value: set[2]
+          }
+        }
       }
-    }
-  }
 
-  const elseIf = /^else\s+if\s+(\S+)\s+(\S+)$/i.exec(text)
-  if (elseIf) {
-    return {
-      elseIf: {
-        flag: elseIf[1],
-        value: elseIf[2]
+      const _if = /^if\s+(\S+)\s+(\S+)$/i.exec(text)
+      if (_if) {
+        return {
+          if: {
+            flag: _if[1],
+            value: _if[2]
+          }
+        }
       }
-    }
-  }
 
-  return null
+      const elseIf = /^else\s+if\s+(\S+)\s+(\S+)$/i.exec(text)
+      if (elseIf) {
+        return {
+          elseIf: {
+            flag: elseIf[1],
+            value: elseIf[2]
+          }
+        }
+      }
+
+      return null
+  }
 }
 
 const indenterEndOfFile = indenter => {
