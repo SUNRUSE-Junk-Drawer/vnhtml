@@ -15,7 +15,9 @@
     "access": "public"
   },
   "scripts": {
-    "test": "nyc --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --include index.js jasmine JASMINE_CONFIG_PATH=jasmine.json",
+    "test": "npm-run-all jasmineUnit jasmineIntegration",
+    "jasmineUnit": "nyc --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --include index.js jasmine JASMINE_CONFIG_PATH=unit.jasmine.json",
+    "jasmineIntegration": "nyc --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --include index.js jasmine JASMINE_CONFIG_PATH=integration.jasmine.json",
     "compile": "npm-run-all compileBabel compileUglifyJs",
     "compileBabel": "babel index.js --out-file index.min.js",
     "compileUglifyJs": "uglifyjs index.min.js --compress --mangle --toplevel --output index.min.js",
