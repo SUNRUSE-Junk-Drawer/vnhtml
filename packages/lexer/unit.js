@@ -1436,8 +1436,8 @@ describe(`create`, () => {
 describe(`character`, () => {
   const linerCharacter = setSpy(`linerCharacter`)
   afterEach(() => linerCharacter.calls.reset())
-  let stateAtTimeOfCallingLineCharacter
-  let linerAtTimeOfCallingLineCharacter
+  let stateAtTimeOfCallingLinerCharacter
+  let linerAtTimeOfCallingLinerCharacter
   let state
   beforeEach(() => state = {
     liner: `Test Liner`
@@ -1448,23 +1448,23 @@ describe(`character`, () => {
     describe(`when no error occurs`, () => {
       beforeEach(() => {
         linerCharacter.and.callFake(() => {
-          stateAtTimeOfCallingLineCharacter = state.state
-          linerAtTimeOfCallingLineCharacter = state.liner
+          stateAtTimeOfCallingLinerCharacter = state.state
+          linerAtTimeOfCallingLinerCharacter = state.liner
         })
         index.character(state, `Test Character`)
       })
       it(`passes one character to the liner`, () => expect(linerCharacter).toHaveBeenCalledTimes(1))
       it(`passes the liner context to the liner`, () => expect(linerCharacter).toHaveBeenCalledWith(`Test Liner`, jasmine.anything()))
       it(`passes the given character to the liner`, () => expect(linerCharacter).toHaveBeenCalledWith(jasmine.anything(), `Test Character`))
-      it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLineCharacter).toEqual(`processing`))
-      it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLineCharacter).toEqual(`Test Liner`))
+      it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLinerCharacter).toEqual(`processing`))
+      it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLinerCharacter).toEqual(`Test Liner`))
       it(`resets the state to "waiting"`, () => expect(state.state).toEqual(`waiting`))
       it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
     })
     describe(`when an error is thrown`, () => {
       beforeEach(() => linerCharacter.and.callFake(() => {
-        stateAtTimeOfCallingLineCharacter = state.state
-        linerAtTimeOfCallingLineCharacter = state.liner
+        stateAtTimeOfCallingLinerCharacter = state.state
+        linerAtTimeOfCallingLinerCharacter = state.liner
         throw new Error(`Test Error`)
       }))
       it(`rethrows the error`, () => expect(() => index.character(state, `Test Character`)).toThrowError(`Test Error`))
@@ -1477,16 +1477,16 @@ describe(`character`, () => {
         it(`passes one character to the liner`, () => expect(linerCharacter).toHaveBeenCalledTimes(1))
         it(`passes the liner context to the liner`, () => expect(linerCharacter).toHaveBeenCalledWith(`Test Liner`, jasmine.anything()))
         it(`passes the given character to the liner`, () => expect(linerCharacter).toHaveBeenCalledWith(jasmine.anything(), `Test Character`))
-        it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLineCharacter).toEqual(`processing`))
-        it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLineCharacter).toEqual(`Test Liner`))
+        it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLinerCharacter).toEqual(`processing`))
+        it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLinerCharacter).toEqual(`Test Liner`))
         it(`sets the state to "error"`, () => expect(state.state).toEqual(`error`))
         it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
       })
     })
     describe(`when character was called recursively`, () => {
       beforeEach(() => linerCharacter.and.callFake(() => {
-        stateAtTimeOfCallingLineCharacter = state.state
-        linerAtTimeOfCallingLineCharacter = state.liner
+        stateAtTimeOfCallingLinerCharacter = state.state
+        linerAtTimeOfCallingLinerCharacter = state.liner
         state.state = `error`
         throw new Error(`Test Error`)
       }))
@@ -1500,8 +1500,8 @@ describe(`character`, () => {
         it(`passes one character to the liner`, () => expect(linerCharacter).toHaveBeenCalledTimes(1))
         it(`passes the liner context to the liner`, () => expect(linerCharacter).toHaveBeenCalledWith(`Test Liner`, jasmine.anything()))
         it(`passes the given character to the liner`, () => expect(linerCharacter).toHaveBeenCalledWith(jasmine.anything(), `Test Character`))
-        it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLineCharacter).toEqual(`processing`))
-        it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLineCharacter).toEqual(`Test Liner`))
+        it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLinerCharacter).toEqual(`processing`))
+        it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLinerCharacter).toEqual(`Test Liner`))
         it(`leaves the state as "error"`, () => expect(state.state).toEqual(`error`))
         it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
       })
@@ -1509,8 +1509,8 @@ describe(`character`, () => {
     describe(`when character was called recusively and the error is swallowed`, () => {
       beforeEach(() => {
         linerCharacter.and.callFake(() => {
-          stateAtTimeOfCallingLineCharacter = state.state
-          linerAtTimeOfCallingLineCharacter = state.liner
+          stateAtTimeOfCallingLinerCharacter = state.state
+          linerAtTimeOfCallingLinerCharacter = state.liner
           state.state = `error`
         })
         index.character(state, `Test Character`)
@@ -1518,8 +1518,8 @@ describe(`character`, () => {
       it(`passes one character to the liner`, () => expect(linerCharacter).toHaveBeenCalledTimes(1))
       it(`passes the liner context to the liner`, () => expect(linerCharacter).toHaveBeenCalledWith(`Test Liner`, jasmine.anything()))
       it(`passes the given character to the liner`, () => expect(linerCharacter).toHaveBeenCalledWith(jasmine.anything(), `Test Character`))
-      it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLineCharacter).toEqual(`processing`))
-      it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLineCharacter).toEqual(`Test Liner`))
+      it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLinerCharacter).toEqual(`processing`))
+      it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLinerCharacter).toEqual(`Test Liner`))
       it(`leaves the state as "error"`, () => expect(state.state).toEqual(`error`))
       it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
     })
