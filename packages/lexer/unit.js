@@ -1608,3 +1608,137 @@ describe(`text`, () => {
     })
   })
 })
+
+describe(`endOfFile`, () => {
+  const linerEndOfFile = setSpy(`linerEndOfFile`)
+  afterEach(() => linerEndOfFile.calls.reset())
+  let stateAtTimeOfCallingLinerEndOfFile
+  let linerAtTimeOfCallingLinerEndOfFile
+  let state
+  beforeEach(() => state = {
+    liner: `Test Liner`
+  })
+
+  describe(`when in state "waiting"`, () => {
+    beforeEach(() => state.state = `waiting`)
+    describe(`when no error occurs`, () => {
+      beforeEach(() => {
+        linerEndOfFile.and.callFake(() => {
+          stateAtTimeOfCallingLinerEndOfFile = state.state
+          linerAtTimeOfCallingLinerEndOfFile = state.liner
+        })
+        index.endOfFile(state)
+      })
+      it(`calls linerEndOfFile once`, () => expect(linerEndOfFile).toHaveBeenCalledTimes(1))
+      it(`passes the liner context to the liner`, () => expect(linerEndOfFile).toHaveBeenCalledWith(`Test Liner`))
+      it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLinerEndOfFile).toEqual(`processing`))
+      it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLinerEndOfFile).toEqual(`Test Liner`))
+      it(`resets the state to "waiting"`, () => expect(state.state).toEqual(`waiting`))
+      it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
+    })
+    describe(`when an error is thrown`, () => {
+      beforeEach(() => linerEndOfFile.and.callFake(() => {
+        stateAtTimeOfCallingLinerEndOfFile = state.state
+        linerAtTimeOfCallingLinerEndOfFile = state.liner
+        throw new Error(`Test Error`)
+      }))
+      it(`rethrows the error`, () => expect(() => index.endOfFile(state)).toThrowError(`Test Error`))
+      describe(`side effects`, () => {
+        beforeEach(() => {
+          try {
+            index.endOfFile(state)
+          } catch { }
+        })
+        it(`calls linerEndOfFile once`, () => expect(linerEndOfFile).toHaveBeenCalledTimes(1))
+        it(`passes the liner context to the liner`, () => expect(linerEndOfFile).toHaveBeenCalledWith(`Test Liner`))
+        it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLinerEndOfFile).toEqual(`processing`))
+        it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLinerEndOfFile).toEqual(`Test Liner`))
+        it(`sets the state to "error"`, () => expect(state.state).toEqual(`error`))
+        it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
+      })
+    })
+    describe(`when called recursively`, () => {
+      beforeEach(() => linerEndOfFile.and.callFake(() => {
+        stateAtTimeOfCallingLinerEndOfFile = state.state
+        linerAtTimeOfCallingLinerEndOfFile = state.liner
+        state.state = `error`
+        throw new Error(`Test Error`)
+      }))
+      it(`rethrows the error`, () => expect(() => index.endOfFile(state)).toThrowError(`Test Error`))
+      describe(`side effects`, () => {
+        beforeEach(() => {
+          try {
+            index.endOfFile(state)
+          } catch { }
+        })
+        it(`calls linerEndOfFile once`, () => expect(linerEndOfFile).toHaveBeenCalledTimes(1))
+        it(`passes the liner context to the liner`, () => expect(linerEndOfFile).toHaveBeenCalledWith(`Test Liner`))
+        it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLinerEndOfFile).toEqual(`processing`))
+        it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLinerEndOfFile).toEqual(`Test Liner`))
+        it(`leaves the state as "error"`, () => expect(state.state).toEqual(`error`))
+        it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
+      })
+    })
+    describe(`when called recusively and the error is swallowed`, () => {
+      beforeEach(() => {
+        linerEndOfFile.and.callFake(() => {
+          stateAtTimeOfCallingLinerEndOfFile = state.state
+          linerAtTimeOfCallingLinerEndOfFile = state.liner
+          state.state = `error`
+        })
+        index.endOfFile(state)
+      })
+      it(`calls linerEndOfFile once`, () => expect(linerEndOfFile).toHaveBeenCalledTimes(1))
+      it(`passes the liner context to the liner`, () => expect(linerEndOfFile).toHaveBeenCalledWith(`Test Liner`))
+      it(`set the state to "processing" while the liner ran`, () => expect(stateAtTimeOfCallingLinerEndOfFile).toEqual(`processing`))
+      it(`did not change the liner context while the liner ran`, () => expect(linerAtTimeOfCallingLinerEndOfFile).toEqual(`Test Liner`))
+      it(`leaves the state as "error"`, () => expect(state.state).toEqual(`error`))
+      it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
+    })
+  })
+
+  describe(`when in state "processing"`, () => {
+    beforeEach(() => state.state = `processing`)
+    it(`throws an error`, () => expect(() => index.endOfFile(state)).toThrowError(`Cannot mark the end of the file recursively`))
+    describe(`side effects`, () => {
+      beforeEach(() => {
+        try {
+          index.endOfFile(state)
+        } catch { }
+      })
+      it(`does call linerEndOfFile`, () => expect(linerEndOfFile).not.toHaveBeenCalled())
+      it(`changes state to "error"`, () => expect(state.state).toEqual("error"))
+      it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
+    })
+  })
+
+  describe(`when in state "endOfFile"`, () => {
+    beforeEach(() => state.state = `endOfFile`)
+    it(`throws an error`, () => expect(() => index.endOfFile(state)).toThrowError(`Cannot mark the end of the file after the end of the file`))
+    describe(`side effects`, () => {
+      beforeEach(() => {
+        try {
+          index.endOfFile(state)
+        } catch { }
+      })
+      it(`does call linerEndOfFile`, () => expect(linerEndOfFile).not.toHaveBeenCalled())
+      it(`does not change state`, () => expect(state.state).toEqual("endOfFile"))
+      it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
+    })
+  })
+
+  describe(`when in state "error"`, () => {
+    beforeEach(() => state.state = `error`)
+    it(`throws an error`, () => expect(() => index.endOfFile(state)).toThrowError(`Cannot mark the end of the file after an error has occurred`))
+    describe(`side effects`, () => {
+      beforeEach(() => {
+        try {
+          index.endOfFile(state)
+        } catch { }
+      })
+      it(`does call linerEndOfFile`, () => expect(linerEndOfFile).not.toHaveBeenCalled())
+      it(`does not change state`, () => expect(state.state).toEqual("error"))
+      it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
+    })
+  })
+})

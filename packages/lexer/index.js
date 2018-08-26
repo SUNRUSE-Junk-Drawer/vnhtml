@@ -277,5 +277,31 @@ export const text = (state, text) => {
   Array
     .from(text)
     .forEach(textCharacter => character(state, textCharacter))
+}
+
+export const endOfFile = (state, character) => {
+  switch (state.state) {
+    case `waiting`:
+      state.state = `processing`
+      try {
+        linerEndOfFile(state.liner)
+      } catch (error) {
+        state.state = `error`
+        throw error
+      }
+      if (state.state == `processing`) {
+        state.state = `waiting`
+      }
+      break
+
+    case `processing`:
+      state.state = `error`
+      throw new Error(`Cannot mark the end of the file recursively`)
+
+    case `endOfFile`:
+      throw new Error(`Cannot mark the end of the file after the end of the file`)
+
+    case `error`:
+      throw new Error(`Cannot mark the end of the file after an error has occurred`)
   }
 }
