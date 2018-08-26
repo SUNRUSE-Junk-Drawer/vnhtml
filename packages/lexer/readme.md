@@ -98,12 +98,12 @@ Should any callback throw an exception, further calls to `character`, `text` and
 | `Jeff Jake and Phil (flatly):`               | `{ lineWithEmote: { characters: ["Jeff", "Jake", "Phil"], emote: "flatly" } }`                               |
 | `Jeff: Hello, world!`                        | `{ lineWithText: { characters: ["Jeff"], text: "Hello, world!" } }`                                          |
 | `Jeff Jake and Phil: Hello, world!`          | `{ lineWithText: { characters: ["Jeff", "Jake", "Phil"], text: "Hello, world!" } }`                          |
+| `Jeff (flatly): Hello, world!`               | `{ lineWithEmoteAndText: { characters: ["Jeff"], emote: "flatly", text: "Hello, world!" } }`                 |
+| `Jeff Jake and Phil (flatly): Hello, world!` | `{ lineWithEmoteAndText: { characters: ["Jeff", "Jake", "Phil"], emote: "flatly", text: "Hello, world!" } }` |
 | `Jeff is bewildered`                         | `{ emote: { characters: ["Jeff"], emote: "bewildered" } }`                                                   |
 | `Jeff Jake and Phil are bewildered`          | `{ emote: { characters: ["Jeff", "Jake", "Phil"], emote: "bewildered" } }`                                   |
 | `Jeff leaves`                                | `{ leave: { characters: ["Jeff"] } }`                                                                        |
 | `Jeff Jake and Phil leave`                   | `{ leave: { characters: ["Jeff", "Jake", "Phil"] } }`                                                        |
-| `Jeff (flatly): Hello, world!`               | `{ lineWithEmoteAndText: { characters: ["Jeff"], emote: "flatly", text: "Hello, world!" } }`                 |
-| `Jeff Jake and Phil (flatly): Hello, world!` | `{ lineWithEmoteAndText: { characters: ["Jeff", "Jake", "Phil"], emote: "flatly", text: "Hello, world!" } }` |
 | `set exampleFlag exampleValue`               | `{ set: { flag: "exampleFlag", value: "exampleValue" } }`                                                    |
 | `if exampleFlag exampleValue`                | `{ if: { flag: "exampleFlag", value: "exampleValue" } }`                                                     |
 | `else if exampleFlag exampleValue`           | `{ elseIf: { flag: "exampleFlag", value: "exampleValue" } }`                                                 |
