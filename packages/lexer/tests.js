@@ -1338,3 +1338,66 @@ describe(`indenterMatch`, () => {
     run(`a  \t  \t \t  b \t c\t\t AnD \t  \td   \t\t \t(e):  \t \t   fgh \t \t \t\t ijKL \t : \t \t\t mno`, { lineWithEmoteAndText: { characters: [`a`, `b`, `c`, `d`], emote: `e`, text: `fgh \t \t \t\t ijKL \t : \t \t\t mno` } })
   })
 })
+
+describe(`indenterEndOfFile`, () => {
+  const onLine = jasmine.createSpy(`onLine`)
+  const onIndent = jasmine.createSpy(`onIndent`)
+  const onOutdent = jasmine.createSpy(`onOutdent`)
+  const onError = jasmine.createSpy(`onError`)
+  const onEndOfFile = jasmine.createSpy(`onEndOfFile`)
+  let numberOfOnOutdentCallsAtTimeOfCallingOnLine
+  onEndOfFile.and.callFake(() => {
+    numberOfOnOutdentCallsAtTimeOfCallingOnLine = onOutdent.calls.count()
+  })
+  afterEach(() => {
+    onLine.calls.reset()
+    onIndent.calls.reset()
+    onOutdent.calls.reset()
+    onError.calls.reset()
+    onEndOfFile.calls.reset()
+  })
+  let indenter
+  beforeEach(() => indenter = {
+    context: `Test Context`,
+    onLine,
+    onIndent,
+    onOutdent,
+    onError,
+    onEndOfFile
+  })
+
+  describe(`when there is not an indentation character`, () => {
+    beforeEach(() => {
+      indenter.stack = [0]
+      indenter.indentationCharacter = null
+      get(`indenterEndOfFile`)(indenter)
+    })
+    it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+    it(`does not call onIndent`, () => expect(onIndent).not.toHaveBeenCalled())
+    it(`does not call onOutdent`, () => expect(onOutdent).not.toHaveBeenCalled())
+    it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+    it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
+    it(`calls onEndOfFile with the context`, () => expect(onEndOfFile).toHaveBeenCalledWith(`Test Context`))
+  })
+
+  describe(`when there is an indentation character`, () => {
+    beforeEach(() => {
+      indenter.stack = [0, 24, 33, 51, 78]
+      indenter.indentationCharacter = `Test Indentation Character`
+      get(`indenterEndOfFile`)(indenter)
+    })
+    it(`does not call onLine`, () => expect(onLine).not.toHaveBeenCalled())
+    it(`does not call onIndent`, () => expect(onIndent).not.toHaveBeenCalled())
+    it(`calls onOutdent once per stack level`, () => expect(onOutdent).toHaveBeenCalledTimes(4))
+    it(`calls onOutdent with the context`, () => {
+      expect(onOutdent.calls.argsFor(0)).toEqual([`Test Context`])
+      expect(onOutdent.calls.argsFor(1)).toEqual([`Test Context`])
+      expect(onOutdent.calls.argsFor(2)).toEqual([`Test Context`])
+      expect(onOutdent.calls.argsFor(3)).toEqual([`Test Context`])
+    })
+    it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+    it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
+    it(`calls onEndOfFile with the context`, () => expect(onEndOfFile).toHaveBeenCalledWith(`Test Context`))
+    it(`calls onOutdent before onEndOfFile`, () => expect(numberOfOnOutdentCallsAtTimeOfCallingOnLine).toEqual(4))
+  })
+})

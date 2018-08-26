@@ -228,3 +228,11 @@ const indenterMatch = text => {
 
   return null
 }
+
+const indenterEndOfFile = indenter => {
+  while (indenter.stack.length > 1) {
+    indenter.stack.pop()
+    indenter.onOutdent(indenter.context)
+  }
+  indenter.onEndOfFile(indenter.context)
+}
