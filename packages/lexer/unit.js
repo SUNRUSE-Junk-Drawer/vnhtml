@@ -1404,6 +1404,10 @@ describe(`indenterMatch`, () => {
     run(`gO\t\t \ttO \t\t \ta`, { goTo: { label: `a` } })
     run(`GO\t\t \tTo \t\t \tABc`, { goTo: { label: `ABc` } })
   })
+  describe(`in background`, () => {
+    run(`a\t\t \tIn \t\t \tBACKGRound`, { background: { name: `a` } })
+    run(`ABc\t\t \tiN \t\t \tbaCKgrOUND`, { background: { name: `ABc` } })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {

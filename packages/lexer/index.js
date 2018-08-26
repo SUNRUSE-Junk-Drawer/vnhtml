@@ -330,6 +330,15 @@ const indenterMatch = text => {
         }
       }
 
+      const inBackground = /^(\S+)\s+in\s+background$/i.exec(text)
+      if (inBackground) {
+        return {
+          background: {
+            name: inBackground[1]
+          }
+        }
+      }
+
       return null
   }
 }
