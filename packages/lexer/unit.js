@@ -1483,7 +1483,7 @@ describe(`character`, () => {
         it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
       })
     })
-    describe(`when character was called recursively`, () => {
+    describe(`when called recursively`, () => {
       beforeEach(() => linerCharacter.and.callFake(() => {
         stateAtTimeOfCallingLinerCharacter = state.state
         linerAtTimeOfCallingLinerCharacter = state.liner
@@ -1506,7 +1506,7 @@ describe(`character`, () => {
         it(`does not change the liner context`, () => expect(state.liner).toEqual(`Test Liner`))
       })
     })
-    describe(`when character was called recusively and the error is swallowed`, () => {
+    describe(`when called recusively and the error is swallowed`, () => {
       beforeEach(() => {
         linerCharacter.and.callFake(() => {
           stateAtTimeOfCallingLinerCharacter = state.state
