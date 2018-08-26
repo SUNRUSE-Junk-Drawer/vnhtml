@@ -245,3 +245,30 @@ export const create = (context, onLine, onIndent, onOutdent, onError, onEndOfFil
     indenterEndOfFile
   )
 })
+
+export const character = (state, character) => {
+  switch (state.state) {
+    case `waiting`:
+      state.state = `processing`
+      try {
+        linerCharacter(state.liner, character)
+      } catch (error) {
+        state.state = `error`
+        throw error
+      }
+      if (state.state == `processing`) {
+        state.state = `waiting`
+      }
+      break
+
+    case `processing`:
+      state.state = `error`
+      throw new Error(`Cannot append characters recursively`)
+
+    case `endOfFile`:
+      throw new Error(`Cannot append characters after the end of the file`)
+
+    case `error`:
+      throw new Error(`Cannot append characters after an error has occurred`)
+  }
+}
