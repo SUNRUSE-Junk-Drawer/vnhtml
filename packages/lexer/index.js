@@ -249,6 +249,27 @@ const indenterMatch = text => {
     }
   }
 
+  const leaves = /^(\S+)\s+leaves$/i.exec(text)
+  if (leaves) {
+    return {
+      leave: {
+        characters: [leaves[1]]
+      }
+    }
+  }
+
+  const leave = /^(\S.*)\s+and\s+(\S+)\s+leave$/i.exec(text)
+  if (leave) {
+    return {
+      leave: {
+        characters: leave[1]
+          .trim()
+          .split(/\s+/)
+          .concat([leave[2]])
+      }
+    }
+  }
+
   return null
 }
 

@@ -1358,6 +1358,23 @@ describe(`indenterMatch`, () => {
     run(`a \t\t \t B \t       \t c\t \tand  \t \t DEf \t\t \t ArE \t \t g`, { emote: { characters: [`a`, `B`, `c`, `DEf`], emote: `g` } })
     run(`a \t\t \t B \t       \t c\t \tand  \t \t d \t\t \t aRe \t \t EFG`, { emote: { characters: [`a`, `B`, `c`, `d`], emote: `EFG` } })
   })
+  describe(`leave`, () => {
+    run(`a \t\t \t lEAvEs`, { leave: { characters: [`a`] } })
+    run(`aBc \t\t \t LEAVes`, { leave: { characters: [`aBc`] } })
+    run(`a \t\t \t leavES`, { leave: { characters: [`a`] } })
+    run(`a \t\t \t and  \t \t B \t\t \t LEavE`, { leave: { characters: [`a`, `B`] } })
+    run(`aBC \t\t \t and  \t \t D \t\t \t leAVe`, { leave: { characters: [`aBC`, `D`] } })
+    run(`a \t\t \t and  \t \t BcD \t\t \t leaVE`, { leave: { characters: [`a`, `BcD`] } })
+    run(`a \t\t \t B \t       \t and  \t \t C \t\t \t LEAve`, { leave: { characters: [`a`, `B`, `C`] } })
+    run(`aBC \t\t \t d \t       \t and  \t \t e \t\t \t leAVe`, { leave: { characters: [`aBC`, `d`, `e`] } })
+    run(`a \t\t \t bCd \t       \t and  \t \t e \t\t \t LEavE`, { leave: { characters: [`a`, `bCd`, `e`] } })
+    run(`a \t\t \t B \t       \t and  \t \t cdE \t\t \t LEAVE`, { leave: { characters: [`a`, `B`, `cdE`] } })
+    run(`a \t\t \t B \t       \t c\t \tand  \t \t d \t\t \t leave`, { leave: { characters: [`a`, `B`, `c`, `d`] } })
+    run(`ABC \t\t \t d \t       \t e\t \tand  \t \t f \t\t \t lEAVe`, { leave: { characters: [`ABC`, `d`, `e`, `f`] } })
+    run(`a \t\t \t bcd \t       \t e\t \tand  \t \t f \t\t \t LeavE`, { leave: { characters: [`a`, `bcd`, `e`, `f`] } })
+    run(`a \t\t \t B \t       \t cDE\t \tand  \t \t f \t\t \t LEAVE`, { leave: { characters: [`a`, `B`, `cDE`, `f`] } })
+    run(`a \t\t \t B \t       \t c\t \tand  \t \t DEf \t\t \t Leave`, { leave: { characters: [`a`, `B`, `c`, `DEf`] } })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {
