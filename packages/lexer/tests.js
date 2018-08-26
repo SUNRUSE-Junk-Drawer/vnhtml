@@ -317,7 +317,7 @@ describe(`linerEndOfFile`, () => {
       it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
       it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
       it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
-      it(`calls onEndOfFile before onLine`, () => expect(numberOfOnLineCallsAtTimeOfCallingOnEndOfFile).toEqual(1))
+      it(`calls onLine before onEndOfFile`, () => expect(numberOfOnLineCallsAtTimeOfCallingOnEndOfFile).toEqual(1))
     })
   })
 
@@ -349,7 +349,7 @@ describe(`linerEndOfFile`, () => {
       it(`calls onLine with the line number`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), 2368, jasmine.anything()))
       it(`calls onLine with the text`, () => expect(onLine).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Text`))
       it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
-      it(`calls onEndOfFile before onLine`, () => expect(numberOfOnLineCallsAtTimeOfCallingOnEndOfFile).toEqual(1))
+      it(`calls onLine before onEndOfFile`, () => expect(numberOfOnLineCallsAtTimeOfCallingOnEndOfFile).toEqual(1))
     })
   })
 })
