@@ -1,0 +1,15 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "packages/cli/package.json",
+        "packages/collector/package.json",
+        "packages/finite-state-machine-generator/package.json",
+        "packages/html-generator/package.json",
+        "packages/lexer/package.json",
+        "packages/parser/package.json",
+        "packages/pretty-printer/package.json"
+      ]
+    }
+  }
+}
