@@ -312,6 +312,15 @@ const indenterMatch = text => {
         }
       }
 
+      const label = /^label\s+(\S+)$/i.exec(text)
+      if (label) {
+        return {
+          label: {
+            name: label[1]
+          }
+        }
+      }
+
       return null
   }
 }

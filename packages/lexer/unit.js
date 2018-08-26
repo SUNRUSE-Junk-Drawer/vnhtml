@@ -1396,6 +1396,10 @@ describe(`indenterMatch`, () => {
   describe(`menu`, () => {
     run(`mENu`, { menu: {} })
   })
+  describe(`label`, () => {
+    run(`LABel \t\t \ta`, { label: { name: `a` } })
+    run(`lABEl \t\t \tABc`, { label: { name: `ABc` } })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {
