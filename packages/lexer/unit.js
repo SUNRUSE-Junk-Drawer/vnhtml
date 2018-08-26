@@ -1380,6 +1380,11 @@ describe(`indenterMatch`, () => {
     run(`SEt \t \t\t ABc \t    \t b`, { set: { flag: `ABc`, value: `b` } })
     run(`sEt \t \t\t a \t    \t bCd`, { set: { flag: `a`, value: `bCd` } })
   })
+  describe(`if`, () => {
+    run(`IF \t \t\t a \t    \t B`, { if: { flag: `a`, value: `B` } })
+    run(`If \t \t\t ABc \t    \t b`, { if: { flag: `ABc`, value: `b` } })
+    run(`iF \t \t\t a \t    \t bCd`, { if: { flag: `a`, value: `bCd` } })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {

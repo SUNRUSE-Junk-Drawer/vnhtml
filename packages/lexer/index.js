@@ -280,6 +280,16 @@ const indenterMatch = text => {
     }
   }
 
+  const _if = /^if\s+(\S+)\s+(\S+)$/i.exec(text)
+  if (_if) {
+    return {
+      if: {
+        flag: _if[1],
+        value: _if[2]
+      }
+    }
+  }
+
   return null
 }
 
