@@ -290,6 +290,16 @@ const indenterMatch = text => {
     }
   }
 
+  const elseIf = /^else\s+if\s+(\S+)\s+(\S+)$/i.exec(text)
+  if (elseIf) {
+    return {
+      elseIf: {
+        flag: elseIf[1],
+        value: elseIf[2]
+      }
+    }
+  }
+
   return null
 }
 

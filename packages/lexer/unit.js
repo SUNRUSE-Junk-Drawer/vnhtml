@@ -1385,6 +1385,11 @@ describe(`indenterMatch`, () => {
     run(`If \t \t\t ABc \t    \t b`, { if: { flag: `ABc`, value: `b` } })
     run(`iF \t \t\t a \t    \t bCd`, { if: { flag: `a`, value: `bCd` } })
   })
+  describe(`else if`, () => {
+    run(`elSE \t   \t \t IF \t \t\t a \t    \t B`, { elseIf: { flag: `a`, value: `B` } })
+    run(`ELse \t   \t \t If \t \t\t ABc \t    \t b`, { elseIf: { flag: `ABc`, value: `b` } })
+    run(`eLSe \t   \t \t iF \t \t\t a \t    \t bCd`, { elseIf: { flag: `a`, value: `bCd` } })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {
