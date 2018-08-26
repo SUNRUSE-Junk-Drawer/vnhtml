@@ -22,7 +22,11 @@ jobs:
       - npm run-script compilePkg --prefix packages/cli
       - npm run-script compileZipPkg --prefix packages/cli
       - npm run-script example --prefix packages/cli
-      - npm test --prefix packages/cli
+      - cd packages/cli
+      - greenkeeper-lockfile-update
+      - npm test
+      - greenkeeper-lockfile-upload
+      - cd ../..
       deploy:
         - provider: releases
           api_key:
@@ -47,7 +51,11 @@ jobs:
       script:
       - npm run-script compileBabel --prefix packages/collector
       - npm run-script compileUglifyJs --prefix packages/collector
-      - npm test --prefix packages/collector
+      - cd packages/collector
+      - greenkeeper-lockfile-update
+      - npm test
+      - greenkeeper-lockfile-upload
+      - cd ../..
       deploy:
         - provider: script
           script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/collector
@@ -62,7 +70,11 @@ jobs:
       script:
       - npm run-script compileBabel --prefix packages/finite-state-machine-generator
       - npm run-script compileUglifyJs --prefix packages/finite-state-machine-generator
-      - npm test --prefix packages/finite-state-machine-generator
+      - cd packages/finite-state-machine-generator
+      - greenkeeper-lockfile-update
+      - npm test
+      - greenkeeper-lockfile-upload
+      - cd ../..
       deploy:
         - provider: script
           script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/finite-state-machine-generator
@@ -77,7 +89,11 @@ jobs:
       script:
       - npm run-script compileBabel --prefix packages/html-generator
       - npm run-script compileUglifyJs --prefix packages/html-generator
-      - npm test --prefix packages/html-generator
+      - cd packages/html-generator
+      - greenkeeper-lockfile-update
+      - npm test
+      - greenkeeper-lockfile-upload
+      - cd ../..
       deploy:
         - provider: script
           script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/html-generator
@@ -92,7 +108,11 @@ jobs:
       script:
       - npm run-script compileBabel --prefix packages/lexer
       - npm run-script compileUglifyJs --prefix packages/lexer
-      - npm test --prefix packages/lexer
+      - cd packages/lexer
+      - greenkeeper-lockfile-update
+      - npm test
+      - greenkeeper-lockfile-upload
+      - cd ../..
       deploy:
         - provider: script
           script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/lexer
@@ -107,7 +127,11 @@ jobs:
       script:
       - npm run-script compileBabel --prefix packages/parser
       - npm run-script compileUglifyJs --prefix packages/parser
-      - npm test --prefix packages/parser
+      - cd packages/parser
+      - greenkeeper-lockfile-update
+      - npm test
+      - greenkeeper-lockfile-upload
+      - cd ../..
       deploy:
         - provider: script
           script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/parser
@@ -122,7 +146,11 @@ jobs:
       script:
       - npm run-script compileBabel --prefix packages/pretty-printer
       - npm run-script compileUglifyJs --prefix packages/pretty-printer
-      - npm test --prefix packages/pretty-printer
+      - cd packages/pretty-printer
+      - greenkeeper-lockfile-update
+      - npm test
+      - greenkeeper-lockfile-upload
+      - cd ../..
       deploy:
         - provider: script
           script: echo $NPM_AUTH > ~/.npmrc && npm publish packages/pretty-printer
