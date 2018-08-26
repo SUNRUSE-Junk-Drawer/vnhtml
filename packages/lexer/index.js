@@ -236,3 +236,14 @@ const indenterEndOfFile = indenter => {
   }
   indenter.onEndOfFile(indenter.context)
 }
+
+export const create = (context, onLine, onIndent, onOutdent, onError, onEndOfFile) => ({
+  endOfFile: false,
+  exceptionThrown: false,
+  recursing: false,
+  liner: linerCreate(
+    indenterCreate(context, onLine, onIndent, onOutdent, onError, onEndOfFile),
+    indenterLine,
+    indenterEndOfFile
+  )
+})
