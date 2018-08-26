@@ -270,6 +270,16 @@ const indenterMatch = text => {
     }
   }
 
+  const set = /^set\s+(\S+)\s+(\S+)$/i.exec(text)
+  if (set) {
+    return {
+      set: {
+        flag: set[1],
+        value: set[2]
+      }
+    }
+  }
+
   return null
 }
 

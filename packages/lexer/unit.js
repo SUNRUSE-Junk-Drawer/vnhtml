@@ -1375,6 +1375,11 @@ describe(`indenterMatch`, () => {
     run(`a \t\t \t B \t       \t cDE\t \tand  \t \t f \t\t \t LEAVE`, { leave: { characters: [`a`, `B`, `cDE`, `f`] } })
     run(`a \t\t \t B \t       \t c\t \tand  \t \t DEf \t\t \t Leave`, { leave: { characters: [`a`, `B`, `c`, `DEf`] } })
   })
+  describe(`set`, () => {
+    run(`sET \t \t\t a \t    \t B`, { set: { flag: `a`, value: `B` } })
+    run(`SEt \t \t\t ABc \t    \t b`, { set: { flag: `ABc`, value: `b` } })
+    run(`sEt \t \t\t a \t    \t bCd`, { set: { flag: `a`, value: `bCd` } })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {
