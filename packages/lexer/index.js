@@ -140,6 +140,11 @@ const indenterMatch = text => {
         else: {}
       }
 
+    case `menu`:
+      return {
+        menu: {}
+      }
+
     default:
       const lineWithEmote = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
       if (lineWithEmote) {

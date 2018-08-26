@@ -1393,6 +1393,9 @@ describe(`indenterMatch`, () => {
   describe(`else`, () => {
     run(`elSE`, { else: {} })
   })
+  describe(`menu`, () => {
+    run(`mENu`, { menu: {} })
+  })
 })
 
 describe(`indenterEndOfFile`, () => {
