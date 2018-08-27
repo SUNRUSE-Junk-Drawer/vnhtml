@@ -11,7 +11,7 @@ var lexer = require("@vnhtml/lexer")
 var parser = require("@vnhtml/parser")
 
 var parserState = parser.create(
-  "A context for the parsing"
+  "A context for the parsing",
   function onError(context, line, message) {
     console.log(
       "Error; context " + nicePrint(context)
