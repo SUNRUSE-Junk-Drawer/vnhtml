@@ -60,7 +60,6 @@ function nicePrint(json) {
     .split(/\s+/)
     .join(" ")
 }
-
 ```
 
 ### Output
