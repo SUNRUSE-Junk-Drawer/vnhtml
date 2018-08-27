@@ -196,6 +196,13 @@
       "command": "npm test --prefix packages/pretty-printer",
       "group": "build",
       "problemMatcher": []
+    },
+    {
+      "label": "Synchronize versions",
+      "type": "shell",
+      "command": "npm run-script synchronizeVersions --prefix tools",
+      "group": "none",
+      "problemMatcher": []
     }
   ]
 }
