@@ -31,7 +31,7 @@ var state = lexer.create(
     )
   },
   function onEndOfFile(context) {
-    console.log("End of file")
+    console.log("End of file; context " + nicePrint(context))
   }
 )
 
@@ -78,7 +78,7 @@ Line; context "A context for the lexing", line 8, text "James: See?", lexed { "l
 Indent; context "A context for the lexing"
 Line; context "A context for the lexing", line 9, text "Characters can also be supplied one-by-one.", lexed null
 Outdent; context "A context for the lexing"
-End of file
+End of file; context "A context for the lexing"
 ```
 
 ## Exception handling
