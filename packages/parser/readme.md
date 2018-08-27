@@ -25,9 +25,11 @@ var parserState = parser.create(
   }
 )
 
-var lexerState = lexer.create(parserState, parser.line, parser.indent, parser.outdent, parser.error, parser.endOfFile)
+var lexerState = lexer.create(parserState, parser.line, parser.indent, parser.outdent, nop, parser.endOfFile)
 lexer.text(lexerState, `TODO`)
 lexer.endOfFile(lexerState)
+
+function nop() {}
 ```
 
 ### Output
