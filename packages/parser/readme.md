@@ -14,9 +14,9 @@ var parserState = parser.create(
   "A context for the parsing",
   function onError(context, line, message) {
     console.log(
-      "Error; context " + nicePrint(context)
+      "Error; context " + JSON.stringify(context)
       + ", line " + line
-      + ", message " + nicePrint(message)
+      + ", message " + JSON.stringify(message)
     )
   },
   function onEndOfFile(context, parsed) {
