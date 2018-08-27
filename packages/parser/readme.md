@@ -20,7 +20,7 @@ var parserState = parser.create(
     )
   },
   function onEndOfFile(context, parsed) {
-    console.log("End of file")
+    console.log("End of file; context " + JSON.stringify(context) + ", collected:")
     console.log(JSON.stringify(parsed, null, 2))
   }
 )
