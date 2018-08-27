@@ -279,7 +279,7 @@ export const text = (state, text) => {
     .forEach(textCharacter => character(state, textCharacter))
 }
 
-export const endOfFile = (state, character) => {
+export const endOfFile = (state) => {
   switch (state.state) {
     case `waiting`:
       state.state = `processing`
