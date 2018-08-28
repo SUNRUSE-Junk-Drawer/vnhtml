@@ -124,8 +124,44 @@ describe(`line`, () => {
       text: `Hello, world!`
     }
   }])
-  xdescribe(`emote`, () => { })
-  xdescribe(`leave`, () => { })
+  runSuccessful(`emote`, {
+    emote: {
+      characters: [`Jeff`, `Jake`, `Phil`],
+      emote: `Disenchanted`
+    }
+  }, [{
+    emote: {
+      character: `Jeff`,
+      emote: `Disenchanted`
+    }
+  }, {
+    emote: {
+      character: `Jake`,
+      emote: `Disenchanted`
+    }
+  }, {
+    emote: {
+      character: `Phil`,
+      emote: `Disenchanted`
+    }
+  }])
+  runSuccessful(`leave`, {
+    leave: {
+      characters: [`Jeff`, `Jake`, `Phil`]
+    }
+  }, [{
+    leave: {
+      character: `Jeff`
+    }
+  }, {
+    leave: {
+      character: `Jake`
+    }
+  }, {
+    leave: {
+      character: `Phil`
+    }
+  }])
   xdescribe(`set`, () => { })
   xdescribe(`if`, () => { })
   xdescribe(`elseIf`, () => { })

@@ -14,7 +14,7 @@ export const line = (state, line, text, lexed) => {
     state.statements.push({
       line: lexed.lineWithText
     })
-  } else {
+  } else if (lexed.lineWithEmoteAndText) {
     lexed.lineWithEmoteAndText.characters.forEach(character => state.statements.push({
       emote: {
         character: character,
@@ -27,5 +27,18 @@ export const line = (state, line, text, lexed) => {
         text: lexed.lineWithEmoteAndText.text
       }
     })
+  } else if (lexed.emote) {
+    lexed.emote.characters.forEach(character => state.statements.push({
+      emote: {
+        character: character,
+        emote: lexed.emote.emote
+      }
+    }))
+  } else {
+    lexed.leave.characters.forEach(character => state.statements.push({
+      leave: {
+        character: character
+}
+    }))
 }
 }
