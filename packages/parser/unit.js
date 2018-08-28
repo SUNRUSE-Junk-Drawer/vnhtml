@@ -49,26 +49,54 @@ describe(`line`, () => {
       onEndOfFile
     }
   })
-  describe(`unlexable`, () => {
-    beforeEach(() => index.line(state, 3897, `Test Text`, null))
-    it(`does not modify statements`, () => expect(statements).toEqual([
-      `Test Existing Statement A`,
-      `Test Existing Statement B`,
-      `Test Existing Statement C`
-    ]))
+  const run = (description, lexed, assertions) => describe(description, () => {
+    let lexedCopy
+    beforeEach(() => {
+      lexedCopy = JSON.parse(JSON.stringify(lexed))
+      index.line(state, 3897, `Test Text`, lexedCopy)
+    })
+    it(`does not modify the lexed statement`, () => expect(lexedCopy).toEqual(lexed))
     it(`does not replace statements`, () => expect(state.statements).toBe(statements))
     it(`does not modify context`, () => expect(state.context).toEqual(`Test Context`))
     it(`does not modify onError`, () => expect(state.onError).toBe(onError))
     it(`does not modify onEndOfFile`, () => expect(state.onEndOfFile).toBe(onEndOfFile))
+    assertions()
+  })
+  const runSuccessful = (description, lexed, newStatements) => run(description, lexed, () => {
+    it(`appends the new statements`, () => expect(statements).toEqual([jasmine.anything(), jasmine.anything(), jasmine.anything()].concat(newStatements)))
+    it(`does not modify the existing statements`, () => expect(statements).toEqual([
+      `Test Existing Statement A`,
+      `Test Existing Statement B`,
+      `Test Existing Statement C`
+    ].concat(newStatements.map(newStatement => jasmine.anything()))))
+    it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+    it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
+  })
+  const runError = (description, lexed, message) => run(description, lexed, () => {
+    it(`does not modify the existing statements`, () => expect(statements).toEqual([
+      `Test Existing Statement A`,
+      `Test Existing Statement B`,
+      `Test Existing Statement C`
+    ]))
     it(`calls onError once`, () => expect(onError).toHaveBeenCalledTimes(1))
     it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
     it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
-    it(`calls onError with a message informing the user that the statement was unparseable`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Unparseable; if this should be a statement, please check the documentation for a list of patterns which can be used; otherwise check indentation`))
-    it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
+    it(`calls onError with a message stating ${JSON.stringify(message)}`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), message))
   })
+  runError(`unlexable`, null, `Unparseable; if this should be a statement, please check the documentation for a list of patterns which can be used; otherwise check indentation`)
   xdescribe(`line`, () => { })
   xdescribe(`lineWithEmote`, () => { })
-  xdescribe(`lineWithText`, () => { })
+  runSuccessful(`lineWithText`, {
+    lineWithText: {
+      characters: [`Jeff`, `Jake`, `Phil`],
+      text: `Hello, world!`
+    }
+  }, [{
+    line: {
+      characters: [`Jeff`, `Jake`, `Phil`],
+      text: `Hello, world!`
+    }
+  }])
   xdescribe(`lineWithEmoteAndText`, () => { })
   xdescribe(`emote`, () => { })
   xdescribe(`leave`, () => { })
