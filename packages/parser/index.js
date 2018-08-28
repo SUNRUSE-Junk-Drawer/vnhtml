@@ -9,7 +9,7 @@ export const create = (context, onError, onEndOfFile) => {
 
 export const line = (state, line, text, lexed) => {
   if (!lexed) {
-  state.onError(state.context, line, `Unparseable; if this should be a statement, please check the documentation for a list of patterns which can be used; otherwise check indentation`)
+    state.onError(state.context, line, `Unparseable; if this should be a statement, please check the documentation for a list of patterns which can be used; otherwise check indentation`)
   } else if (lexed.lineWithText) {
     state.statements.push({
       line: lexed.lineWithText
@@ -34,11 +34,13 @@ export const line = (state, line, text, lexed) => {
         emote: lexed.emote.emote
       }
     }))
-  } else {
+  } else if (lexed.leave) {
     lexed.leave.characters.forEach(character => state.statements.push({
       leave: {
         character: character
-}
+      }
     }))
-}
+  } else {
+    state.statements.push(lexed)
+  }
 }

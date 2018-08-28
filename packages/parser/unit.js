@@ -162,7 +162,17 @@ describe(`line`, () => {
       character: `Phil`
     }
   }])
-  xdescribe(`set`, () => { })
+  runSuccessful(`set`, {
+    set: {
+      flag: `window`,
+      value: `locked`
+    }
+  }, [{
+    set: {
+      flag: `window`,
+      value: `locked`
+    }
+  }])
   xdescribe(`if`, () => { })
   xdescribe(`elseIf`, () => { })
   xdescribe(`else`, () => { })
