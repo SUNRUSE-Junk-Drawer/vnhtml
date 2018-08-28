@@ -177,8 +177,40 @@ describe(`line`, () => {
   xdescribe(`elseIf`, () => { })
   xdescribe(`else`, () => { })
   xdescribe(`menu`, () => { })
-  xdescribe(`label`, () => { })
-  xdescribe(`goTo`, () => { })
-  xdescribe(`background`, () => { })
-  xdescribe(`include`, () => { })
+  runSuccessful(`label`, {
+    label: {
+      name: `fromTheTop`
+    }
+  }, [{
+    label: {
+      name: `fromTheTop`
+    }
+  }])
+  runSuccessful(`goTo`, {
+    goTo: {
+      label: `fromTheTop`
+    }
+  }, [{
+    goTo: {
+      label: `fromTheTop`
+    }
+  }])
+  runSuccessful(`background`, {
+    background: {
+      name: `mountains`
+    }
+  }, [{
+    background: {
+      name: `mountains`
+    }
+  }])
+  runSuccessful(`include`, {
+    include: {
+      name: `aTestScript`
+    }
+  }, [{
+    include: {
+      name: `aTestScript`
+    }
+  }])
 })
