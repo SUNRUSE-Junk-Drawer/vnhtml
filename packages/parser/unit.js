@@ -97,7 +97,33 @@ describe(`line`, () => {
       text: `Hello, world!`
     }
   }])
-  xdescribe(`lineWithEmoteAndText`, () => { })
+  runSuccessful(`lineWithEmoteAndText`, {
+    lineWithEmoteAndText: {
+      characters: [`Jeff`, `Jake`, `Phil`],
+      emote: `Disenchanted`,
+      text: `Hello, world!`
+    }
+  }, [{
+    emote: {
+      character: `Jeff`,
+      emote: `Disenchanted`
+    }
+  }, {
+    emote: {
+      character: `Jake`,
+      emote: `Disenchanted`
+    }
+  }, {
+    emote: {
+      character: `Phil`,
+      emote: `Disenchanted`
+    }
+  }, {
+    line: {
+      characters: [`Jeff`, `Jake`, `Phil`],
+      text: `Hello, world!`
+    }
+  }])
   xdescribe(`emote`, () => { })
   xdescribe(`leave`, () => { })
   xdescribe(`set`, () => { })
