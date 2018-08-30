@@ -220,3 +220,189 @@ describe(`combineLabels`, () => {
     })
   })
 })
+
+describe(`findLabelsInStatementArray`, () => {
+  const findLabelsInStatement = setSpy(`findLabelsInStatement`)
+  findLabelsInStatement.and.callFake((context, onError, statement, nextStatements) => {
+    switch (statement) {
+      case `Test Statement A`:
+        return `Test Found Labels A`
+
+      case `Test Statement B`:
+        return `Test Found Labels B`
+
+      case `Test Statement C`:
+        return `Test Found Labels C`
+    }
+  })
+  const combineLabels = setSpy(`combineLabels`)
+  combineLabels.and.callFake((context, onError, a, b) => {
+    switch (a) {
+      case `Test Found Labels A`:
+        return `Test Combination Of Labels A and B`
+
+      case `Test Combination Of Labels A and B`:
+        return `Test Combination Of Labels A B and C`
+    }
+  })
+  afterEach(() => {
+    findLabelsInStatement.calls.reset()
+    combineLabels.calls.reset()
+  })
+  let statements
+  let nextStatements
+  let result
+  beforeEach(() => {
+    nextStatements = [
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]
+  })
+  describe(`no statements`, () => {
+    beforeEach(() => {
+      statements = []
+      result = get(`findLabelsInStatementArray`)(`Test Context`, `Test On Error`, statements, nextStatements)
+    })
+    it(`returns null`, () => expect(result).toBeNull())
+    it(`does not modify statements`, () => expect(statements).toEqual([]))
+    it(`does not modify nextStatements`, () => expect(nextStatements).toEqual([
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`does not call findLabelsInStatement`, () => expect(findLabelsInStatement).not.toHaveBeenCalled())
+    it(`does not call combineLabels`, () => expect(combineLabels).not.toHaveBeenCalled())
+  })
+  describe(`one statement`, () => {
+    beforeEach(() => {
+      statements = [
+        `Test Statement A`
+      ]
+      result = get(`findLabelsInStatementArray`)(`Test Context`, `Test On Error`, statements, nextStatements)
+    })
+    it(`returns the labels found from the statement`, () => expect(result).toEqual(`Test Found Labels A`))
+    it(`does not modify statements`, () => expect(statements).toEqual([
+      `Test Statement A`
+    ]))
+    it(`does not modify nextStatements`, () => expect(nextStatements).toEqual([
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement once`, () => expect(findLabelsInStatement).toHaveBeenCalledTimes(1))
+    it(`calls findLabelsInStatement with the context`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()))
+    it(`calls findLabelsInStatement with onError`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()))
+    it(`calls findLabelsInStatement with the statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement A`, jasmine.anything()))
+    it(`calls findLabelsInStatement with the next statements`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), [
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`does not call combineLabels`, () => expect(combineLabels).not.toHaveBeenCalled())
+  })
+  describe(`two statements`, () => {
+    beforeEach(() => {
+      statements = [
+        `Test Statement A`,
+        `Test Statement B`
+      ]
+      result = get(`findLabelsInStatementArray`)(`Test Context`, `Test On Error`, statements, nextStatements)
+    })
+    it(`returns the combined labels`, () => expect(result).toEqual(`Test Combination Of Labels A and B`))
+    it(`does not modify statements`, () => expect(statements).toEqual([
+      `Test Statement A`,
+      `Test Statement B`
+    ]))
+    it(`does not modify nextStatements`, () => expect(nextStatements).toEqual([
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement once per statement`, () => expect(findLabelsInStatement).toHaveBeenCalledTimes(2))
+    it(`calls findLabelsInStatement with the context`, () => {
+      expect(findLabelsInStatement.calls.argsFor(0)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(1)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls findLabelsInStatement with onError`, () => {
+      expect(findLabelsInStatement.calls.argsFor(0)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(1)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls findLabelsInStatement for the first statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement A`, [
+      `Test Statement B`,
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement for the second statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement B`, [
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls combineLabels once`, () => expect(combineLabels).toHaveBeenCalledTimes(1))
+    it(`calls combineLabels with the context`, () => expect(combineLabels).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()))
+    it(`calls combineLabels with onError`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()))
+    it(`calls combineLabels with the labels extracted from the first and second statements`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, `Test Found Labels B`))
+  })
+  describe(`three statements`, () => {
+    beforeEach(() => {
+      statements = [
+        `Test Statement A`,
+        `Test Statement B`,
+        `Test Statement C`
+      ]
+      result = get(`findLabelsInStatementArray`)(`Test Context`, `Test On Error`, statements, nextStatements)
+    })
+    it(`returns the combined labels`, () => expect(result).toEqual(`Test Combination Of Labels A B and C`))
+    it(`does not modify statements`, () => expect(statements).toEqual([
+      `Test Statement A`,
+      `Test Statement B`,
+      `Test Statement C`
+    ]))
+    it(`does not modify nextStatements`, () => expect(nextStatements).toEqual([
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement once per statement`, () => expect(findLabelsInStatement).toHaveBeenCalledTimes(3))
+    it(`calls findLabelsInStatement with the context`, () => {
+      expect(findLabelsInStatement.calls.argsFor(0)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(1)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(2)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls findLabelsInStatement with onError`, () => {
+      expect(findLabelsInStatement.calls.argsFor(0)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(1)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(2)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls findLabelsInStatement for the first statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement A`, [
+      `Test Statement B`,
+      `Test Statement C`,
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement for the second statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement B`, [
+      `Test Statement C`,
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement for the third statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement C`, [
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls combineLabels once per statement combination`, () => expect(combineLabels).toHaveBeenCalledTimes(2))
+    it(`calls combineLabels with the context`, () => {
+      expect(combineLabels.calls.argsFor(0)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+      expect(combineLabels.calls.argsFor(1)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls combineLabels with onError`, () => {
+      expect(combineLabels.calls.argsFor(0)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+      expect(combineLabels.calls.argsFor(1)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls combineLabels with the labels extracted from the first and second statements`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, `Test Found Labels B`))
+    it(`calls combineLabels with the labels extracted from the first second and third statements`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A and B`, `Test Found Labels C`))
+  })
+})

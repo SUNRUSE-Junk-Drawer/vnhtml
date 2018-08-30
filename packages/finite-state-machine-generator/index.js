@@ -24,3 +24,22 @@ const combineLabels = (context, onError, a, b) => {
     return b
   }
 }
+
+const findLabelsInStatementArray = (context, onError, statements, nextStatements) => {
+  if (!statements.length) {
+    return null
+  }
+
+  let output
+  for (let i = 0; i < statements.length; i++) {
+    const nextLabels = findLabelsInStatement(context, onError, statements[i], statements.slice(i + 1).concat(nextStatements))
+    if (output) {
+      output = combineLabels(context, onError, output, nextLabels)
+    } else {
+      output = nextLabels
+    }
+  }
+  return output
+}
+
+const findLabelsInStatement = null
