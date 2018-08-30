@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid"
+
 export const create = (context, onError, onEndOfFile) => {
   return {
     statements: [],
@@ -12,7 +14,11 @@ export const line = (state, line, text, lexed) => {
     state.onError(state.context, line, `Unparseable; if this should be a statement, please check the documentation for a list of patterns which can be used; otherwise check indentation`)
   } else if (lexed.lineWithText) {
     state.statements.push({
-      line: lexed.lineWithText
+      line: {
+        promptId: uuidv4(),
+        characters: lexed.lineWithText.characters,
+        text: lexed.lineWithText.text
+      }
     })
   } else if (lexed.lineWithEmoteAndText) {
     lexed.lineWithEmoteAndText.characters.forEach(character => state.statements.push({
@@ -23,6 +29,7 @@ export const line = (state, line, text, lexed) => {
     }))
     state.statements.push({
       line: {
+        promptId: uuidv4(),
         characters: lexed.lineWithEmoteAndText.characters,
         text: lexed.lineWithEmoteAndText.text
       }
