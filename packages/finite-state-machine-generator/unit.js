@@ -233,6 +233,9 @@ describe(`findLabelsInStatementArray`, () => {
 
       case `Test Statement C`:
         return `Test Found Labels C`
+
+      case `Test Statement D`:
+        return `Test Found Labels D`
     }
   })
   const combineLabels = setSpy(`combineLabels`)
@@ -243,6 +246,9 @@ describe(`findLabelsInStatementArray`, () => {
 
       case `Test Combination Of Labels A and B`:
         return `Test Combination Of Labels A B and C`
+
+      case `Test Combination Of Labels A B and C`:
+        return `Test Combination Of Labels A B C and D`
     }
   })
   afterEach(() => {
@@ -404,5 +410,79 @@ describe(`findLabelsInStatementArray`, () => {
     })
     it(`calls combineLabels with the labels extracted from the first and second statements`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, `Test Found Labels B`))
     it(`calls combineLabels with the labels extracted from the first second and third statements`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A and B`, `Test Found Labels C`))
+  })
+  describe(`four statements`, () => {
+    beforeEach(() => {
+      statements = [
+        `Test Statement A`,
+        `Test Statement B`,
+        `Test Statement C`,
+        `Test Statement D`
+      ]
+      result = get(`findLabelsInStatementArray`)(`Test Context`, `Test On Error`, statements, nextStatements)
+    })
+    it(`returns the combined labels`, () => expect(result).toEqual(`Test Combination Of Labels A B C and D`))
+    it(`does not modify statements`, () => expect(statements).toEqual([
+      `Test Statement A`,
+      `Test Statement B`,
+      `Test Statement C`,
+      `Test Statement D`
+    ]))
+    it(`does not modify nextStatements`, () => expect(nextStatements).toEqual([
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement once per statement`, () => expect(findLabelsInStatement).toHaveBeenCalledTimes(4))
+    it(`calls findLabelsInStatement with the context`, () => {
+      expect(findLabelsInStatement.calls.argsFor(0)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(1)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(2)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls findLabelsInStatement with onError`, () => {
+      expect(findLabelsInStatement.calls.argsFor(0)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(1)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+      expect(findLabelsInStatement.calls.argsFor(2)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls findLabelsInStatement for the first statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement A`, [
+      `Test Statement B`,
+      `Test Statement C`,
+      `Test Statement D`,
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement for the second statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement B`, [
+      `Test Statement C`,
+      `Test Statement D`,
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement for the third statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement C`, [
+      `Test Statement D`,
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls findLabelsInStatement for the third statement`, () => expect(findLabelsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement D`, [
+      `Test Next Statement A`,
+      `Test Next Statement B`,
+      `Test Next Statement C`
+    ]))
+    it(`calls combineLabels once per statement combination`, () => expect(combineLabels).toHaveBeenCalledTimes(3))
+    it(`calls combineLabels with the context`, () => {
+      expect(combineLabels.calls.argsFor(0)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+      expect(combineLabels.calls.argsFor(1)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+      expect(combineLabels.calls.argsFor(2)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls combineLabels with onError`, () => {
+      expect(combineLabels.calls.argsFor(0)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+      expect(combineLabels.calls.argsFor(1)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+      expect(combineLabels.calls.argsFor(2)).toEqual([jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()])
+    })
+    it(`calls combineLabels with the labels extracted from the first and second statements`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, `Test Found Labels B`))
+    it(`calls combineLabels with the labels extracted from the first second and third statements`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A and B`, `Test Found Labels C`))
+    it(`calls combineLabels with the labels extracted from the first second third and fourth statements`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A B and C`, `Test Found Labels D`))
   })
 })
