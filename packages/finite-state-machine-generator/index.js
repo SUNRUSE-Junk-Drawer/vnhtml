@@ -66,3 +66,9 @@ const findLabelsInStatement = (context, onError, statement, nextStatements) => {
   }
   return null
 }
+
+const createState = () => ({
+  flags: {},
+  characters: {},
+  background: null
+})

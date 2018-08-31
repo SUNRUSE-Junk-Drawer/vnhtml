@@ -822,3 +822,14 @@ describe(`findLabelsInStatement`, () => {
     }
   })
 })
+
+describe(`createState`, () => {
+  it(`returns an object`, () => expect(get(`createState`)()).toEqual(jasmine.any(Object)))
+  it(`returns flags, an empty object`, () => expect(get(`createState`)().flags).toEqual({}))
+  it(`returns characters, an empty object`, () => expect(get(`createState`)().characters).toEqual({}))
+  it(`returns background, null`, () => expect(get(`createState`)().background).toBeNull({}))
+  it(`returns the same value every call`, () => expect(get(`createState`)()).toEqual(get(`createState`)()))
+  it(`returns a new instance every call`, () => expect(get(`createState`)()).not.toBe(get(`createState`)()))
+  it(`returns a new flags every call`, () => expect(get(`createState`)().flags).not.toBe(get(`createState`)().flags))
+  it(`returns a new characters every call`, () => expect(get(`createState`)().characters).not.toBe(get(`createState`)().characters))
+})
