@@ -42,4 +42,27 @@ const findLabelsInStatementArray = (context, onError, statements, nextStatements
   return output
 }
 
-const findLabelsInStatement = null
+const findLabelsInStatement = (context, onError, statement, nextStatements) => {
+  if (statement.label) {
+    const output = {}
+    output[statement.label.name] = nextStatements
+    return output
+  } else if (statement.decision) {
+    let output = findLabelsInStatementArray(context, onError, statement.decision.paths[0].then, nextStatements)
+    statement.decision.paths
+      .slice(1)
+      .forEach(path => {
+        output = combineLabels(context, onError, output, findLabelsInStatementArray(context, onError, path.then, nextStatements))
+      })
+    return output
+  } else if (statement.menu) {
+    let output = findLabelsInStatementArray(context, onError, statement.menu.paths[0].then, nextStatements)
+    statement.menu.paths
+      .slice(1)
+      .forEach(path => {
+        output = combineLabels(context, onError, output, findLabelsInStatementArray(context, onError, path.then, nextStatements))
+      })
+    return output
+  }
+  return null
+}
