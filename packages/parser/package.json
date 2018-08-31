@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/parser",
   "description": "A module which parses a basic scripting language for visual novels.",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "uglify-js": "^3.4.7"
   },
   "peerDependencies": {
-    "@vnhtml/lexer": "0.0.17"
+    "@vnhtml/lexer": "0.0.18"
   },
   "dependencies": {
     "uuid": "^3.3.2"
