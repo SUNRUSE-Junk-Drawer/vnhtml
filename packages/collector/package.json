@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/collector",
   "description": "A module which collects a list of all assets required by vnhtml scripts.",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -37,6 +37,6 @@
     "uglify-js": "^3.4.7"
   },
   "peerDependencies": {
-    "@vnhtml/lexer": "0.0.18"
+    "@vnhtml/lexer": "0.0.19"
   }
 }
