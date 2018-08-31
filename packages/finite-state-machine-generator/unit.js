@@ -16,9 +16,9 @@ const set = (name, value) => {
 
 const setSpy = name => set(name, jasmine.createSpy(name))
 
-describe(`normalizeLabel`, () => {
-  const runEqual = (description, a, b) => it(description, () => expect(get(`normalizeLabel`)(a)).toEqual(get(`normalizeLabel`)(b)))
-  const runInequal = (description, a, b) => it(description, () => expect(get(`normalizeLabel`)(a)).not.toEqual(get(`normalizeLabel`)(b)))
+describe(`normalizeName`, () => {
+  const runEqual = (description, a, b) => it(description, () => expect(get(`normalizeName`)(a)).toEqual(get(`normalizeName`)(b)))
+  const runInequal = (description, a, b) => it(description, () => expect(get(`normalizeName`)(a)).not.toEqual(get(`normalizeName`)(b)))
   runEqual(`normalizes case`, `Test Label`, `TeSt label`)
   runEqual(`normalizes white space type`, `Test\tLabel`, `Test Label`)
   runEqual(`normalizes white space quantity`, `Test      Label`, `Test Label`)
@@ -28,12 +28,12 @@ describe(`normalizeLabel`, () => {
 
 describe(`combineLabels`, () => {
   const onError = jasmine.createSpy(`onError`)
-  let normalizeLabelMappings
-  const normalizeLabel = setSpy(`normalizeLabel`)
-  normalizeLabel.and.callFake(label => normalizeLabelMappings[label])
+  let normalizeNameMappings
+  const normalizeName = setSpy(`normalizeName`)
+  normalizeName.and.callFake(label => normalizeNameMappings[label])
   afterEach(() => {
     onError.calls.reset()
-    normalizeLabel.calls.reset()
+    normalizeName.calls.reset()
   })
   let a
   let b
@@ -55,7 +55,7 @@ describe(`combineLabels`, () => {
       })
       describe(`with overlap`, () => {
         beforeEach(() => {
-          normalizeLabelMappings = {
+          normalizeNameMappings = {
             testLabelA: `Test Normalized Label A`,
             testLabelB: `Test Normalized Label B`,
             testLabelC: `Test Normalized Label C`,
@@ -103,21 +103,21 @@ describe(`combineLabels`, () => {
           expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `The label "testLabelB" is defined multiple times`)
           expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `The label "testLabelD" is defined multiple times`)
         })
-        it(`calls normalizeLabel once per label`, () => expect(normalizeLabel).toHaveBeenCalledTimes(9))
-        it(`calls normalizeLabel with every label`, () => {
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelA`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelB`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelC`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelD`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelE`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelG`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelH`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelI`)
+        it(`calls normalizeName once per label`, () => expect(normalizeName).toHaveBeenCalledTimes(9))
+        it(`calls normalizeName with every label`, () => {
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelA`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelB`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelC`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelD`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelE`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelG`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelH`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelI`)
         })
       })
       describe(`without overlap`, () => {
         beforeEach(() => {
-          normalizeLabelMappings = {
+          normalizeNameMappings = {
             testLabelA: `Test Normalized Label A`,
             testLabelB: `Test Normalized Label B`,
             testLabelC: `Test Normalized Label C`,
@@ -158,16 +158,16 @@ describe(`combineLabels`, () => {
         })
         it(`includes no further labels`, () => expect(Object.keys(result).length).toEqual(9))
         it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
-        it(`calls normalizeLabel once per label`, () => expect(normalizeLabel).toHaveBeenCalledTimes(9))
-        it(`calls normalizeLabel with every label`, () => {
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelA`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelB`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelC`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelD`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelE`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelG`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelH`)
-          expect(normalizeLabel).toHaveBeenCalledWith(`testLabelI`)
+        it(`calls normalizeName once per label`, () => expect(normalizeName).toHaveBeenCalledTimes(9))
+        it(`calls normalizeName with every label`, () => {
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelA`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelB`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelC`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelD`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelE`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelG`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelH`)
+          expect(normalizeName).toHaveBeenCalledWith(`testLabelI`)
         })
       })
     })
@@ -184,7 +184,7 @@ describe(`combineLabels`, () => {
       }))
       it(`returns a`, () => expect(result).toBe(a))
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
-      it(`does not call normalizeLabel`, () => expect(normalizeLabel).not.toHaveBeenCalled())
+      it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
     })
   })
   describe(`without a`, () => {
@@ -207,7 +207,7 @@ describe(`combineLabels`, () => {
       }))
       it(`returns b`, () => expect(result).toBe(b))
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
-      it(`does not call normalizeLabel`, () => expect(normalizeLabel).not.toHaveBeenCalled())
+      it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
     })
     describe(`without b`, () => {
       beforeEach(() => {
@@ -216,7 +216,7 @@ describe(`combineLabels`, () => {
       })
       it(`returns null`, () => expect(result).toBeNull())
       it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
-      it(`does not call normalizeLabel`, () => expect(normalizeLabel).not.toHaveBeenCalled())
+      it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
     })
   })
 })

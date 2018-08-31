@@ -1,4 +1,4 @@
-const normalizeLabel = label => label.toLowerCase().split(/\s+/).join(` `)
+const normalizeName = name => name.toLowerCase().split(/\s+/).join(` `)
 
 const combineLabels = (context, onError, a, b) => {
   if (a) {
@@ -7,9 +7,9 @@ const combineLabels = (context, onError, a, b) => {
       const fromA = Object.keys(a)
       const fromB = Object.keys(b)
       fromA.forEach(key => output[key] = a[key])
-      const fromANormalized = fromA.map(key => normalizeLabel(key))
+      const fromANormalized = fromA.map(key => normalizeName(key))
       fromB.forEach(key => {
-        const index = fromANormalized.indexOf(normalizeLabel(key))
+        const index = fromANormalized.indexOf(normalizeName(key))
         if (index != -1) {
           onError(context, `unknown`, `The label "${fromA[index]}" is defined multiple times`)
         } else {
