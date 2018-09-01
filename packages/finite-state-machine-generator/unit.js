@@ -833,3 +833,87 @@ describe(`createState`, () => {
   it(`returns a new flags every call`, () => expect(get(`createState`)().flags).not.toBe(get(`createState`)().flags))
   it(`returns a new characters every call`, () => expect(get(`createState`)().characters).not.toBe(get(`createState`)().characters))
 })
+
+describe(`hashStateFlag`, () => {
+  it(`hashes the same when the normalized values are same`, () => expect(get(`hashStateFlag`)({
+    flag: `Test Flag A`,
+    normalizedFlag: `Test Normalized Flag`,
+    value: `Test Value A`,
+    normalizedValue: `Test Normalized Value`
+  })).toEqual(get(`hashStateFlag`)({
+    flag: `Test Flag B`,
+    normalizedFlag: `Test Normalized Flag`,
+    value: `Test Value B`,
+    normalizedValue: `Test Normalized Value`
+  })))
+  it(`hashes differently should the normalized flag change`, () => expect(get(`hashStateFlag`)({
+    flag: `Test Flag A`,
+    normalizedFlag: `Test Normalized Flag A`,
+    value: `Test Value A`,
+    normalizedValue: `Test Normalized Value`
+  })).not.toEqual(get(`hashStateFlag`)({
+    flag: `Test Flag B`,
+    normalizedFlag: `Test Normalized Flag B`,
+    value: `Test Value B`,
+    normalizedValue: `Test Normalized Value`
+  })))
+  it(`hashes differently should the normalized value change`, () => expect(get(`hashStateFlag`)({
+    flag: `Test Flag A`,
+    normalizedFlag: `Test Normalized Flag`,
+    value: `Test Value A`,
+    normalizedValue: `Test Normalized Value A`
+  })).not.toEqual(get(`hashStateFlag`)({
+    flag: `Test Flag B`,
+    normalizedFlag: `Test Normalized Flag`,
+    value: `Test Value B`,
+    normalizedValue: `Test Normalized Value B`
+  })))
+  it(`separates the flag and value`, () => expect(get(`hashStateFlag`)({
+    flag: `Test Flag A`,
+    normalizedFlag: `Test Normalized Flag A`,
+    value: `Test Value A`,
+    normalizedValue: `Test Normalized Value`
+  })).not.toEqual(get(`hashStateFlag`)({
+    flag: `Test Flag B`,
+    normalizedFlag: `Test Normalized Flag`,
+    value: `Test Value B`,
+    normalizedValue: `A Test Normalized Value`
+  })))
+  it(`separates the value and flag`, () => expect(get(`hashStateFlag`)({
+    flag: `Test Flag A`,
+    normalizedFlag: `A Test Normalized Flag`,
+    value: `Test Value A`,
+    normalizedValue: `Test Normalized Value`
+  })).not.toEqual(get(`hashStateFlag`)({
+    flag: `Test Flag B`,
+    normalizedFlag: `Test Normalized Flag A`,
+    value: `Test Value B`,
+    normalizedValue: `Test Normalized Value`
+  })))
+  it(`still sorts by normalized flag`, () => {
+    const hashes = [{
+      flag: `Test Flag`,
+      normalizedFlag: `Test Normalized Flag C`,
+      value: `Test Value`,
+      normalizedValue: `Test Normalized Value D`
+    }, {
+      flag: `Test Flag`,
+      normalizedFlag: `Test Normalized Flag A`,
+      value: `Test Value`,
+      normalizedValue: `Test Normalized Value B`
+    }, {
+      flag: `Test Flag`,
+      normalizedFlag: `Test Normalized Flag D`,
+      value: `Test Value`,
+      normalizedValue: `Test Normalized Value C`
+    }, {
+      flag: `Test Flag`,
+      normalizedFlag: `Test Normalized Flag B`,
+      value: `Test Value`,
+      normalizedValue: `Test Normalized Value A`
+    }].map(flag => get(`hashStateFlag`)(flag))
+    const sortedHashes = hashes.slice().sort()
+    const sortedIndices = sortedHashes.map(hash => hashes.indexOf(hash))
+    expect(sortedIndices).toEqual([1, 3, 0, 2])
+  })
+})

@@ -72,3 +72,5 @@ const createState = () => ({
   characters: [],
   background: null
 })
+
+const hashStateFlag = flag => `${flag.normalizedFlag}  ${flag.normalizedValue}`
