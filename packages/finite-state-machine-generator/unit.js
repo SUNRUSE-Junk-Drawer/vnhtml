@@ -917,3 +917,87 @@ describe(`hashStateFlag`, () => {
     expect(sortedIndices).toEqual([1, 3, 0, 2])
   })
 })
+
+describe(`hashStateCharacter`, () => {
+  it(`hashes the same when the normalized values are same`, () => expect(get(`hashStateCharacter`)({
+    name: `Test Name A`,
+    normalizedName: `Test Normalized Name`,
+    emote: `Test Emote A`,
+    normalizedEmote: `Test Normalized Emote`
+  })).toEqual(get(`hashStateCharacter`)({
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name`,
+    emote: `Test Emote B`,
+    normalizedEmote: `Test Normalized Emote`
+  })))
+  it(`hashes differently should the normalized name change`, () => expect(get(`hashStateCharacter`)({
+    name: `Test Name A`,
+    normalizedName: `Test Normalized Name A`,
+    emote: `Test Emote A`,
+    normalizedEmote: `Test Normalized Emote`
+  })).not.toEqual(get(`hashStateCharacter`)({
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name B`,
+    emote: `Test Emote B`,
+    normalizedEmote: `Test Normalized Emote`
+  })))
+  it(`hashes differently should the normalized emote change`, () => expect(get(`hashStateCharacter`)({
+    name: `Test Name A`,
+    normalizedName: `Test Normalized Name`,
+    emote: `Test Emote A`,
+    normalizedEmote: `Test Normalized Emote A`
+  })).not.toEqual(get(`hashStateCharacter`)({
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name`,
+    emote: `Test Emote B`,
+    normalizedEmote: `Test Normalized Emote B`
+  })))
+  it(`separates the name and emote`, () => expect(get(`hashStateCharacter`)({
+    name: `Test Name A`,
+    normalizedName: `Test Normalized Name A`,
+    emote: `Test Emote A`,
+    normalizedEmote: `Test Normalized Emote`
+  })).not.toEqual(get(`hashStateCharacter`)({
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name`,
+    emote: `Test Emote B`,
+    normalizedEmote: `A Test Normalized Emote`
+  })))
+  it(`separates the emote and name`, () => expect(get(`hashStateCharacter`)({
+    name: `Test Name A`,
+    normalizedName: `A Test Normalized Name`,
+    emote: `Test Emote A`,
+    normalizedEmote: `Test Normalized Emote`
+  })).not.toEqual(get(`hashStateCharacter`)({
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name A`,
+    emote: `Test Emote B`,
+    normalizedEmote: `Test Normalized Emote`
+  })))
+  it(`still sorts by normalized name`, () => {
+    const hashes = [{
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name C`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote D`
+    }, {
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name A`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote B`
+    }, {
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name D`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote C`
+    }, {
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name B`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote A`
+    }].map(name => get(`hashStateCharacter`)(name))
+    const sortedHashes = hashes.slice().sort()
+    const sortedIndices = sortedHashes.map(hash => hashes.indexOf(hash))
+    expect(sortedIndices).toEqual([1, 3, 0, 2])
+  })
+})

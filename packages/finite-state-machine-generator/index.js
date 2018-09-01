@@ -74,3 +74,4 @@ const createState = () => ({
 })
 
 const hashStateFlag = flag => `${flag.normalizedFlag}  ${flag.normalizedValue}`
+const hashStateCharacter = character => `${character.normalizedName}  ${character.normalizedEmote}`
