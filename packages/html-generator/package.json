@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/html-generator",
   "description": "A module which generates self-contained HTML files from vnhtml scripts.",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "uglify-js": "^3.4.7"
   },
   "peerDependencies": {
-    "@vnhtml/finite-state-machine-generator": "0.0.21",
-    "@vnhtml/collector": "0.0.21"
+    "@vnhtml/finite-state-machine-generator": "0.0.22",
+    "@vnhtml/collector": "0.0.22"
   }
 }

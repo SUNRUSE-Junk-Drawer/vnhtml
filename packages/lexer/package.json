@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/lexer",
   "description": "A module which performs \"SAX-like\" streaming lexing of vnhtml scripts.",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -1,7 +1,7 @@
 {
   "name": "@vnhtml/finite-state-machine-generator",
   "description": "A module which generates a finite state machine describing every state a vnhtml script can be in.",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "uglify-js": "^3.4.7"
   },
   "peerDependencies": {
-    "@vnhtml/parser": "0.0.21",
-    "@vnhtml/collector": "0.0.21"
+    "@vnhtml/parser": "0.0.22",
+    "@vnhtml/collector": "0.0.22"
   }
 }
