@@ -1,7 +1,7 @@
 import * as path from "path"
 import * as fs from "fs"
 
-const version = `0.0.19`
+const version = `0.0.20`
 
 fs.readdir(path.join(`..`, `packages`), (error, files) => {
   if (error) {
