@@ -24,6 +24,7 @@ describe(`normalizeName`, () => {
   runEqual(`normalizes white space quantity`, `Test      Label`, `Test Label`)
   runInequal(`does not normalize character choice`, `Test Label`, `Test Lebel`)
   runInequal(`does not normalize the existence of white space`, `Test Label`, `Test La bel`)
+  it(`returns empty given null`, () => expect(get(`normalizeName`)(null)).toEqual(``))
 })
 
 describe(`combineLabels`, () => {

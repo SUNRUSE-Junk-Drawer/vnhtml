@@ -1,4 +1,4 @@
-const normalizeName = name => name.toLowerCase().split(/\s+/).join(` `)
+const normalizeName = name => (name || ``).toLowerCase().split(/\s+/).join(` `)
 
 const combineLabels = (context, onError, a, b) => {
   if (a) {
