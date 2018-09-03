@@ -1,9 +1,10 @@
 #! /usr/bin/env node
 
 import commander from "commander"
+import packageJson from "./package.json"
 
 const command = commander
-  .version(`0.0.20`)
+  .version(packageJson.version)
   .description(`Generates HTML/CSS visual novels from a basic scripting language`)
   .option(`-w --watch`, `recompile on changes`)
   .option(`-s --script [path]`, `the script to parse`)
