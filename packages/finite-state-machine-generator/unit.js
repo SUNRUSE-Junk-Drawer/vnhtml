@@ -918,6 +918,74 @@ describe(`hashStateFlag`, () => {
   })
 })
 
+describe(`hashStateFlags`, () => {
+  let unhashedA
+  let unhashedACopy
+  let unhashedB
+  let unhashedBCopy
+  let resultA
+  let resultB
+  const hashStateFlag = setSpy(`hashStateFlag`)
+  afterEach(() => hashStateFlag.calls.reset())
+  const run = (description, hashedA, hashedB, then) => describe(description, () => {
+    beforeEach(() => {
+      unhashedA = hashedA.map((hashed, i) => `Test Unhashed A ${i}`)
+      unhashedACopy = unhashedA.slice()
+      unhashedB = hashedB.map((hashed, i) => `Test Unhashed B ${i}`)
+      unhashedBCopy = unhashedB.slice()
+      hashStateFlag.and.callFake(flag => {
+        const match = /^Test Unhashed ([A-Z]) (\d+)$/.exec(flag)
+        switch (match[1]) {
+          case `A`:
+            return hashedA[match[2]]
+          case `B`:
+            return hashedB[match[2]]
+        }
+      })
+      resultA = get(`hashStateFlags`)(unhashedA)
+      resultB = get(`hashStateFlags`)(unhashedB)
+    })
+    it(`calls hashStateFlag once per flag`, () => expect(hashStateFlag).toHaveBeenCalledTimes(hashedA.length + hashedB.length))
+    it(`calls hashStateFlag for every flag from the first set`, () => unhashedACopy.forEach(unhashed => expect(hashStateFlag).toHaveBeenCalledWith(unhashed)))
+    it(`calls hashStateFlag for every flag from the second set`, () => unhashedBCopy.forEach(unhashed => expect(hashStateFlag).toHaveBeenCalledWith(unhashed)))
+    it(`does not modify the first set of flags`, () => expect(unhashedA).toEqual(unhashedACopy))
+    it(`does not modify the second set of flags`, () => expect(unhashedB).toEqual(unhashedBCopy))
+    then()
+  })
+  const runMatching = (description, hashedA, hashedB) => run(description, hashedA, hashedB, () => {
+    it(`returns matching values`, () => expect(resultA).toEqual(resultB))
+  })
+  const runNotMatching = (description, hashedA, hashedB) => run(description, hashedA, hashedB, () => {
+    it(`returns differing values`, () => expect(resultA).not.toEqual(resultB))
+  })
+  runMatching(`returns the same value when there are no flags`, [], [])
+  runMatching(`returns the same value when there is one flag which hashes identically`, [`Test Hashed Flag A`], [`Test Hashed Flag A`])
+  runNotMatching(`returns a different value when there is one flag which hashes differently`, [`Test Hashed Flag A`], [`Test Hashed Flag B`])
+  runMatching(`returns the same value when there are two flags which hash identically`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`Test Hashed Flag A`, `Test Hashed Flag B`])
+  runMatching(`returns the same value when there are two flags which hash identically, regardless of order`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`Test Hashed Flag B`, `Test Hashed Flag A`])
+  runNotMatching(`returns a different value when there are two flags, the first of which hashes differently`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`Test Hashed Flag C`, `Test Hashed Flag B`])
+  runNotMatching(`returns a different value when there are two flags, the second of which hashes differently`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`Test Hashed Flag A`, `Test Hashed Flag C`])
+  runMatching(`returns the same value when there are three flags which hash identically`, [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`], [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`])
+  runMatching(`returns the same value when there are three flags which hash identically, regardless of order`, [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`], [`Test Hashed Flag C`, `Test Hashed Flag A`, `Test Hashed Flag B`])
+  runNotMatching(`returns a different value when there are three flags, the first of which hashes differently`, [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`], [`Test Hashed Flag D`, `Test Hashed Flag B`, `Test Hashed Flag C`])
+  runNotMatching(`returns a different value when there are three flags, the second of which hashes differently`, [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`], [`Test Hashed Flag A`, `Test Hashed Flag D`, `Test Hashed Flag C`])
+  runNotMatching(`returns a different value when there are three flags, the third of which hashes differently`, [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`], [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag D`])
+  runNotMatching(`returns a different value when comparing one flag to none`, [`Test Hashed Flag A`], [])
+  runNotMatching(`returns a different value when comparing two flags to none`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [])
+  runNotMatching(`returns a different value when comparing three flags to none`, [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`], [])
+  runNotMatching(`returns a different value when comparing one flag to two, even if the first matches`, [`Test Hashed Flag A`], [`Test Hashed Flag A`, `Test Hashed Flag B`])
+  runNotMatching(`returns a different value when comparing one flag to two, even if the second matches`, [`Test Hashed Flag B`], [`Test Hashed Flag A`, `Test Hashed Flag B`])
+  runNotMatching(`returns a different value when comparing one flag to three, even if the first matches`, [`Test Hashed Flag A`], [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`])
+  runNotMatching(`returns a different value when comparing one flag to three, even if the second matches`, [`Test Hashed Flag B`], [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`])
+  runNotMatching(`returns a different value when comparing one flag to three, even if the third matches`, [`Test Hashed Flag C`], [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`])
+  runNotMatching(`returns a different value when comparing two flags to three, even if the first two match`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`])
+  runNotMatching(`returns a different value when comparing two flags to three, even if the last two match`, [`Test Hashed Flag B`, `Test Hashed Flag C`], [`Test Hashed Flag A`, `Test Hashed Flag B`, `Test Hashed Flag C`])
+  runNotMatching(`separates flag hashes well`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`Test Hashed Flag AT`, `est Hashed Flag B`])
+  runNotMatching(`separates flag hashes well (reverse)`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`est Hashed Flag A`, `Test Hashed Flag BT`])
+  runNotMatching(`separates flag hashes well with spaces`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`Test Hashed Flag A T`, `est Hashed Flag B`])
+  runNotMatching(`separates flag hashes well with spaces (reverse)`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`est Hashed Flag A`, `Test Hashed Flag B T`])
+})
+
 describe(`hashStateCharacter`, () => {
   it(`hashes the same when the normalized values are same`, () => expect(get(`hashStateCharacter`)({
     name: `Test Name A`,
