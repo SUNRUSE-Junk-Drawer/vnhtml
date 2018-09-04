@@ -1138,3 +1138,90 @@ describe(`hashStateCharacters`, () => {
   runNotMatching(`separates character hashes well with spaces`, [`Test Hashed Character A`, `Test Hashed Character B`], [`Test Hashed Character A T`, `est Hashed Character B`])
   runNotMatching(`separates character hashes well with spaces (reverse)`, [`Test Hashed Character A`, `Test Hashed Character B`], [`est Hashed Character A`, `Test Hashed Character B T`])
 })
+
+describe(`hashState`, () => {
+  let resultA
+  let resultB
+  let stateA
+  let stateACopy
+  let stateB
+  let stateBCopy
+  const hashStateFlags = setSpy(`hashStateFlags`)
+  const hashStateCharacters = setSpy(`hashStateCharacters`)
+  const normalizeName = setSpy(`normalizeName`)
+  afterEach(() => {
+    hashStateFlags.calls.reset()
+    hashStateCharacters.calls.reset()
+    normalizeName.calls.reset()
+  })
+  const run = (description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB, then) => describe(description, () => {
+    beforeEach(() => {
+      hashStateFlags.and.callFake(flags => {
+        switch (flags) {
+          case `Test Flags A`:
+            return flagsA
+          case `Test Flags B`:
+            return flagsB
+        }
+      })
+      hashStateCharacters.and.callFake(characters => {
+        switch (characters) {
+          case `Test Characters A`:
+            return charactersA
+          case `Test Characters B`:
+            return charactersB
+        }
+      })
+      normalizeName.and.callFake(name => {
+        switch (name) {
+          case `Test Background A`:
+            return backgroundA
+          case `Test Background B`:
+            return backgroundB
+        }
+      })
+      stateA = {
+        flags: `Test Flags A`,
+        characters: `Test Characters A`,
+        background: `Test Background A`
+      }
+      stateACopy = JSON.parse(JSON.stringify(stateA))
+      stateB = {
+        flags: `Test Flags B`,
+        characters: `Test Characters B`,
+        background: `Test Background B`
+      }
+      stateBCopy = JSON.parse(JSON.stringify(stateB))
+      resultA = get(`hashState`)(stateA)
+      resultB = get(`hashState`)(stateB)
+    })
+    it(`hashes two sets of flags`, () => expect(hashStateFlags).toHaveBeenCalledTimes(2))
+    it(`hashes the first set of flags`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags A`))
+    it(`hashes the second set of flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters A`))
+    it(`hashes two sets of characters`, () => expect(hashStateCharacters).toHaveBeenCalledTimes(2))
+    it(`hashes the first set of characters`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags B`))
+    it(`hashes the second set of characters`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters B`))
+    it(`normalizes two names`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
+    it(`normalizes the first background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background A`))
+    it(`normalizes the second background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background B`))
+    it(`does not modify the first state`, () => expect(stateA).toEqual(stateACopy))
+    it(`does not modify the second state`, () => expect(stateB).toEqual(stateBCopy))
+    then()
+  })
+  const runMatching = (description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB) => run(description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB, () => {
+    it(`returns matching values`, () => expect(resultA).toEqual(resultB))
+  })
+  const runNotMatching = (description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB) => run(description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB, () => {
+    it(`returns differing values`, () => expect(resultA).not.toEqual(resultB))
+  })
+  runMatching(`everything matches`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
+  runNotMatching(`flags do not match`, `Test Hashed Flags A`, `Test Hashed Characters`, `Test Hashed Background`, `Test Hashed Flags B`, `Test Hashed Characters`, `Test Hashed Background`)
+  runNotMatching(`characters do not match`, `Test Hashed Flags`, `Test Hashed Characters A`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters B`, `Test Hashed Background`)
+  runNotMatching(`backgrounds do not match`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background A`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background B`)
+  runNotMatching(`flags are characters`, `Test Hashed Characters`, `Test Hashed Characters`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
+  runNotMatching(`flags are background`, `Test Hashed Background`, `Test Hashed Characters`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
+  runNotMatching(`characters are flags`, `Test Hashed Flags`, `Test Hashed Flags`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
+  runNotMatching(`characters are background`, `Test Hashed Flags`, `Test Hashed Background`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
+  runNotMatching(`background is flags`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Flags`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
+  runNotMatching(`background is characters`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Characters`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
+})
