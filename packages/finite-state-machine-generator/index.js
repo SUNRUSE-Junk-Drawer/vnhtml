@@ -89,6 +89,22 @@ const combinePromptStates = (a, b) => {
   }
 }
 
+const conditionMet = (condition, state) => {
+  if (!condition) {
+    return true
+  } else {
+    if (!state.flags.length) {
+      return false
+    }
+    const normalizedFlag = normalizeName(condition.flag.flag)
+    const match = state.flags.find(flag => flag.normalizedFlag == normalizedFlag)
+    if (!match) {
+      return false
+    }
+    return normalizeName(condition.flag.value) == match.normalizedValue
+  }
+}
+
 const findPromptStateCombinationsInStatementArray = (context, onError, statements, states, labels) => {
   if (statements.length) {
     return findPromptStateCombinationsInStatement(context, onError, statements[0], statements.slice(1), states, labels)
