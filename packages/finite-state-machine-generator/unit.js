@@ -1226,3 +1226,86 @@ describe(`hashStateCharacters`, () => {
   runNotMatching(`separates character hashes well with spaces`, [`Test Hashed Character A`, `Test Hashed Character B`], [`Test Hashed Character A T`, `est Hashed Character B`])
   runNotMatching(`separates character hashes well with spaces (reverse)`, [`Test Hashed Character A`, `Test Hashed Character B`], [`est Hashed Character A`, `Test Hashed Character B T`])
 })
+
+describe(`hashPromptState`, () => {
+  let stateA
+  let stateACopy
+  let resultA
+  let stateB
+  let stateBCopy
+  let resultB
+  const hashStateFlags = setSpy(`hashStateFlags`)
+  const hashStateCharacters = setSpy(`hashStateCharacters`)
+  const normalizeName = setSpy(`normalizeName`)
+  afterEach(() => {
+    hashStateFlags.calls.reset()
+    hashStateCharacters.calls.reset()
+    normalizeName.calls.reset()
+  })
+  const run = (description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, then) => describe(description, () => {
+    beforeEach(() => {
+      hashStateFlags.and.callFake(flags => {
+        switch (flags) {
+          case `Test Flags A`:
+            return hashedStateFlagsA
+          case `Test Flags B`:
+            return hashedStateFlagsB
+        }
+      })
+      hashStateCharacters.and.callFake(characters => {
+        switch (characters) {
+          case `Test Characters A`:
+            return hashedStateCharactersA
+          case `Test Characters B`:
+            return hashedStateCharactersB
+        }
+      })
+      normalizeName.and.callFake(name => {
+        switch (name) {
+          case `Test Background A`:
+            return normalizedStateBackgroundA
+          case `Test Background B`:
+            return normalizedStateBackgroundB
+        }
+      })
+      stateA = {
+        flags: `Test Flags A`,
+        characters: `Test Characters A`,
+        background: `Test Background A`
+      }
+      stateACopy = JSON.parse(JSON.stringify(stateA))
+      stateB = {
+        flags: `Test Flags B`,
+        characters: `Test Characters B`,
+        background: `Test Background B`
+      }
+      stateBCopy = JSON.parse(JSON.stringify(stateB))
+
+      resultA = get(`hashPromptState`)(promptIdA, stateA)
+      resultB = get(`hashPromptState`)(promptIdB, stateB)
+    })
+    it(`does not modify the first state`, () => expect(stateA).toEqual(stateACopy))
+    it(`does not modify the second state`, () => expect(stateB).toEqual(stateBCopy))
+    it(`calls hashStateFlags twice`, () => expect(hashStateFlags).toHaveBeenCalledTimes(2))
+    it(`calls hashStateFlags with the first state's flags`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags A`))
+    it(`calls hashStateFlags with the second state's flags`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags B`))
+    it(`calls hashStateCharacters twice`, () => expect(hashStateCharacters).toHaveBeenCalledTimes(2))
+    it(`calls hashStateCharacters with the first state's flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters A`))
+    it(`calls hashStateCharacters with the second state's flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters B`))
+    it(`calls normalizeName twice`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
+    it(`calls normalizeName with the first state's background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background A`))
+    it(`calls normalizeName with the second state's background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background B`))
+    then()
+  })
+  const runMatching = (description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB) => run(description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, () => {
+    it(`returns matching hashes`, () => expect(resultA).toEqual(resultB))
+  })
+  const runNotMatching = (description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB) => run(description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, () => {
+    it(`returns differing hashes`, () => expect(resultA).not.toEqual(resultB))
+  })
+  runMatching(`everything matches`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runNotMatching(`promptId does not match`, `Test PromptId A`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, `Test PromptId B`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runNotMatching(`state flags do not match`, `Test PromptId`, `Test Hashed State Flags A`, `Test Hashed Character Flags`, `Test Normalized Background`, `Test PromptId`, `Test Hashed State Flags B`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runNotMatching(`character flags do not match`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags A`, `Test Normalized Background`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags B`, `Test Normalized Background`)
+  runNotMatching(`backgrounds do not match`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background A`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background B`)
+})

@@ -75,3 +75,4 @@ const hashStateFlag = flag => `${flag.normalizedFlag}  ${flag.normalizedValue}`
 const hashStateFlags = flags => flags.map(flag => hashStateFlag(flag)).sort().join(`  `)
 const hashStateCharacter = character => `${character.normalizedName}  ${character.normalizedEmote}`
 const hashStateCharacters = characters => characters.map(character => hashStateCharacter(character)).sort().join(`  `)
+const hashPromptState = (promptId, state) => `${promptId}   ${hashStateFlags(state.flags)}   ${hashStateCharacters(state.characters)}   ${normalizeName(state.background)}`
