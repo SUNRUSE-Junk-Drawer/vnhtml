@@ -47,7 +47,7 @@
     "archiver": "3.0.0",
     "chokidar": "2.0.4",
     "commander": "2.17.1",
-    "html-minifier": "3.5.19",
+    "html-minifier": "3.5.20",
     "svgo": "1.0.5"
   }
 }
