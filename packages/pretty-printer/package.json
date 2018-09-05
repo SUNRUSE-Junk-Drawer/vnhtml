@@ -25,15 +25,15 @@
     "watchBabel": "babel index.js --watch --out-file index.min.js"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/node": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "greenkeeper-lockfile": "^2.5.0",
-    "jasmine": "^3.2.0",
-    "npm-run-all": "^4.1.3",
-    "nyc": "^12.0.2",
-    "rewire": "^4.0.1",
-    "uglify-js": "^3.4.7"
+    "@babel/cli": "7.0.0-rc.2",
+    "@babel/core": "7.0.0-rc.2",
+    "@babel/node": "7.0.0-rc.2",
+    "@babel/preset-env": "7.0.0-rc.2",
+    "greenkeeper-lockfile": "2.5.0",
+    "jasmine": "3.2.0",
+    "npm-run-all": "4.1.3",
+    "nyc": "12.0.2",
+    "rewire": "4.0.1",
+    "uglify-js": "3.4.7"
   }
 }
