@@ -1565,6 +1565,201 @@ describe(`combinePromptStates`, () => {
   })
 })
 
+describe(`conditionMet`, () => {
+  let conditionCopy
+  let stateCopy
+  let result
+  const normalizeName = setSpy(`normalizeName`)
+  afterEach(() => normalizeName.calls.reset())
+  const run = (description, condition, state, then) => describe(description, () => {
+    beforeEach(() => {
+      conditionCopy = JSON.parse(JSON.stringify(condition))
+      stateCopy = JSON.parse(JSON.stringify(state))
+      result = get(`conditionMet`)(conditionCopy, stateCopy)
+    })
+    it(`does not modify the condition`, () => expect(conditionCopy).toEqual(condition))
+    it(`does not modify the state`, () => expect(stateCopy).toEqual(state))
+    then()
+  })
+  const runMatching = (description, condition, state, then) => run(description, condition, state, () => {
+    it(`returns true`, () => expect(result).toBe(true))
+    then()
+  })
+  const runNotMatching = (description, condition, state, then) => run(description, condition, state, () => {
+    it(`returns false`, () => expect(result).toBe(false))
+    then()
+  })
+  runMatching(`null`, null, `Test State`, () => {
+    it(`does not normalize any names`, () => expect(normalizeName).not.toHaveBeenCalled())
+  })
+  describe(`flag`, () => {
+    const flagCondition = {
+      flag: {
+        flag: `Test Condition Flag`,
+        value: `Test Condition Value`
+      }
+    }
+    beforeEach(() => normalizeName.and.callFake(name => {
+      switch (name) {
+        case `Test Condition Flag`:
+          return `Test Normalized Condition Flag`
+        case `Test Condition Value`:
+          return `Test Normalized Condition Value`
+      }
+    }))
+    runMatching(`when the flag and value match`, flagCondition, {
+      flags: [{
+        flag: `Test Flag A`,
+        normalizedFlag: `Test Normalized Flag A`,
+        value: `Test Value A`,
+        normalizedValue: `Test Normalized Value A`
+      }, {
+        flag: `Test Flag B`,
+        normalizedFlag: `Test Normalized Flag B`,
+        value: `Test Value B`,
+        normalizedValue: `Test Normalized Value B`
+      }, {
+        flag: `Test Flag C`,
+        normalizedFlag: `Test Normalized Condition Flag`,
+        value: `Test Value C`,
+        normalizedValue: `Test Normalized Condition Value`
+      }, {
+        flag: `Test Flag D`,
+        normalizedFlag: `Test Normalized Flag D`,
+        value: `Test Value D`,
+        normalizedValue: `Test Normalized Value D`
+      }],
+      characters: `Test Characters`,
+      background: `Test Background`
+    }, () => {
+      it(`normalizes two names`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
+      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
+      it(`normalizes the value`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Value`))
+    })
+    runNotMatching(`when the flag does not match`, flagCondition, {
+      flags: [{
+        flag: `Test Flag A`,
+        normalizedFlag: `Test Normalized Flag A`,
+        value: `Test Value A`,
+        normalizedValue: `Test Normalized Value A`
+      }, {
+        flag: `Test Flag B`,
+        normalizedFlag: `Test Normalized Flag B`,
+        value: `Test Value B`,
+        normalizedValue: `Test Normalized Value B`
+      }, {
+        flag: `Test Flag C`,
+        normalizedFlag: `Test Other Normalized Condition Flag`,
+        value: `Test Value C`,
+        normalizedValue: `Test Normalized Condition Value`
+      }, {
+        flag: `Test Flag D`,
+        normalizedFlag: `Test Normalized Flag D`,
+        value: `Test Value D`,
+        normalizedValue: `Test Normalized Value D`
+      }],
+      characters: `Test Characters`,
+      background: `Test Background`
+    }, () => {
+      it(`normalizes one name`, () => expect(normalizeName).toHaveBeenCalledTimes(1))
+      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
+    })
+    runNotMatching(`when the value does not match`, flagCondition, {
+      flags: [{
+        flag: `Test Flag A`,
+        normalizedFlag: `Test Normalized Flag A`,
+        value: `Test Value A`,
+        normalizedValue: `Test Normalized Value A`
+      }, {
+        flag: `Test Flag B`,
+        normalizedFlag: `Test Normalized Flag B`,
+        value: `Test Value B`,
+        normalizedValue: `Test Normalized Value B`
+      }, {
+        flag: `Test Flag C`,
+        normalizedFlag: `Test Normalized Condition Flag`,
+        value: `Test Value C`,
+        normalizedValue: `Test Other Normalized Condition Value`
+      }, {
+        flag: `Test Flag D`,
+        normalizedFlag: `Test Normalized Flag D`,
+        value: `Test Value D`,
+        normalizedValue: `Test Normalized Value D`
+      }],
+      characters: `Test Characters`,
+      background: `Test Background`
+    }, () => {
+      it(`normalizes two names`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
+      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
+      it(`normalizes the value`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Value`))
+    })
+    runNotMatching(`when neither the flag nor value match`, flagCondition, {
+      flags: [{
+        flag: `Test Flag A`,
+        normalizedFlag: `Test Normalized Flag A`,
+        value: `Test Value A`,
+        normalizedValue: `Test Normalized Value A`
+      }, {
+        flag: `Test Flag B`,
+        normalizedFlag: `Test Normalized Flag B`,
+        value: `Test Value B`,
+        normalizedValue: `Test Normalized Value B`
+      }, {
+        flag: `Test Flag C`,
+        normalizedFlag: `Test Other Normalized Condition Flag`,
+        value: `Test Value C`,
+        normalizedValue: `Test Other Normalized Condition Value`
+      }, {
+        flag: `Test Flag D`,
+        normalizedFlag: `Test Normalized Flag D`,
+        value: `Test Value D`,
+        normalizedValue: `Test Normalized Value D`
+      }],
+      characters: `Test Characters`,
+      background: `Test Background`
+    }, () => {
+      it(`normalizes one name`, () => expect(normalizeName).toHaveBeenCalledTimes(1))
+      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
+    })
+    runNotMatching(`when there are no flags`, flagCondition, {
+      flags: [],
+      characters: `Test Characters`,
+      background: `Test Background`
+    }, () => {
+      it(`does not normalize any names`, () => expect(normalizeName).not.toHaveBeenCalled())
+    })
+    runMatching(`when multiple flags have the same value, but only one has the correct flag`, flagCondition, {
+      flags: [{
+        flag: `Test Flag A`,
+        normalizedFlag: `Test Normalized Flag A`,
+        value: `Test Value A`,
+        normalizedValue: `Test Normalized Value A`
+      }, {
+        flag: `Test Flag B`,
+        normalizedFlag: `Test Normalized Flag B`,
+        value: `Test Value B`,
+        normalizedValue: `Test Normalized Condition Value`
+      }, {
+        flag: `Test Flag C`,
+        normalizedFlag: `Test Normalized Condition Flag`,
+        value: `Test Value C`,
+        normalizedValue: `Test Normalized Condition Value`
+      }, {
+        flag: `Test Flag D`,
+        normalizedFlag: `Test Normalized Flag D`,
+        value: `Test Value D`,
+        normalizedValue: `Test Normalized Condition Value`
+      }],
+      characters: `Test Characters`,
+      background: `Test Background`
+    }, () => {
+      it(`normalizes two names`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
+      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
+      it(`normalizes the value`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Value`))
+    })
+  })
+})
+
 describe(`findPromptStateCombinationsInStatementArray`, () => {
   let statementsCopy
   let result
@@ -1583,7 +1778,7 @@ describe(`findPromptStateCombinationsInStatementArray`, () => {
     it(`does not call findPromptStateCombinationsInStatement`, () => expect(findPromptStateCombinationsInStatement).not.toHaveBeenCalled())
     it(`returns the given states`, () => expect(result).toEqual(`Test States`))
   })
-  run(`one statement`, [`Test Statement A`], () => { 
+  run(`one statement`, [`Test Statement A`], () => {
     it(`calls findPromptStateCombinationsInStatement once`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledTimes(1))
     it(`calls findPromptStateCombinationsInStatement with the given context`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the given onError`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
@@ -1593,7 +1788,7 @@ describe(`findPromptStateCombinationsInStatementArray`, () => {
     it(`calls findPromptStateCombinationsInStatement with the given labels`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Labels`))
     it(`returns the result of findPromptStateCombinationsInStatement`, () => expect(result).toEqual(`Test Recursed States`))
   })
-  run(`two statements`, [`Test Statement A`, `Test Statement B`], () => { 
+  run(`two statements`, [`Test Statement A`, `Test Statement B`], () => {
     it(`calls findPromptStateCombinationsInStatement once`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledTimes(1))
     it(`calls findPromptStateCombinationsInStatement with the given context`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the given onError`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
@@ -1603,7 +1798,7 @@ describe(`findPromptStateCombinationsInStatementArray`, () => {
     it(`calls findPromptStateCombinationsInStatement with the given labels`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Labels`))
     it(`returns the result of findPromptStateCombinationsInStatement`, () => expect(result).toEqual(`Test Recursed States`))
   })
-  run(`three statements`, [`Test Statement A`, `Test Statement B`, `Test Statement C`], () => { 
+  run(`three statements`, [`Test Statement A`, `Test Statement B`, `Test Statement C`], () => {
     it(`calls findPromptStateCombinationsInStatement once`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledTimes(1))
     it(`calls findPromptStateCombinationsInStatement with the given context`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the given onError`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
