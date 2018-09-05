@@ -1309,3 +1309,258 @@ describe(`hashPromptState`, () => {
   runNotMatching(`character flags do not match`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags A`, `Test Normalized Background`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags B`, `Test Normalized Background`)
   runNotMatching(`backgrounds do not match`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background A`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background B`)
 })
+
+describe(`combinePromptStates`, () => {
+  let aCopy
+  let bCopy
+  let result
+  const run = (description, a, b, then) => describe(description, () => {
+    beforeEach(() => {
+      aCopy = JSON.parse(JSON.stringify(a))
+      bCopy = JSON.parse(JSON.stringify(b))
+      result = get(`combinePromptStates`)(aCopy, bCopy)
+    })
+    it(`does not modify the first set of prompt/state combinations`, () => expect(aCopy).toEqual(a))
+    it(`does not modify the second set of prompt/state combinations`, () => expect(bCopy).toEqual(b))
+    then()
+  })
+  run(`all null`, null, null, () => {
+    it(`returns null`, () => expect(result).toBeNull())
+  })
+  run(`first set of prompt/state combinations only`, [{
+    hash: `Test Hash A`,
+    statement: `Test Statement A`,
+    state: `Test State A`
+  }, {
+    hash: `Test Hash B`,
+    statement: `Test Statement B`,
+    state: `Test State B`
+  }, {
+    hash: `Test Hash C`,
+    statement: `Test Statement C`,
+    state: `Test State C`
+  }, {
+    hash: `Test Hash D`,
+    statement: `Test Statement D`,
+    state: `Test State D`
+  }], null, () => {
+    it(`returns the first set of prompt/state combinations`, () => expect(result).toEqual([{
+      hash: `Test Hash A`,
+      statement: `Test Statement A`,
+      state: `Test State A`
+    }, {
+      hash: `Test Hash B`,
+      statement: `Test Statement B`,
+      state: `Test State B`
+    }, {
+      hash: `Test Hash C`,
+      statement: `Test Statement C`,
+      state: `Test State C`
+    }, {
+      hash: `Test Hash D`,
+      statement: `Test Statement D`,
+      state: `Test State D`
+    }]))
+  })
+  run(`second set of prompt/state combinations only`, null, [{
+    hash: `Test Hash A`,
+    statement: `Test Statement A`,
+    state: `Test State A`
+  }, {
+    hash: `Test Hash B`,
+    statement: `Test Statement B`,
+    state: `Test State B`
+  }, {
+    hash: `Test Hash C`,
+    statement: `Test Statement C`,
+    state: `Test State C`
+  }, {
+    hash: `Test Hash D`,
+    statement: `Test Statement D`,
+    state: `Test State D`
+  }], () => {
+    it(`returns the second set of prompt/state combinations`, () => expect(result).toEqual([{
+      hash: `Test Hash A`,
+      statement: `Test Statement A`,
+      state: `Test State A`
+    }, {
+      hash: `Test Hash B`,
+      statement: `Test Statement B`,
+      state: `Test State B`
+    }, {
+      hash: `Test Hash C`,
+      statement: `Test Statement C`,
+      state: `Test State C`
+    }, {
+      hash: `Test Hash D`,
+      statement: `Test Statement D`,
+      state: `Test State D`
+    }]))
+  })
+  run(`two sets of prompt/state combinations without overlap`, [{
+    hash: `Test Hash A`,
+    statement: `Test Statement A`,
+    state: `Test State A`
+  }, {
+    hash: `Test Hash B`,
+    statement: `Test Statement B`,
+    state: `Test State B`
+  }, {
+    hash: `Test Hash C`,
+    statement: `Test Statement C`,
+    state: `Test State C`
+  }, {
+    hash: `Test Hash D`,
+    statement: `Test Statement D`,
+    state: `Test State D`
+  }], [{
+    hash: `Test Hash E`,
+    statement: `Test Statement E`,
+    state: `Test State E`
+  }, {
+    hash: `Test Hash F`,
+    statement: `Test Statement F`,
+    state: `Test State F`
+  }, {
+    hash: `Test Hash G`,
+    statement: `Test Statement G`,
+    state: `Test State G`
+  }, {
+    hash: `Test Hash H`,
+    statement: `Test Statement H`,
+    state: `Test State H`
+  }, {
+    hash: `Test Hash I`,
+    statement: `Test Statement I`,
+    state: `Test State I`
+  }], () => {
+    it(`returns the prompt/state combinations from the first set`, () => {
+      expect(result).toContain({
+        hash: `Test Hash A`,
+        statement: `Test Statement A`,
+        state: `Test State A`
+      })
+      expect(result).toContain({
+        hash: `Test Hash B`,
+        statement: `Test Statement B`,
+        state: `Test State B`
+      })
+      expect(result).toContain({
+        hash: `Test Hash C`,
+        statement: `Test Statement C`,
+        state: `Test State C`
+      })
+      expect(result).toContain({
+        hash: `Test Hash D`,
+        statement: `Test Statement D`,
+        state: `Test State D`
+      })
+    })
+    it(`returns the prompt/state combinations from the second set`, () => {
+      expect(result).toContain({
+        hash: `Test Hash E`,
+        statement: `Test Statement E`,
+        state: `Test State E`
+      })
+      expect(result).toContain({
+        hash: `Test Hash F`,
+        statement: `Test Statement F`,
+        state: `Test State F`
+      })
+      expect(result).toContain({
+        hash: `Test Hash G`,
+        statement: `Test Statement G`,
+        state: `Test State G`
+      })
+      expect(result).toContain({
+        hash: `Test Hash H`,
+        statement: `Test Statement H`,
+        state: `Test State H`
+      })
+      expect(result).toContain({
+        hash: `Test Hash I`,
+        statement: `Test Statement I`,
+        state: `Test State I`
+      })
+    })
+    it(`returns no further prompt/state combinations`, () => expect(result.length).toEqual(9))
+  })
+  run(`two sets of prompt/state combinations with overlap`, [{
+    hash: `Test Hash A`,
+    statement: `Test Statement A`,
+    state: `Test State A`
+  }, {
+    hash: `Test Hash B`,
+    statement: `Test Statement B`,
+    state: `Test State B`
+  }, {
+    hash: `Test Hash C`,
+    statement: `Test Statement C`,
+    state: `Test State C`
+  }, {
+    hash: `Test Hash D`,
+    statement: `Test Statement D`,
+    state: `Test State D`
+  }], [{
+    hash: `Test Hash E`,
+    statement: `Test Statement E`,
+    state: `Test State E`
+  }, {
+    hash: `Test Hash D`,
+    statement: `Test Statement F`,
+    state: `Test State F`
+  }, {
+    hash: `Test Hash G`,
+    statement: `Test Statement G`,
+    state: `Test State G`
+  }, {
+    hash: `Test Hash B`,
+    statement: `Test Statement H`,
+    state: `Test State H`
+  }, {
+    hash: `Test Hash I`,
+    statement: `Test Statement I`,
+    state: `Test State I`
+  }], () => {
+    it(`returns the prompt/state combinations from the first set`, () => {
+      expect(result).toContain({
+        hash: `Test Hash A`,
+        statement: `Test Statement A`,
+        state: `Test State A`
+      })
+      expect(result).toContain({
+        hash: `Test Hash B`,
+        statement: `Test Statement B`,
+        state: `Test State B`
+      })
+      expect(result).toContain({
+        hash: `Test Hash C`,
+        statement: `Test Statement C`,
+        state: `Test State C`
+      })
+      expect(result).toContain({
+        hash: `Test Hash D`,
+        statement: `Test Statement D`,
+        state: `Test State D`
+      })
+    })
+    it(`returns the prompt/state combinations from the second set (excluding those which are also from the first set)`, () => {
+      expect(result).toContain({
+        hash: `Test Hash E`,
+        statement: `Test Statement E`,
+        state: `Test State E`
+      })
+      expect(result).toContain({
+        hash: `Test Hash G`,
+        statement: `Test Statement G`,
+        state: `Test State G`
+      })
+      expect(result).toContain({
+        hash: `Test Hash I`,
+        statement: `Test Statement I`,
+        state: `Test State I`
+      })
+    })
+    it(`returns no further prompt/state combinations`, () => expect(result.length).toEqual(7))
+  })
+})
