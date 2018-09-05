@@ -41,7 +41,7 @@
     "pkg": "4.3.4",
     "recursive-readdir": "2.2.2",
     "rimraf": "2.6.2",
-    "uglify-js": "3.4.7"
+    "uglify-js": "3.4.9"
   },
   "dependencies": {
     "archiver": "3.0.0",
