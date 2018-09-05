@@ -88,3 +88,13 @@ const combinePromptStates = (a, b) => {
     return b
   }
 }
+
+const findPromptStateCombinationsInStatementArray = (context, onError, statements, states, labels) => {
+  if (statements.length) {
+    return findPromptStateCombinationsInStatement(context, onError, statements[0], statements.slice(1), states, labels)
+  } else {
+    return states
+  }
+}
+
+const findPromptStateCombinationsInStatement = null
