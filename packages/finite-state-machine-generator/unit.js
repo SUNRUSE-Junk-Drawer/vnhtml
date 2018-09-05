@@ -29,196 +29,272 @@ describe(`normalizeName`, () => {
 
 describe(`combineLabels`, () => {
   const onError = jasmine.createSpy(`onError`)
-  let normalizeNameMappings
-  const normalizeName = setSpy(`normalizeName`)
-  normalizeName.and.callFake(label => normalizeNameMappings[label])
-  afterEach(() => {
-    onError.calls.reset()
-    normalizeName.calls.reset()
-  })
-  let a
-  let b
+  afterEach(() => onError.calls.reset())
+  let aCopy
+  let bCopy
   let result
-  describe(`with a`, () => {
-    beforeEach(() => a = {
-      testLabelA: `Test Label Location A`,
-      testLabelB: `Test Label Location B`,
-      testLabelC: `Test Label Location C`,
-      testLabelD: `Test Label Location D`
+  const run = (description, a, b, then) => describe(description, () => {
+    beforeEach(() => {
+      aCopy = JSON.parse(JSON.stringify(a))
+      bCopy = JSON.parse(JSON.stringify(b))
+      result = get(`combineLabels`)(`Test Context`, onError, aCopy, bCopy)
     })
-    describe(`with b`, () => {
-      beforeEach(() => b = {
-        testLabelE: `Test Label Location E`,
-        testLabelF: `Test Label Location F`,
-        testLabelG: `Test Label Location G`,
-        testLabelH: `Test Label Location H`,
-        testLabelI: `Test Label Location I`
-      })
-      describe(`with overlap`, () => {
-        beforeEach(() => {
-          normalizeNameMappings = {
-            testLabelA: `Test Normalized Label A`,
-            testLabelB: `Test Normalized Label B`,
-            testLabelC: `Test Normalized Label C`,
-            testLabelD: `Test Normalized Label D`,
-            testLabelE: `Test Normalized Label E`,
-            testLabelF: `Test Normalized Label D`,
-            testLabelG: `Test Normalized Label G`,
-            testLabelH: `Test Normalized Label B`,
-            testLabelI: `Test Normalized Label I`
-          }
-          result = get(`combineLabels`)(`Test Context`, onError, a, b)
-        })
-        it(`does not modify a`, () => expect(a).toEqual({
-          testLabelA: `Test Label Location A`,
-          testLabelB: `Test Label Location B`,
-          testLabelC: `Test Label Location C`,
-          testLabelD: `Test Label Location D`
-        }))
-        it(`does not modify b`, () => expect(b).toEqual({
-          testLabelE: `Test Label Location E`,
-          testLabelF: `Test Label Location F`,
-          testLabelG: `Test Label Location G`,
-          testLabelH: `Test Label Location H`,
-          testLabelI: `Test Label Location I`
-        }))
-        it(`includes every label from a`, () => {
-          expect(result.testLabelA).toEqual(`Test Label Location A`)
-          expect(result.testLabelB).toEqual(`Test Label Location B`)
-          expect(result.testLabelC).toEqual(`Test Label Location C`)
-          expect(result.testLabelD).toEqual(`Test Label Location D`)
-        })
-        it(`includes every label from b which is not in a`, () => {
-          expect(result.testLabelE).toEqual(`Test Label Location E`)
-          expect(result.testLabelG).toEqual(`Test Label Location G`)
-          expect(result.testLabelI).toEqual(`Test Label Location I`)
-        })
-        it(`includes no further labels`, () => expect(Object.keys(result).length).toEqual(7))
-        it(`calls onError once for every overlapping label`, () => expect(onError).toHaveBeenCalledTimes(2))
-        it(`calls onError with the context`, () => {
-          expect(onError.calls.argsFor(0)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything()])
-          expect(onError.calls.argsFor(1)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything()])
-        })
-        xit(`calls onError with the line number`, () => { })
-        it(`calls onError with a message specifying that the overlapping labels have been defined multiple times`, () => {
-          expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `The label "testLabelB" is defined multiple times`)
-          expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `The label "testLabelD" is defined multiple times`)
-        })
-        it(`calls normalizeName once per label`, () => expect(normalizeName).toHaveBeenCalledTimes(9))
-        it(`calls normalizeName with every label`, () => {
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelA`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelB`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelC`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelD`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelE`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelG`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelH`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelI`)
-        })
-      })
-      describe(`without overlap`, () => {
-        beforeEach(() => {
-          normalizeNameMappings = {
-            testLabelA: `Test Normalized Label A`,
-            testLabelB: `Test Normalized Label B`,
-            testLabelC: `Test Normalized Label C`,
-            testLabelD: `Test Normalized Label D`,
-            testLabelE: `Test Normalized Label E`,
-            testLabelF: `Test Normalized Label F`,
-            testLabelG: `Test Normalized Label G`,
-            testLabelH: `Test Normalized Label H`,
-            testLabelI: `Test Normalized Label I`
-          }
-          result = get(`combineLabels`)(`Test Context`, onError, a, b)
-        })
-        it(`does not modify a`, () => expect(a).toEqual({
-          testLabelA: `Test Label Location A`,
-          testLabelB: `Test Label Location B`,
-          testLabelC: `Test Label Location C`,
-          testLabelD: `Test Label Location D`
-        }))
-        it(`does not modify b`, () => expect(b).toEqual({
-          testLabelE: `Test Label Location E`,
-          testLabelF: `Test Label Location F`,
-          testLabelG: `Test Label Location G`,
-          testLabelH: `Test Label Location H`,
-          testLabelI: `Test Label Location I`
-        }))
-        it(`includes every label from a`, () => {
-          expect(result.testLabelA).toEqual(`Test Label Location A`)
-          expect(result.testLabelB).toEqual(`Test Label Location B`)
-          expect(result.testLabelC).toEqual(`Test Label Location C`)
-          expect(result.testLabelD).toEqual(`Test Label Location D`)
-        })
-        it(`includes every label from b`, () => {
-          expect(result.testLabelE).toEqual(`Test Label Location E`)
-          expect(result.testLabelF).toEqual(`Test Label Location F`)
-          expect(result.testLabelG).toEqual(`Test Label Location G`)
-          expect(result.testLabelH).toEqual(`Test Label Location H`)
-          expect(result.testLabelI).toEqual(`Test Label Location I`)
-        })
-        it(`includes no further labels`, () => expect(Object.keys(result).length).toEqual(9))
-        it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
-        it(`calls normalizeName once per label`, () => expect(normalizeName).toHaveBeenCalledTimes(9))
-        it(`calls normalizeName with every label`, () => {
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelA`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelB`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelC`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelD`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelE`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelG`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelH`)
-          expect(normalizeName).toHaveBeenCalledWith(`testLabelI`)
-        })
-      })
-    })
-    describe(`without b`, () => {
-      beforeEach(() => {
-        b = null
-        result = get(`combineLabels`)(`Test Context`, onError, a, b)
-      })
-      it(`does not modify a`, () => expect(a).toEqual({
-        testLabelA: `Test Label Location A`,
-        testLabelB: `Test Label Location B`,
-        testLabelC: `Test Label Location C`,
-        testLabelD: `Test Label Location D`
-      }))
-      it(`returns a`, () => expect(result).toBe(a))
-      it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
-      it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
-    })
+    it(`does not modify the first set of labels`, () => expect(aCopy).toEqual(a))
+    it(`does not modify the second set of labels`, () => expect(bCopy).toEqual(b))
+    then()
   })
-  describe(`without a`, () => {
-    beforeEach(() => a = null)
-    describe(`with b`, () => {
-      beforeEach(() => {
-        b = {
-          testLabelA: `Test Label Location A`,
-          testLabelB: `Test Label Location B`,
-          testLabelC: `Test Label Location C`,
-          testLabelD: `Test Label Location D`
-        }
-        result = get(`combineLabels`)(`Test Context`, onError, a, b)
+  run(`all null`, null, null, () => {
+    it(`does not raise an error`, () => expect(onError).not.toHaveBeenCalled())
+    it(`returns null`, () => expect(result).toBeNull())
+  })
+  run(`first set of labels only`, [{
+    name: `Test Name A`,
+    normalizedName: `Test Normalized Name A`,
+    statements: `Test Statements A`
+  }, {
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name B`,
+    statements: `Test Statements B`
+  }, {
+    name: `Test Name C`,
+    normalizedName: `Test Normalized Name C`,
+    statements: `Test Statements C`
+  }, {
+    name: `Test Name D`,
+    normalizedName: `Test Normalized Name D`,
+    statements: `Test Statements D`
+  }], null, () => {
+    it(`does not raise an error`, () => expect(onError).not.toHaveBeenCalled())
+    it(`returns the first set of labels`, () => expect(result).toEqual([{
+      name: `Test Name A`,
+      normalizedName: `Test Normalized Name A`,
+      statements: `Test Statements A`
+    }, {
+      name: `Test Name B`,
+      normalizedName: `Test Normalized Name B`,
+      statements: `Test Statements B`
+    }, {
+      name: `Test Name C`,
+      normalizedName: `Test Normalized Name C`,
+      statements: `Test Statements C`
+    }, {
+      name: `Test Name D`,
+      normalizedName: `Test Normalized Name D`,
+      statements: `Test Statements D`
+    }]))
+  })
+  run(`second set of labels only`, null, [{
+    name: `Test Name A`,
+    normalizedName: `Test Normalized Name A`,
+    statements: `Test Statements A`
+  }, {
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name B`,
+    statements: `Test Statements B`
+  }, {
+    name: `Test Name C`,
+    normalizedName: `Test Normalized Name C`,
+    statements: `Test Statements C`
+  }, {
+    name: `Test Name D`,
+    normalizedName: `Test Normalized Name D`,
+    statements: `Test Statements D`
+  }], () => {
+    it(`does not raise an error`, () => expect(onError).not.toHaveBeenCalled())
+    it(`returns the second set of labels`, () => expect(result).toEqual([{
+      name: `Test Name A`,
+      normalizedName: `Test Normalized Name A`,
+      statements: `Test Statements A`
+    }, {
+      name: `Test Name B`,
+      normalizedName: `Test Normalized Name B`,
+      statements: `Test Statements B`
+    }, {
+      name: `Test Name C`,
+      normalizedName: `Test Normalized Name C`,
+      statements: `Test Statements C`
+    }, {
+      name: `Test Name D`,
+      normalizedName: `Test Normalized Name D`,
+      statements: `Test Statements D`
+    }]))
+  })
+  run(`two sets of labels without overlap`, [{
+    name: `Test Name A`,
+    normalizedName: `Test Normalized Name A`,
+    statements: `Test Statements A`
+  }, {
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name B`,
+    statements: `Test Statements B`
+  }, {
+    name: `Test Name C`,
+    normalizedName: `Test Normalized Name C`,
+    statements: `Test Statements C`
+  }, {
+    name: `Test Name D`,
+    normalizedName: `Test Normalized Name D`,
+    statements: `Test Statements D`
+  }], [{
+    name: `Test Name E`,
+    normalizedName: `Test Normalized Name E`,
+    statements: `Test Statements E`
+  }, {
+    name: `Test Name F`,
+    normalizedName: `Test Normalized Name F`,
+    statements: `Test Statements F`
+  }, {
+    name: `Test Name G`,
+    normalizedName: `Test Normalized Name G`,
+    statements: `Test Statements G`
+  }, {
+    name: `Test Name H`,
+    normalizedName: `Test Normalized Name H`,
+    statements: `Test Statements H`
+  }, {
+    name: `Test Name I`,
+    normalizedName: `Test Normalized Name I`,
+    statements: `Test Statements I`
+  }], () => {
+    it(`does not raise an error`, () => expect(onError).not.toHaveBeenCalled())
+    it(`returns the labels from the first set`, () => {
+      expect(result).toContain({
+        name: `Test Name A`,
+        normalizedName: `Test Normalized Name A`,
+        statements: `Test Statements A`
       })
-      it(`does not modify b`, () => expect(b).toEqual({
-        testLabelA: `Test Label Location A`,
-        testLabelB: `Test Label Location B`,
-        testLabelC: `Test Label Location C`,
-        testLabelD: `Test Label Location D`
-      }))
-      it(`returns b`, () => expect(result).toBe(b))
-      it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
-      it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
-    })
-    describe(`without b`, () => {
-      beforeEach(() => {
-        b = null
-        result = get(`combineLabels`)(`Test Context`, onError, a, b)
+      expect(result).toContain({
+        name: `Test Name B`,
+        normalizedName: `Test Normalized Name B`,
+        statements: `Test Statements B`
       })
-      it(`returns null`, () => expect(result).toBeNull())
-      it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
-      it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
+      expect(result).toContain({
+        name: `Test Name C`,
+        normalizedName: `Test Normalized Name C`,
+        statements: `Test Statements C`
+      })
+      expect(result).toContain({
+        name: `Test Name D`,
+        normalizedName: `Test Normalized Name D`,
+        statements: `Test Statements D`
+      })
     })
+    it(`returns the labels from the second set`, () => {
+      expect(result).toContain({
+        name: `Test Name E`,
+        normalizedName: `Test Normalized Name E`,
+        statements: `Test Statements E`
+      })
+      expect(result).toContain({
+        name: `Test Name F`,
+        normalizedName: `Test Normalized Name F`,
+        statements: `Test Statements F`
+      })
+      expect(result).toContain({
+        name: `Test Name G`,
+        normalizedName: `Test Normalized Name G`,
+        statements: `Test Statements G`
+      })
+      expect(result).toContain({
+        name: `Test Name H`,
+        normalizedName: `Test Normalized Name H`,
+        statements: `Test Statements H`
+      })
+      expect(result).toContain({
+        name: `Test Name I`,
+        normalizedName: `Test Normalized Name I`,
+        statements: `Test Statements I`
+      })
+    })
+    it(`returns no further labels`, () => expect(result.length).toEqual(9))
+  })
+  run(`two sets of labels with overlap`, [{
+    name: `Test Name A`,
+    normalizedName: `Test Normalized Name A`,
+    statements: `Test Statements A`
+  }, {
+    name: `Test Name B`,
+    normalizedName: `Test Normalized Name B`,
+    statements: `Test Statements B`
+  }, {
+    name: `Test Name C`,
+    normalizedName: `Test Normalized Name C`,
+    statements: `Test Statements C`
+  }, {
+    name: `Test Name D`,
+    normalizedName: `Test Normalized Name D`,
+    statements: `Test Statements D`
+  }], [{
+    name: `Test Name E`,
+    normalizedName: `Test Normalized Name E`,
+    statements: `Test Statements E`
+  }, {
+    name: `Test Name F`,
+    normalizedName: `Test Normalized Name D`,
+    statements: `Test Statements F`
+  }, {
+    name: `Test Name G`,
+    normalizedName: `Test Normalized Name G`,
+    statements: `Test Statements G`
+  }, {
+    name: `Test Name H`,
+    normalizedName: `Test Normalized Name B`,
+    statements: `Test Statements H`
+  }, {
+    name: `Test Name I`,
+    normalizedName: `Test Normalized Name I`,
+    statements: `Test Statements I`
+  }], () => {
+    it(`raises one error per overlapping label`, () => expect(onError).toHaveBeenCalledTimes(2))
+    it(`raises errors using the context`, () => {
+      expect(onError.calls.argsFor(0)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything()])
+      expect(onError.calls.argsFor(1)).toEqual([`Test Context`, jasmine.anything(), jasmine.anything()])
+    })
+    xit(`raises errors using the line number`, () => { })
+    it(`raises errors with messages explaining to the end-user that the same label has been defined multiple times`, () => {
+      expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `The label "Test Name B" is defined multiple times`)
+      expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `The label "Test Name D" is defined multiple times`)
+    })
+    it(`returns the labels from the first set`, () => {
+      expect(result).toContain({
+        name: `Test Name A`,
+        normalizedName: `Test Normalized Name A`,
+        statements: `Test Statements A`
+      })
+      expect(result).toContain({
+        name: `Test Name B`,
+        normalizedName: `Test Normalized Name B`,
+        statements: `Test Statements B`
+      })
+      expect(result).toContain({
+        name: `Test Name C`,
+        normalizedName: `Test Normalized Name C`,
+        statements: `Test Statements C`
+      })
+      expect(result).toContain({
+        name: `Test Name D`,
+        normalizedName: `Test Normalized Name D`,
+        statements: `Test Statements D`
+      })
+    })
+    it(`returns the labels from the second set (excluding those which are also from the first set)`, () => {
+      expect(result).toContain({
+        name: `Test Name E`,
+        normalizedName: `Test Normalized Name E`,
+        statements: `Test Statements E`
+      })
+      expect(result).toContain({
+        name: `Test Name G`,
+        normalizedName: `Test Normalized Name G`,
+        statements: `Test Statements G`
+      })
+      expect(result).toContain({
+        name: `Test Name I`,
+        normalizedName: `Test Normalized Name I`,
+        statements: `Test Statements I`
+      })
+    })
+    it(`returns no further labels`, () => expect(result.length).toEqual(7))
   })
 })
 
@@ -519,9 +595,12 @@ describe(`findLabelsInStatement`, () => {
         return `Test Combination Of Labels A B C and D`
     }
   })
+  const normalizeName = setSpy(`normalizeName`)
+  normalizeName.and.returnValue(`Test Normalized Label Name`)
   afterEach(() => {
     findLabelsInStatementArray.calls.reset()
     combineLabels.calls.reset()
+    normalizeName.calls.reset()
   })
   let result
   let inputCopy
@@ -534,6 +613,7 @@ describe(`findLabelsInStatement`, () => {
     it(`does not modify the input`, () => expect(inputCopy).toEqual(input))
     it(`does not call findLabelsInStatementArray`, () => expect(findLabelsInStatementArray).not.toHaveBeenCalled())
     it(`does not call combineLabels`, () => expect(combineLabels).not.toHaveBeenCalled())
+    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   const containsOneArrayOfLabels = (description, input) => describe(description, () => {
     beforeEach(() => {
@@ -548,6 +628,7 @@ describe(`findLabelsInStatement`, () => {
     it(`calls findLabelsInStatementArray with the statement array`, () => expect(findLabelsInStatementArray).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statements A`, jasmine.anything()))
     it(`calls findLabelsInStatementArray with the next statements`, () => expect(findLabelsInStatementArray).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Next Statements`))
     it(`does not call combineLabels`, () => expect(combineLabels).not.toHaveBeenCalled())
+    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   const containsTwoArraysOfLabels = (description, input) => describe(description, () => {
     beforeEach(() => {
@@ -576,6 +657,7 @@ describe(`findLabelsInStatement`, () => {
     it(`calls combineLabels with onError`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()))
     it(`calls combineLabels with the labels from the first statement array`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, jasmine.anything()))
     it(`calls combineLabels with the labels from the second statement array`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Found Labels B`))
+    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   const containsThreeArraysOfLabels = (description, input) => describe(description, () => {
     beforeEach(() => {
@@ -614,6 +696,7 @@ describe(`findLabelsInStatement`, () => {
     })
     it(`calls combineLabels with the labels from the first and second statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, `Test Found Labels B`))
     it(`calls combineLabels with the labels from the first second and third statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A and B`, `Test Found Labels C`))
+    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   const containsFourArraysOfLabels = (description, input) => describe(description, () => {
     beforeEach(() => {
@@ -659,6 +742,7 @@ describe(`findLabelsInStatement`, () => {
     it(`calls combineLabels with the labels from the first and second statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, `Test Found Labels B`))
     it(`calls combineLabels with the labels from the first second and third statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A and B`, `Test Found Labels C`))
     it(`calls combineLabels with the labels from the first second third and fourth statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A B and C`, `Test Found Labels D`))
+    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   containsNoLabels(`line`, {
     line: {
@@ -796,21 +880,25 @@ describe(`findLabelsInStatement`, () => {
     beforeEach(() => {
       inputCopy = {
         label: {
-          name: `testName`
+          name: `Test Label Name`
         }
       }
       result = get(`findLabelsInStatement`)(`Test Context`, `Test On Error`, inputCopy, `Test Next Statements`)
     })
-    it(`returns the name, with the next statements`, () => expect(result).toEqual({
-      testName: `Test Next Statements`
-    }))
+    it(`returns the name, with the next statements`, () => expect(result).toEqual([{
+      name: `Test Label Name`,
+      normalizedName: `Test Normalized Label Name`,
+      statements: `Test Next Statements`
+    }]))
     it(`does not modify the input`, () => expect(inputCopy).toEqual({
       label: {
-        name: `testName`
+        name: `Test Label Name`
       }
     }))
     it(`does not call findLabelsInStatementArray`, () => expect(findLabelsInStatementArray).not.toHaveBeenCalled())
     it(`does not call combineLabels`, () => expect(combineLabels).not.toHaveBeenCalled())
+    it(`calls normalizeName once`, () => expect(normalizeName).toHaveBeenCalledTimes(1))
+    it(`calls normalizeName with the label's name`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Label Name`))
   })
   containsNoLabels(`goTo`, {
     goTo: {
@@ -1137,91 +1225,4 @@ describe(`hashStateCharacters`, () => {
   runNotMatching(`separates character hashes well (reverse)`, [`Test Hashed Character A`, `Test Hashed Character B`], [`est Hashed Character A`, `Test Hashed Character BT`])
   runNotMatching(`separates character hashes well with spaces`, [`Test Hashed Character A`, `Test Hashed Character B`], [`Test Hashed Character A T`, `est Hashed Character B`])
   runNotMatching(`separates character hashes well with spaces (reverse)`, [`Test Hashed Character A`, `Test Hashed Character B`], [`est Hashed Character A`, `Test Hashed Character B T`])
-})
-
-describe(`hashState`, () => {
-  let resultA
-  let resultB
-  let stateA
-  let stateACopy
-  let stateB
-  let stateBCopy
-  const hashStateFlags = setSpy(`hashStateFlags`)
-  const hashStateCharacters = setSpy(`hashStateCharacters`)
-  const normalizeName = setSpy(`normalizeName`)
-  afterEach(() => {
-    hashStateFlags.calls.reset()
-    hashStateCharacters.calls.reset()
-    normalizeName.calls.reset()
-  })
-  const run = (description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB, then) => describe(description, () => {
-    beforeEach(() => {
-      hashStateFlags.and.callFake(flags => {
-        switch (flags) {
-          case `Test Flags A`:
-            return flagsA
-          case `Test Flags B`:
-            return flagsB
-        }
-      })
-      hashStateCharacters.and.callFake(characters => {
-        switch (characters) {
-          case `Test Characters A`:
-            return charactersA
-          case `Test Characters B`:
-            return charactersB
-        }
-      })
-      normalizeName.and.callFake(name => {
-        switch (name) {
-          case `Test Background A`:
-            return backgroundA
-          case `Test Background B`:
-            return backgroundB
-        }
-      })
-      stateA = {
-        flags: `Test Flags A`,
-        characters: `Test Characters A`,
-        background: `Test Background A`
-      }
-      stateACopy = JSON.parse(JSON.stringify(stateA))
-      stateB = {
-        flags: `Test Flags B`,
-        characters: `Test Characters B`,
-        background: `Test Background B`
-      }
-      stateBCopy = JSON.parse(JSON.stringify(stateB))
-      resultA = get(`hashState`)(stateA)
-      resultB = get(`hashState`)(stateB)
-    })
-    it(`hashes two sets of flags`, () => expect(hashStateFlags).toHaveBeenCalledTimes(2))
-    it(`hashes the first set of flags`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags A`))
-    it(`hashes the second set of flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters A`))
-    it(`hashes two sets of characters`, () => expect(hashStateCharacters).toHaveBeenCalledTimes(2))
-    it(`hashes the first set of characters`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags B`))
-    it(`hashes the second set of characters`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters B`))
-    it(`normalizes two names`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
-    it(`normalizes the first background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background A`))
-    it(`normalizes the second background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background B`))
-    it(`does not modify the first state`, () => expect(stateA).toEqual(stateACopy))
-    it(`does not modify the second state`, () => expect(stateB).toEqual(stateBCopy))
-    then()
-  })
-  const runMatching = (description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB) => run(description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB, () => {
-    it(`returns matching values`, () => expect(resultA).toEqual(resultB))
-  })
-  const runNotMatching = (description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB) => run(description, flagsA, charactersA, backgroundA, flagsB, charactersB, backgroundB, () => {
-    it(`returns differing values`, () => expect(resultA).not.toEqual(resultB))
-  })
-  runMatching(`everything matches`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
-  runNotMatching(`flags do not match`, `Test Hashed Flags A`, `Test Hashed Characters`, `Test Hashed Background`, `Test Hashed Flags B`, `Test Hashed Characters`, `Test Hashed Background`)
-  runNotMatching(`characters do not match`, `Test Hashed Flags`, `Test Hashed Characters A`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters B`, `Test Hashed Background`)
-  runNotMatching(`backgrounds do not match`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background A`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background B`)
-  runNotMatching(`flags are characters`, `Test Hashed Characters`, `Test Hashed Characters`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
-  runNotMatching(`flags are background`, `Test Hashed Background`, `Test Hashed Characters`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
-  runNotMatching(`characters are flags`, `Test Hashed Flags`, `Test Hashed Flags`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
-  runNotMatching(`characters are background`, `Test Hashed Flags`, `Test Hashed Background`, `Test Hashed Background`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
-  runNotMatching(`background is flags`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Flags`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
-  runNotMatching(`background is characters`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Characters`, `Test Hashed Flags`, `Test Hashed Characters`, `Test Hashed Background`)
 })

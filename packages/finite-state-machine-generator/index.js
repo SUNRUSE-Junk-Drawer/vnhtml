@@ -3,20 +3,16 @@ const normalizeName = name => (name || ``).toLowerCase().split(/\s+/).join(` `)
 const combineLabels = (context, onError, a, b) => {
   if (a) {
     if (b) {
-      const output = {}
-      const fromA = Object.keys(a)
-      const fromB = Object.keys(b)
-      fromA.forEach(key => output[key] = a[key])
-      const fromANormalized = fromA.map(key => normalizeName(key))
-      fromB.forEach(key => {
-        const index = fromANormalized.indexOf(normalizeName(key))
-        if (index != -1) {
-          onError(context, `unknown`, `The label "${fromA[index]}" is defined multiple times`)
+      const combined = a.slice()
+      b.forEach(label => {
+        const existing = combined.find(other => other.normalizedName == label.normalizedName)
+        if (existing) {
+          onError(context, `unknown`, `The label "${existing.name}" is defined multiple times`)
         } else {
-          output[key] = b[key]
+          combined.push(label)
         }
       })
-      return output
+      return combined
     } else {
       return a
     }
@@ -44,9 +40,11 @@ const findLabelsInStatementArray = (context, onError, statements, nextStatements
 
 const findLabelsInStatement = (context, onError, statement, nextStatements) => {
   if (statement.label) {
-    const output = {}
-    output[statement.label.name] = nextStatements
-    return output
+    return [{
+      name: statement.label.name,
+      normalizedName: normalizeName(statement.label.name),
+      statements: nextStatements
+    }]
   } else if (statement.decision) {
     let output = findLabelsInStatementArray(context, onError, statement.decision.paths[0].then, nextStatements)
     statement.decision.paths
@@ -77,4 +75,3 @@ const hashStateFlag = flag => `${flag.normalizedFlag}  ${flag.normalizedValue}`
 const hashStateFlags = flags => flags.map(flag => hashStateFlag(flag)).sort().join(`  `)
 const hashStateCharacter = character => `${character.normalizedName}  ${character.normalizedEmote}`
 const hashStateCharacters = characters => characters.map(character => hashStateCharacter(character)).sort().join(`  `)
-const hashState = state => `${hashStateFlags(state.flags)}   ${hashStateCharacters(state.characters)}   ${normalizeName(state.background)}`
