@@ -25,10 +25,10 @@
     "watchBabel": "babel index.js --watch --out-file index.min.js"
   },
   "devDependencies": {
-    "@babel/cli": "7.0.0-rc.2",
-    "@babel/core": "7.0.0-rc.2",
-    "@babel/node": "7.0.0-rc.2",
-    "@babel/preset-env": "7.0.0-rc.2",
+    "@babel/cli": "7.0.0",
+    "@babel/core": "7.0.0",
+    "@babel/node": "7.0.0",
+    "@babel/preset-env": "7.0.0",
     "greenkeeper-lockfile": "2.5.0",
     "jasmine": "3.2.0",
     "npm-run-all": "4.1.3",
