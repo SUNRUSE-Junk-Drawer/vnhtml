@@ -1565,6 +1565,58 @@ describe(`combinePromptStates`, () => {
   })
 })
 
+describe(`findPromptStateByHash`, () => {
+  const run = (description, promptStates, hash, expectedResult) => describe(description, () => {
+    let actualResult
+    let promptStatesCopy
+    beforeEach(() => {
+      promptStatesCopy = JSON.parse(JSON.stringify(promptStates))
+      actualResult = get(`findPromptStateByHash`)(promptStatesCopy, hash)
+    })
+    it(`does not modify the given prompt states`, () => expect(promptStatesCopy).toEqual(promptStates))
+    it(`returns the expected result`, () => expect(actualResult).toEqual(expectedResult))
+  })
+  run(`no prompt states`, [], `Test Hash`, null)
+  run(`no matching prompt state`, [{
+    hash: `Test Hash A`,
+    statement: `Test Statement A`,
+    state: `Test State A`
+  }, {
+    hash: `Test Hash B`,
+    statement: `Test Statement B`,
+    state: `Test State B`
+  }, {
+    hash: `Test Hash C`,
+    statement: `Test Statement C`,
+    state: `Test State C`
+  }, {
+    hash: `Test Hash D`,
+    statement: `Test Statement D`,
+    state: `Test State D`
+  }], `Test Hash E`, null)
+  run(`a matching prompt state`, [{
+    hash: `Test Hash A`,
+    statement: `Test Statement A`,
+    state: `Test State A`
+  }, {
+    hash: `Test Hash B`,
+    statement: `Test Statement B`,
+    state: `Test State B`
+  }, {
+    hash: `Test Hash C`,
+    statement: `Test Statement C`,
+    state: `Test State C`
+  }, {
+    hash: `Test Hash D`,
+    statement: `Test Statement D`,
+    state: `Test State D`
+  }], `Test Hash C`, {
+      hash: `Test Hash C`,
+      statement: `Test Statement C`,
+      state: `Test State C`
+    })
+})
+
 describe(`conditionMet`, () => {
   let conditionCopy
   let stateCopy
