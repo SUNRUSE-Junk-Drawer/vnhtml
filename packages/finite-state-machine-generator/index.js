@@ -109,7 +109,10 @@ const findPromptStatesInStatementArray = (context, onError, statements, promptSt
   if (statements.length) {
     return findPromptStatesInStatement(context, onError, statements[0], statements.slice(1), promptStates, labels)
   } else {
-    return promptStates
+    return {
+      promptState: null,
+      promptStates
+    }
   }
 }
 

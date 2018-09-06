@@ -1776,7 +1776,9 @@ describe(`findPromptStatesInStatementArray`, () => {
   })
   run(`no statements`, [], () => {
     it(`does not call findPromptStatesInStatement`, () => expect(findPromptStatesInStatement).not.toHaveBeenCalled())
-    it(`returns the given prompt states`, () => expect(result).toEqual(`Test Prompt States`))
+    it(`returns an object`, () => expect(result).toEqual(jasmine.any(Object)))
+    it(`returns a null prompt state`, () => expect(result.promptState).toBeNull())
+    it(`returns the given prompt states`, () => expect(result.promptStates).toEqual(`Test Prompt States`))
   })
   run(`one statement`, [`Test Statement A`], () => {
     it(`calls findPromptStatesInStatement once`, () => expect(findPromptStatesInStatement).toHaveBeenCalledTimes(1))
