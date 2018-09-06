@@ -1987,3 +1987,107 @@ describe(`findPromptStatesInStatementArray`, () => {
     it(`returns the result of findPromptStatesInStatement`, () => expect(result).toEqual(`Test Recursed States`))
   })
 })
+
+describe(`findPromptStatesInStatement`, () => {
+  const hashPromptState = setSpy(`hashPromptState`)
+  hashPromptState.and.returnValue(`Test Hashed Prompt State`)
+  const promptStatesContainHash = setSpy(`promptStatesContainHash`)
+  const findPromptStatesInStatementArray = setSpy(`findPromptStatesInStatementArray`)
+  const replacePromptState = setSpy(`replacePromptState`)
+  afterEach(() => {
+    hashPromptState.calls.reset()
+    promptStatesContainHash.calls.reset()
+    findPromptStatesInStatementArray.calls.reset()
+    replacePromptState.calls.reset()
+  })
+  let statement
+  let promptStates
+  beforeEach(() => {
+    statement = {
+      line: {
+        promptId: `Test Prompt Id`,
+        characters: `Test Characters`,
+        text: `Test Text`
+      }
+    }
+    promptStates = [`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`]
+  })
+  describe(`when the hash already exists in the prompt states`, () => {
+    let result
+    beforeEach(() => {
+      promptStatesContainHash.and.returnValue(true)
+      result = get(`findPromptStatesInStatement`)(`Test Context`, `Test On Error`, statement, `Test Next Statements`, `Test State`, promptStates, `Test Labels`)
+    })
+    it(`hashes one prompt state`, () => expect(hashPromptState).toHaveBeenCalledTimes(1))
+    it(`hashes the promptId of the given statement`, () => expect(hashPromptState).toHaveBeenCalledWith(`Test Prompt Id`, jasmine.anything()))
+    it(`hashes the given state`, () => expect(hashPromptState).toHaveBeenCalledWith(jasmine.anything(), `Test State`))
+    it(`checks whether one set of prompt states contains a hash`, () => expect(promptStatesContainHash).toHaveBeenCalledTimes(1))
+    it(`checks whether the given set of prompt states contains a hash`, () => expect(promptStatesContainHash).toHaveBeenCalledWith([`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`], jasmine.anything()))
+    it(`checks whether a set of prompt states contains the hash of the given prompt state`, () => expect(promptStatesContainHash).toHaveBeenCalledWith(jasmine.anything(), `Test Hashed Prompt State`))
+    it(`does not find prompt states in a statement array`, () => expect(findPromptStatesInStatementArray).not.toHaveBeenCalled())
+    it(`does not replace prompt states`, () => expect(replacePromptState).not.toHaveBeenCalled())
+    it(`returns an object`, () => expect(result).toEqual(jasmine.any(Object)))
+    it(`returns the hash`, () => expect(result.hash).toEqual(`Test Hashed Prompt State`))
+    it(`returns the given prompt states`, () => expect(result.promptStates).toEqual([`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`]))
+    it(`does not modify the given statement`, () => expect(statement).toEqual({
+      line: {
+        promptId: `Test Prompt Id`,
+        characters: `Test Characters`,
+        text: `Test Text`
+      }
+    }))
+    it(`does not modify the given prompt states`, () => expect(promptStates).toEqual([`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`]))
+  })
+  describe(`when the hash does not yet exist in the prompt states`, () => {
+    let result
+    let foundPromptStatesInStatementArray
+    beforeEach(() => {
+      promptStatesContainHash.and.returnValue(false)
+      foundPromptStatesInStatementArray = {
+        hash: `Test Found Prompt States In Statement Array Hash`,
+        promptStates: `Test Found Prompt States In Statement Array Prompt States`
+      }
+      findPromptStatesInStatementArray.and.returnValue(foundPromptStatesInStatementArray)
+      result = get(`findPromptStatesInStatement`)(`Test Context`, `Test On Error`, statement, `Test Next Statements`, `Test State`, promptStates, `Test Labels`)
+    })
+    it(`hashes one prompt state`, () => expect(hashPromptState).toHaveBeenCalledTimes(1))
+    it(`hashes the promptId of the given statement`, () => expect(hashPromptState).toHaveBeenCalledWith(`Test Prompt Id`, jasmine.anything()))
+    it(`hashes the given state`, () => expect(hashPromptState).toHaveBeenCalledWith(jasmine.anything(), `Test State`))
+    it(`checks whether one set of prompt states contains a hash`, () => expect(promptStatesContainHash).toHaveBeenCalledTimes(1))
+    it(`checks whether the given set of prompt states contains a hash`, () => expect(promptStatesContainHash).toHaveBeenCalledWith([`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`], jasmine.anything()))
+    it(`checks whether a set of prompt states contains the hash of the given prompt state`, () => expect(promptStatesContainHash).toHaveBeenCalledWith(jasmine.anything(), `Test Hashed Prompt State`))
+    it(`finds prompt states in one statement array`, () => expect(findPromptStatesInStatementArray).toHaveBeenCalledTimes(1))
+    it(`finds prompt states in one statement array using the context`, () => expect(findPromptStatesInStatementArray).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
+    it(`finds prompt states in one statement array using the error handler`, () => expect(findPromptStatesInStatementArray).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything(), jasmine.anything()))
+    it(`finds prompt states in one statement array using the next statements`, () => expect(findPromptStatesInStatementArray).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Next Statements`, jasmine.anything(), jasmine.anything()))
+    it(`finds prompt states in one statement array using the given prompt states, with a placeholder for one representing the current statement`, () => expect(findPromptStatesInStatementArray).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), [`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`, { hash: `Test Hashed Prompt State` }], jasmine.anything()))
+    it(`finds prompt states in one statement array using the given labels`, () => expect(findPromptStatesInStatementArray).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Labels`))
+    it(`replaces a prompt state in one set of prompt states`, () => expect(replacePromptState).toHaveBeenCalledTimes(1))
+    it(`replaces a prompt state in the prompt states found in the statement array`, () => expect(replacePromptState).toHaveBeenCalledWith(`Test Found Prompt States In Statement Array Prompt States`, jasmine.anything()))
+    it(`replaces with a prompt state constructed using the generated hash, given statement, the state and returned hash`, () => expect(replacePromptState).toHaveBeenCalledWith(jasmine.anything(), {
+      hash: `Test Hashed Prompt State`,
+      statement: {
+        line: {
+          promptId: `Test Prompt Id`,
+          characters: `Test Characters`,
+          text: `Test Text`
+        }
+      },
+      state: `Test State`,
+      next: `Test Found Prompt States In Statement Array Hash`
+    }))
+    xit(`returns an object`, () => expect(result).toEqual(jasmine.any(Object)))
+    it(`does not modify the given statement`, () => expect(statement).toEqual({
+      line: {
+        promptId: `Test Prompt Id`,
+        characters: `Test Characters`,
+        text: `Test Text`
+      }
+    }))
+    it(`does not modify the given prompt states`, () => expect(promptStates).toEqual([`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`]))
+    it(`does not modify the prompt states found in the statement array`, () => expect(foundPromptStatesInStatementArray).toEqual({
+      hash: `Test Found Prompt States In Statement Array Hash`,
+      promptStates: `Test Found Prompt States In Statement Array Prompt States`
+    }))
+  })
+})

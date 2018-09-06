@@ -120,4 +120,26 @@ const findPromptStatesInStatementArray = (context, onError, statements, state, p
   }
 }
 
-const findPromptStatesInStatement = null
+const findPromptStatesInStatement = (context, onError, statement, nextStatements, state, promptStates, labels) => {
+  const hash = hashPromptState(statement.line.promptId, state)
+  if (promptStatesContainHash(promptStates, hash)) {
+    return {
+      hash,
+      promptStates
+    }
+  }
+
+  const next = findPromptStatesInStatementArray(context, onError, nextStatements, promptStates.concat({
+    hash
+  }), labels)
+
+  return {
+    hash,
+    promptStates: replacePromptState(next.promptStates, {
+      hash,
+      statement,
+      state,
+      next: next.hash
+    })
+  }
+}
