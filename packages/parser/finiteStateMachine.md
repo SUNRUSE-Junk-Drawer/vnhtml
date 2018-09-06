@@ -64,7 +64,8 @@ to expectingStatements.
 ### expectingIndentForMenu
 
 If an indent occurs, switch to readingOptionForMenu.
-Otherwise, raise an error (a menu has no options), but parse as default.
+Otherwise, raise an error (a menu has no options), but parse as default.  No
+menu should be written in such a scenario.
 
 ### readingOptionForMenu
 
