@@ -91,6 +91,7 @@ const combinePromptStates = (a, b) => {
 
 const findPromptStateByHash = (promptStates, hash) => promptStates.find(promptState => promptState.hash == hash) || null
 const replacePromptState = (promptStates, replacement) => promptStates.map(promptState => promptState.hash == replacement.hash ? replacement : promptState)
+const promptStatesContainHash = (promptStates, hash) => promptStates.some(promptState => promptState.hash == hash)
 
 const conditionMet = (condition, state) => {
   if (!condition) {
