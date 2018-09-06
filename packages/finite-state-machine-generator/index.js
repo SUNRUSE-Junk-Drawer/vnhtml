@@ -109,9 +109,9 @@ const conditionMet = (condition, state) => {
   }
 }
 
-const findPromptStatesInStatementArray = (context, onError, statements, promptStates, labels) => {
+const findPromptStatesInStatementArray = (context, onError, statements, state, promptStates, labels) => {
   if (statements.length) {
-    return findPromptStatesInStatement(context, onError, statements[0], statements.slice(1), promptStates, labels)
+    return findPromptStatesInStatement(context, onError, statements[0], statements.slice(1), state, promptStates, labels)
   } else {
     return {
       promptState: null,
