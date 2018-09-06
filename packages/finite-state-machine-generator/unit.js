@@ -1769,14 +1769,14 @@ describe(`findPromptStateCombinationsInStatementArray`, () => {
   const run = (description, statements, then) => describe(description, () => {
     beforeEach(() => {
       statementsCopy = JSON.parse(JSON.stringify(statements))
-      result = get(`findPromptStateCombinationsInStatementArray`)(`Test Context`, `Test On Error`, statementsCopy, `Test States`, `Test Labels`)
+      result = get(`findPromptStateCombinationsInStatementArray`)(`Test Context`, `Test On Error`, statementsCopy, `Test Prompt States`, `Test Labels`)
     })
     it(`does not modify the given statements`, () => expect(statementsCopy).toEqual(statements))
     then()
   })
   run(`no statements`, [], () => {
     it(`does not call findPromptStateCombinationsInStatement`, () => expect(findPromptStateCombinationsInStatement).not.toHaveBeenCalled())
-    it(`returns the given states`, () => expect(result).toEqual(`Test States`))
+    it(`returns the given prompt states`, () => expect(result).toEqual(`Test Prompt States`))
   })
   run(`one statement`, [`Test Statement A`], () => {
     it(`calls findPromptStateCombinationsInStatement once`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledTimes(1))
@@ -1784,7 +1784,7 @@ describe(`findPromptStateCombinationsInStatementArray`, () => {
     it(`calls findPromptStateCombinationsInStatement with the given onError`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the first given statement`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement A`, jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the next given statements`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), [], jasmine.anything(), jasmine.anything()))
-    it(`calls findPromptStateCombinationsInStatement with the given states`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test States`, jasmine.anything()))
+    it(`calls findPromptStateCombinationsInStatement with the given prompt states`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Prompt States`, jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the given labels`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Labels`))
     it(`returns the result of findPromptStateCombinationsInStatement`, () => expect(result).toEqual(`Test Recursed States`))
   })
@@ -1794,7 +1794,7 @@ describe(`findPromptStateCombinationsInStatementArray`, () => {
     it(`calls findPromptStateCombinationsInStatement with the given onError`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the first given statement`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement A`, jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the next given statements`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), [`Test Statement B`], jasmine.anything(), jasmine.anything()))
-    it(`calls findPromptStateCombinationsInStatement with the given states`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test States`, jasmine.anything()))
+    it(`calls findPromptStateCombinationsInStatement with the given prompt states`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Prompt States`, jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the given labels`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Labels`))
     it(`returns the result of findPromptStateCombinationsInStatement`, () => expect(result).toEqual(`Test Recursed States`))
   })
@@ -1804,7 +1804,7 @@ describe(`findPromptStateCombinationsInStatementArray`, () => {
     it(`calls findPromptStateCombinationsInStatement with the given onError`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the first given statement`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statement A`, jasmine.anything(), jasmine.anything(), jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the next given statements`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), [`Test Statement B`, `Test Statement C`], jasmine.anything(), jasmine.anything()))
-    it(`calls findPromptStateCombinationsInStatement with the given states`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test States`, jasmine.anything()))
+    it(`calls findPromptStateCombinationsInStatement with the given prompt states`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Prompt States`, jasmine.anything()))
     it(`calls findPromptStateCombinationsInStatement with the given labels`, () => expect(findPromptStateCombinationsInStatement).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Labels`))
     it(`returns the result of findPromptStateCombinationsInStatement`, () => expect(result).toEqual(`Test Recursed States`))
   })

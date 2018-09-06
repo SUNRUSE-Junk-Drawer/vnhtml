@@ -105,11 +105,11 @@ const conditionMet = (condition, state) => {
   }
 }
 
-const findPromptStateCombinationsInStatementArray = (context, onError, statements, states, labels) => {
+const findPromptStateCombinationsInStatementArray = (context, onError, statements, promptStates, labels) => {
   if (statements.length) {
-    return findPromptStateCombinationsInStatement(context, onError, statements[0], statements.slice(1), states, labels)
+    return findPromptStateCombinationsInStatement(context, onError, statements[0], statements.slice(1), promptStates, labels)
   } else {
-    return states
+    return promptStates
   }
 }
 
