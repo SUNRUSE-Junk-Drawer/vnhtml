@@ -1617,6 +1617,79 @@ describe(`findPromptStateByHash`, () => {
     })
 })
 
+describe(`replacePromptState`, () => {
+  let promptStates
+  let replacement
+  let result
+  beforeEach(() => {
+    promptStates = [{
+      hash: `Test Hash A`,
+      misc: `Test Misc A`
+    }, {
+      hash: `Test Hash B`,
+      misc: `Test Misc B`
+    }, {
+      hash: `Test Hash C`,
+      misc: `Test Misc C`
+    }, {
+      hash: `Test Hash D`,
+      misc: `Test Misc D`
+    }, {
+      hash: `Test Hash E`,
+      misc: `Test Misc E`
+    }]
+    replacement = {
+      hash: `Test Hash D`,
+      misc: `Test Misc F`
+    }
+    result = get(`replacePromptState`)(promptStates, replacement)
+  })
+  it(`does not modify the prompt states`, () => expect(promptStates).toEqual([{
+    hash: `Test Hash A`,
+    misc: `Test Misc A`
+  }, {
+    hash: `Test Hash B`,
+    misc: `Test Misc B`
+  }, {
+    hash: `Test Hash C`,
+    misc: `Test Misc C`
+  }, {
+    hash: `Test Hash D`,
+    misc: `Test Misc D`
+  }, {
+    hash: `Test Hash E`,
+    misc: `Test Misc E`
+  }]))
+  it(`does not modify the replacement`, () => expect(replacement).toEqual({
+    hash: `Test Hash D`,
+    misc: `Test Misc F`
+  }))
+  it(`returns an array`, () => expect(result).toEqual(jasmine.any(Array)))
+  it(`includes every prompt state with a different hash`, () => {
+    expect(result).toContain({
+      hash: `Test Hash A`,
+      misc: `Test Misc A`
+    })
+    expect(result).toContain({
+      hash: `Test Hash B`,
+      misc: `Test Misc B`
+    })
+    expect(result).toContain({
+      hash: `Test Hash C`,
+      misc: `Test Misc C`
+    })
+    expect(result).toContain({
+      hash: `Test Hash E`,
+      misc: `Test Misc E`
+    })
+  })
+  it(`includes the given prompt state`, () => expect(result).toContain({
+    hash: `Test Hash D`,
+    misc: `Test Misc F`
+  }))
+  it(`includes no further prompt states`, () => expect(result.length).toEqual(5))
+})
+
 describe(`conditionMet`, () => {
   let conditionCopy
   let stateCopy
