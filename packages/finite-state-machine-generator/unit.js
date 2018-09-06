@@ -1320,14 +1320,14 @@ describe(`combinePromptStates`, () => {
       bCopy = JSON.parse(JSON.stringify(b))
       result = get(`combinePromptStates`)(aCopy, bCopy)
     })
-    it(`does not modify the first set of prompt/state combinations`, () => expect(aCopy).toEqual(a))
-    it(`does not modify the second set of prompt/state combinations`, () => expect(bCopy).toEqual(b))
+    it(`does not modify the first set of prompt states`, () => expect(aCopy).toEqual(a))
+    it(`does not modify the second set of prompt states`, () => expect(bCopy).toEqual(b))
     then()
   })
   run(`all null`, null, null, () => {
     it(`returns null`, () => expect(result).toBeNull())
   })
-  run(`first set of prompt/state combinations only`, [{
+  run(`first set of prompt states only`, [{
     hash: `Test Hash A`,
     statement: `Test Statement A`,
     state: `Test State A`
@@ -1344,7 +1344,7 @@ describe(`combinePromptStates`, () => {
     statement: `Test Statement D`,
     state: `Test State D`
   }], null, () => {
-    it(`returns the first set of prompt/state combinations`, () => expect(result).toEqual([{
+    it(`returns the first set of prompt states`, () => expect(result).toEqual([{
       hash: `Test Hash A`,
       statement: `Test Statement A`,
       state: `Test State A`
@@ -1362,7 +1362,7 @@ describe(`combinePromptStates`, () => {
       state: `Test State D`
     }]))
   })
-  run(`second set of prompt/state combinations only`, null, [{
+  run(`second set of prompt states only`, null, [{
     hash: `Test Hash A`,
     statement: `Test Statement A`,
     state: `Test State A`
@@ -1379,7 +1379,7 @@ describe(`combinePromptStates`, () => {
     statement: `Test Statement D`,
     state: `Test State D`
   }], () => {
-    it(`returns the second set of prompt/state combinations`, () => expect(result).toEqual([{
+    it(`returns the second set of prompt states`, () => expect(result).toEqual([{
       hash: `Test Hash A`,
       statement: `Test Statement A`,
       state: `Test State A`
@@ -1397,7 +1397,7 @@ describe(`combinePromptStates`, () => {
       state: `Test State D`
     }]))
   })
-  run(`two sets of prompt/state combinations without overlap`, [{
+  run(`two sets of prompt states without overlap`, [{
     hash: `Test Hash A`,
     statement: `Test Statement A`,
     state: `Test State A`
@@ -1434,7 +1434,7 @@ describe(`combinePromptStates`, () => {
     statement: `Test Statement I`,
     state: `Test State I`
   }], () => {
-    it(`returns the prompt/state combinations from the first set`, () => {
+    it(`returns the prompt states from the first set`, () => {
       expect(result).toContain({
         hash: `Test Hash A`,
         statement: `Test Statement A`,
@@ -1456,7 +1456,7 @@ describe(`combinePromptStates`, () => {
         state: `Test State D`
       })
     })
-    it(`returns the prompt/state combinations from the second set`, () => {
+    it(`returns the prompt states from the second set`, () => {
       expect(result).toContain({
         hash: `Test Hash E`,
         statement: `Test Statement E`,
@@ -1483,9 +1483,9 @@ describe(`combinePromptStates`, () => {
         state: `Test State I`
       })
     })
-    it(`returns no further prompt/state combinations`, () => expect(result.length).toEqual(9))
+    it(`returns no further prompt states`, () => expect(result.length).toEqual(9))
   })
-  run(`two sets of prompt/state combinations with overlap`, [{
+  run(`two sets of prompt states with overlap`, [{
     hash: `Test Hash A`,
     statement: `Test Statement A`,
     state: `Test State A`
@@ -1522,7 +1522,7 @@ describe(`combinePromptStates`, () => {
     statement: `Test Statement I`,
     state: `Test State I`
   }], () => {
-    it(`returns the prompt/state combinations from the first set`, () => {
+    it(`returns the prompt states from the first set`, () => {
       expect(result).toContain({
         hash: `Test Hash A`,
         statement: `Test Statement A`,
@@ -1544,7 +1544,7 @@ describe(`combinePromptStates`, () => {
         state: `Test State D`
       })
     })
-    it(`returns the prompt/state combinations from the second set (excluding those which are also from the first set)`, () => {
+    it(`returns the prompt states from the second set (excluding those which are also from the first set)`, () => {
       expect(result).toContain({
         hash: `Test Hash E`,
         statement: `Test Statement E`,
@@ -1561,7 +1561,7 @@ describe(`combinePromptStates`, () => {
         state: `Test State I`
       })
     })
-    it(`returns no further prompt/state combinations`, () => expect(result.length).toEqual(7))
+    it(`returns no further prompt states`, () => expect(result.length).toEqual(7))
   })
 })
 
