@@ -75,7 +75,7 @@ const hashStateFlag = flag => `${flag.normalizedFlag}  ${flag.normalizedValue}`
 const hashStateFlags = flags => flags.map(flag => hashStateFlag(flag)).sort().join(`  `)
 const hashStateCharacter = character => `${character.normalizedName}  ${character.normalizedEmote}`
 const hashStateCharacters = characters => characters.map(character => hashStateCharacter(character)).sort().join(`  `)
-const hashPromptState = (promptId, state) => `${promptId}   ${hashStateFlags(state.flags)}   ${hashStateCharacters(state.characters)}   ${normalizeName(state.background)}`
+const hashPromptState = (statement, state) => `${JSON.stringify(statement.origin.file)}@${statement.origin.line}.${statement.origin.subStatement} ${hashStateFlags(state.flags)}   ${hashStateCharacters(state.characters)}   ${normalizeName(state.background)}`
 
 const combinePromptStates = (a, b) => {
   if (a) {
@@ -121,7 +121,7 @@ const findPromptStatesInStatementArray = (context, onError, statements, state, p
 }
 
 const findPromptStatesInStatement = (context, onError, statement, nextStatements, state, promptStates, labels) => {
-  const hash = hashPromptState(statement.line.promptId, state)
+  const hash = hashPromptState(statement, state)
   if (promptStatesContainHash(promptStates, hash)) {
     return {
       hash,

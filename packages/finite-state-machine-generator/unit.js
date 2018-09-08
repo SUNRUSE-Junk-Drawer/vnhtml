@@ -1264,9 +1264,11 @@ describe(`hashStateCharacters`, () => {
 })
 
 describe(`hashPromptState`, () => {
+  let statementACopy
   let stateA
   let stateACopy
   let resultA
+  let statementBCopy
   let stateB
   let stateBCopy
   let resultB
@@ -1278,7 +1280,7 @@ describe(`hashPromptState`, () => {
     hashStateCharacters.calls.reset()
     normalizeName.calls.reset()
   })
-  const run = (description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, then) => describe(description, () => {
+  const run = (description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, then) => describe(description, () => {
     beforeEach(() => {
       hashStateFlags.and.callFake(flags => {
         switch (flags) {
@@ -1304,6 +1306,8 @@ describe(`hashPromptState`, () => {
             return normalizedStateBackgroundB
         }
       })
+      statementACopy = JSON.parse(JSON.stringify(statementA))
+      statementBCopy = JSON.parse(JSON.stringify(statementB))
       stateA = {
         flags: `Test Flags A`,
         characters: `Test Characters A`,
@@ -1317,9 +1321,11 @@ describe(`hashPromptState`, () => {
       }
       stateBCopy = JSON.parse(JSON.stringify(stateB))
 
-      resultA = get(`hashPromptState`)(promptIdA, stateA)
-      resultB = get(`hashPromptState`)(promptIdB, stateB)
+      resultA = get(`hashPromptState`)(statementACopy, stateA)
+      resultB = get(`hashPromptState`)(statementBCopy, stateB)
     })
+    it(`does not modify the first statement`, () => expect(statementACopy).toEqual(statementA))
+    it(`does not modify the second statement`, () => expect(statementBCopy).toEqual(statementB))
     it(`does not modify the first state`, () => expect(stateA).toEqual(stateACopy))
     it(`does not modify the second state`, () => expect(stateB).toEqual(stateBCopy))
     it(`calls hashStateFlags twice`, () => expect(hashStateFlags).toHaveBeenCalledTimes(2))
@@ -1333,17 +1339,20 @@ describe(`hashPromptState`, () => {
     it(`calls normalizeName with the second state's background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background B`))
     then()
   })
-  const runMatching = (description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB) => run(description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, () => {
+  const runMatching = (description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB) => run(description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, () => {
     it(`returns matching hashes`, () => expect(resultA).toEqual(resultB))
   })
-  const runNotMatching = (description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB) => run(description, promptIdA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, promptIdB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, () => {
+  const runNotMatching = (description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB) => run(description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, () => {
     it(`returns differing hashes`, () => expect(resultA).not.toEqual(resultB))
   })
-  runMatching(`everything matches`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
-  runNotMatching(`promptId does not match`, `Test PromptId A`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, `Test PromptId B`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
-  runNotMatching(`state flags do not match`, `Test PromptId`, `Test Hashed State Flags A`, `Test Hashed Character Flags`, `Test Normalized Background`, `Test PromptId`, `Test Hashed State Flags B`, `Test Hashed Character Flags`, `Test Normalized Background`)
-  runNotMatching(`character flags do not match`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags A`, `Test Normalized Background`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags B`, `Test Normalized Background`)
-  runNotMatching(`backgrounds do not match`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background A`, `Test PromptId`, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background B`)
+  runMatching(`everything matches`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runMatching(`irrelevant parts of the statement do not match`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value A` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value B` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runNotMatching(`origin file does not match`, { origin: { file: `Test File A`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, { origin: { file: `Test File B`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runNotMatching(`origin line does not match`, { origin: { file: `Test File`, line: 7987, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runNotMatching(`origin subStatement does not match`, { origin: { file: `Test File`, line: 7982, subStatement: 877 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runNotMatching(`state flags do not match`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags A`, `Test Hashed Character Flags`, `Test Normalized Background`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags B`, `Test Hashed Character Flags`, `Test Normalized Background`)
+  runNotMatching(`character flags do not match`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags A`, `Test Normalized Background`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags B`, `Test Normalized Background`)
+  runNotMatching(`backgrounds do not match`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background A`, { origin: { file: `Test File`, line: 7982, subStatement: 873 }, miscKey: `Test Misc Value` }, `Test Hashed State Flags`, `Test Hashed Character Flags`, `Test Normalized Background B`)
 })
 
 describe(`combinePromptStates`, () => {
@@ -2056,7 +2065,14 @@ describe(`findPromptStatesInStatement`, () => {
       result = get(`findPromptStatesInStatement`)(`Test Context`, `Test On Error`, statement, `Test Next Statements`, `Test State`, promptStates, `Test Labels`)
     })
     it(`hashes one prompt state`, () => expect(hashPromptState).toHaveBeenCalledTimes(1))
-    it(`hashes the promptId of the given statement`, () => expect(hashPromptState).toHaveBeenCalledWith(`Test Prompt Id`, jasmine.anything()))
+    it(`hashes the given statement`, () => expect(hashPromptState).toHaveBeenCalledWith({
+      origin: `Test Origin`,
+      line: {
+        promptId: `Test Prompt Id`,
+        characters: `Test Characters`,
+        text: `Test Text`
+      }
+    }, jasmine.anything()))
     it(`hashes the given state`, () => expect(hashPromptState).toHaveBeenCalledWith(jasmine.anything(), `Test State`))
     it(`checks whether one set of prompt states contains a hash`, () => expect(promptStatesContainHash).toHaveBeenCalledTimes(1))
     it(`checks whether the given set of prompt states contains a hash`, () => expect(promptStatesContainHash).toHaveBeenCalledWith([`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`], jasmine.anything()))
@@ -2089,7 +2105,14 @@ describe(`findPromptStatesInStatement`, () => {
       result = get(`findPromptStatesInStatement`)(`Test Context`, `Test On Error`, statement, `Test Next Statements`, `Test State`, promptStates, `Test Labels`)
     })
     it(`hashes one prompt state`, () => expect(hashPromptState).toHaveBeenCalledTimes(1))
-    it(`hashes the promptId of the given statement`, () => expect(hashPromptState).toHaveBeenCalledWith(`Test Prompt Id`, jasmine.anything()))
+    it(`hashes the given statement`, () => expect(hashPromptState).toHaveBeenCalledWith({
+      origin: `Test Origin`,
+      line: {
+        promptId: `Test Prompt Id`,
+        characters: `Test Characters`,
+        text: `Test Text`
+      }
+    }, jasmine.anything()))
     it(`hashes the given state`, () => expect(hashPromptState).toHaveBeenCalledWith(jasmine.anything(), `Test State`))
     it(`checks whether one set of prompt states contains a hash`, () => expect(promptStatesContainHash).toHaveBeenCalledTimes(1))
     it(`checks whether the given set of prompt states contains a hash`, () => expect(promptStatesContainHash).toHaveBeenCalledWith([`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`], jasmine.anything()))
