@@ -11,6 +11,7 @@ var lexer = require("@vnhtml/lexer")
 var parser = require("@vnhtml/parser")
 
 var parserState = parser.create(
+  "The name of the file being parsed",
   "A context for the parsing",
   function onError(context, line, message) {
     console.log(
@@ -63,6 +64,11 @@ Jeff Jake and Phil:
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "line": {
     "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "characters": ["Jeff", "Jake", "Phil"],
@@ -86,21 +92,41 @@ Jeff Jake and Phil (otherworldly):
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "emote": {
     "character": "Jeff",
     "emote": "otherworldly"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 1
+  },
   "emote": {
     "character": "Jake",
     "emote": "otherworldly"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 2
+  },
   "emote": {
     "character": "Phil",
     "emote": "otherworldly"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 3
+  },
   "line": {
     "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "characters": ["Jeff", "Jake", "Phil"],
@@ -121,6 +147,11 @@ Jeff Jake and Phil: This takes less vertical space, however.
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "line": {
     "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "characters": ["Jeff", "Jake", "Phil"],
@@ -141,21 +172,41 @@ Jeff Jake and Phil (otherworldly): This takes less vertical space, however.
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "emote": {
     "character": "Jeff",
     "emote": "otherworldly"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 1
+  },
   "emote": {
     "character": "Jake",
     "emote": "otherworldly"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 2
+  },
   "emote": {
     "character": "Phil",
     "emote": "otherworldly"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 3
+  },
   "line": {
     "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "characters": ["Jeff", "Jake", "Phil"],
@@ -176,16 +227,31 @@ Jeff Jake and Phil are otherworldly
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "emote": {
     "character": "Jeff",
     "emote": "otherworldly"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 1
+  },
   "emote": {
     "character": "Jake",
     "emote": "otherworldly"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 2
+  },
   "emote": {
     "character": "Phil",
     "emote": "otherworldly"
@@ -205,14 +271,29 @@ Jeff Jake and Phil leave
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "leave": {
     "character": "Jeff"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 1
+  },
   "leave": {
     "character": "Jake"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 2
+  },
   "leave": {
     "character": "Phil"
   }
@@ -231,6 +312,11 @@ set window locked
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "set": {
     "flag": "window",
     "value": "locked
@@ -252,8 +338,18 @@ if window unlocked
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "decision": {
     "paths": [{
+      "origin": {
+        "file": "The name of the file being parsed",
+        "line": 473,
+        "subStatement": 0
+      },
       "condition": {
         "flag": {
           "flag": "window",
@@ -261,11 +357,21 @@ if window unlocked
         }
       },
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 474,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jeff"],
           "text": "The window's locked!"
         }
       }, {
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 475,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jake"],
           "text": "You sure?"
@@ -292,13 +398,28 @@ else if window open
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "line": {
     "characters": ["Jeff"],
     "text": "The window's locked!"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 474,
+    "subStatement": 0
+  },
   "decision": {
     "paths": [{
+      "origin": {
+        "file": "The name of the file being parsed",
+        "line": 474,
+        "subStatement": 0
+      },
       "condition": {
         "flag": {
           "flag": "window",
@@ -306,12 +427,22 @@ else if window open
         }
       },
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 475,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jake"],
           "text": "You sure?"
         }
       }]
     }, {
+      "origin": {
+        "file": "The name of the file being parsed",
+        "line": 476,
+        "subStatement": 0
+      },
       "condition": {
         "flag": {
           "flag": "window",
@@ -319,6 +450,11 @@ else if window open
         }
       },
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 477,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jake"],
           "text": "I implied locked *closed*."
@@ -347,13 +483,28 @@ else
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "line": {
     "characters": ["Jeff"],
     "text": "The window's locked!"
   }
 }, {
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 474,
+    "subStatement": 0
+  },
   "decision": {
     "paths": [{
+      "origin": {
+        "file": "The name of the file being parsed",
+        "line": 474,
+        "subStatement": 0
+      },
       "condition": {
         "flag": {
           "flag": "window",
@@ -361,12 +512,22 @@ else
         }
       },
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 475,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jake"],
           "text": "You sure?"
         }
       }]
     }, {
+      "origin": {
+        "file": "The name of the file being parsed",
+        "line": 475,
+        "subStatement": 0
+      },
       "condition": {
         "flag": {
           "flag": "window",
@@ -374,14 +535,29 @@ else
         }
       },
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 476,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jake"],
           "text": "I implied locked *closed*."
         }
       }]
     }, {
+      "origin": {
+        "file": "The name of the file being parsed",
+        "line": 477,
+        "subStatement": 0
+      },
       "condition": null,
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 478,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jake"],
           "text": "Looks right from here."
@@ -411,16 +587,36 @@ menu
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "menu": {
     "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "paths": [{
+      "origin": {
+        "file": "The name of the file being parsed",
+        "line": 474,
+        "subStatement": 0
+      },
       "label": "Coffee",
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 475,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jeff"],
           "text": "Why did I pick this!"
         }
       }, {
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 476,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jake"],
           "text": "You'll have a right headache..."
@@ -429,6 +625,11 @@ menu
     }, {
       "label": "Cake",
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 477,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jeff"],
           "text": "Bad for me, but so good."
@@ -437,6 +638,11 @@ menu
     }, {
       "label": "Fruit Salad",
       "then": [{
+        "origin": {
+          "file": "The name of the file being parsed",
+          "line": 478,
+          "subStatement": 0
+        },
         "line": {
           "characters": ["Jeff"],
           "text": "Not bad!"
@@ -459,6 +665,11 @@ label fromTheTop
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "label": {
     "name": "fromTheTop"
   }
@@ -477,6 +688,11 @@ go to fromTheTop
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "goTo": {
     "label": "fromTheTop"
   }
@@ -495,6 +711,11 @@ mountains in background
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "background": {
     "name": "mountains"
   }
@@ -513,6 +734,11 @@ include lengthySidequest
 
 ```json
 [{
+  "origin": {
+    "file": "The name of the file being parsed",
+    "line": 473,
+    "subStatement": 0
+  },
   "include": {
     "name": "lengthySidequest"
   }

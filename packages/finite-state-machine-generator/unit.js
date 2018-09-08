@@ -745,6 +745,7 @@ describe(`findLabelsInStatement`, () => {
     it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   containsNoLabels(`line`, {
+    origin: `Test Origin`,
     line: {
       promptId: `Test Prompt ID`,
       characters: [`Test Character A`, `Test Character B`, `Test Character C`],
@@ -752,17 +753,20 @@ describe(`findLabelsInStatement`, () => {
     }
   })
   containsNoLabels(`emote`, {
+    origin: `Test Origin`,
     emote: {
       character: `Test Character`,
       emote: `Test Emote`
     }
   })
   containsNoLabels(`leave`, {
+    origin: `Test Origin`,
     leave: {
       character: `Test Character`
     }
   })
   containsNoLabels(`set`, {
+    origin: `Test Origin`,
     set: {
       flag: `Test Flag`,
       value: `Test Value`
@@ -770,50 +774,64 @@ describe(`findLabelsInStatement`, () => {
   })
   describe(`decision`, () => {
     containsOneArrayOfLabels(`if`, {
+      origin: `Test Origin A`,
       decision: {
         paths: [{
+          origin: `Test Origin B`,
           condition: `Test Condition A`,
           then: `Test Statements A`
         }]
       }
     })
     containsTwoArraysOfLabels(`if-else`, {
+      origin: `Test Origin A`,
       decision: {
         paths: [{
+          origin: `Test Origin B`,
           condition: `Test Condition A`,
           then: `Test Statements A`
         }, {
+          origin: `Test Origin C`,
           condition: `Test Condition B`,
           then: `Test Statements B`
         }]
       }
     })
     containsThreeArraysOfLabels(`if-else-else`, {
+      origin: `Test Origin A`,
       decision: {
         paths: [{
+          origin: `Test Origin B`,
           condition: `Test Condition A`,
           then: `Test Statements A`
         }, {
+          origin: `Test Origin C`,
           condition: `Test Condition B`,
           then: `Test Statements B`
         }, {
+          origin: `Test Origin D`,
           condition: `Test Condition C`,
           then: `Test Statements C`
         }]
       }
     })
     containsFourArraysOfLabels(`if-else-else-else`, {
+      origin: `Test Origin A`,
       decision: {
         paths: [{
+          origin: `Test Origin B`,
           condition: `Test Condition A`,
           then: `Test Statements A`
         }, {
+          origin: `Test Origin C`,
           condition: `Test Condition B`,
           then: `Test Statements B`
         }, {
+          origin: `Test Origin D`,
           condition: `Test Condition C`,
           then: `Test Statements C`
         }, {
+          origin: `Test Origin E`,
           condition: `Test Condition D`,
           then: `Test Statements D`
         }]
@@ -822,54 +840,68 @@ describe(`findLabelsInStatement`, () => {
   })
   describe(`menu`, () => {
     containsOneArrayOfLabels(`one option`, {
+      origin: `Test Origin A`,
       menu: {
         promptId: `Test Prompt Id`,
         paths: [{
+          origin: `Test Origin B`,
           label: `Test Label A`,
           then: `Test Statements A`
         }]
       }
     })
     containsTwoArraysOfLabels(`two options`, {
+      origin: `Test Origin A`,
       menu: {
         promptId: `Test Prompt Id`,
         paths: [{
+          origin: `Test Origin B`,
           label: `Test Label A`,
           then: `Test Statements A`
         }, {
+          origin: `Test Origin C`,
           label: `Test Label B`,
           then: `Test Statements B`
         }]
       }
     })
     containsThreeArraysOfLabels(`three options`, {
+      origin: `Test Origin A`,
       menu: {
         promptId: `Test Prompt Id`,
         paths: [{
+          origin: `Test Origin B`,
           label: `Test Label A`,
           then: `Test Statements A`
         }, {
+          origin: `Test Origin C`,
           label: `Test Label B`,
           then: `Test Statements B`
         }, {
+          origin: `Test Origin D`,
           label: `Test Label C`,
           then: `Test Statements C`
         }]
       }
     })
     containsFourArraysOfLabels(`four options`, {
+      origin: `Test Origin A`,
       menu: {
         promptId: `Test Prompt Id`,
         paths: [{
+          origin: `Test Origin B`,
           label: `Test Label A`,
           then: `Test Statements A`
         }, {
+          origin: `Test Origin C`,
           label: `Test Label B`,
           then: `Test Statements B`
         }, {
+          origin: `Test Origin D`,
           label: `Test Label C`,
           then: `Test Statements C`
         }, {
+          origin: `Test Origin E`,
           label: `Test Label D`,
           then: `Test Statements D`
         }]
@@ -879,6 +911,7 @@ describe(`findLabelsInStatement`, () => {
   describe(`label`, () => {
     beforeEach(() => {
       inputCopy = {
+        origin: `Test Origin`,
         label: {
           name: `Test Label Name`
         }
@@ -891,6 +924,7 @@ describe(`findLabelsInStatement`, () => {
       statements: `Test Next Statements`
     }]))
     it(`does not modify the input`, () => expect(inputCopy).toEqual({
+      origin: `Test Origin`,
       label: {
         name: `Test Label Name`
       }
@@ -901,11 +935,13 @@ describe(`findLabelsInStatement`, () => {
     it(`calls normalizeName with the label's name`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Label Name`))
   })
   containsNoLabels(`goTo`, {
+    origin: `Test Origin`,
     goTo: {
       label: `Test Label`
     }
   })
   containsNoLabels(`background`, {
+    origin: `Test Origin`,
     background: {
       name: `Test Name`
     }
@@ -2004,6 +2040,7 @@ describe(`findPromptStatesInStatement`, () => {
   let promptStates
   beforeEach(() => {
     statement = {
+      origin: `Test Origin`,
       line: {
         promptId: `Test Prompt Id`,
         characters: `Test Characters`,
@@ -2030,6 +2067,7 @@ describe(`findPromptStatesInStatement`, () => {
     it(`returns the hash`, () => expect(result.hash).toEqual(`Test Hashed Prompt State`))
     it(`returns the given prompt states`, () => expect(result.promptStates).toEqual([`Test Prompt State A`, `Test Prompt State B`, `Test Prompt State C`]))
     it(`does not modify the given statement`, () => expect(statement).toEqual({
+      origin: `Test Origin`,
       line: {
         promptId: `Test Prompt Id`,
         characters: `Test Characters`,
@@ -2067,6 +2105,7 @@ describe(`findPromptStatesInStatement`, () => {
     it(`replaces with a prompt state constructed using the generated hash, given statement, the state and returned hash`, () => expect(replacePromptState).toHaveBeenCalledWith(jasmine.anything(), {
       hash: `Test Hashed Prompt State`,
       statement: {
+        origin: `Test Origin`,
         line: {
           promptId: `Test Prompt Id`,
           characters: `Test Characters`,
@@ -2078,6 +2117,7 @@ describe(`findPromptStatesInStatement`, () => {
     }))
     xit(`returns an object`, () => expect(result).toEqual(jasmine.any(Object)))
     it(`does not modify the given statement`, () => expect(statement).toEqual({
+      origin: `Test Origin`,
       line: {
         promptId: `Test Prompt Id`,
         characters: `Test Characters`,

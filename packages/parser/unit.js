@@ -19,14 +19,15 @@ const setSpy = name => set(name, jasmine.createSpy(name))
 it(`imports uuid/v4`, () => expect(get(`_uuid`)).toBe(require(`uuid`)))
 
 describe(`create`, () => {
-  it(`returns an object`, () => expect(index.create(`Test Context`, `Test On Error`, `Test On End Of File`)).toEqual(jasmine.any(Object)))
-  it(`returns statements, an empty array`, () => expect(index.create(`Test Context`, `Test On Error`, `Test On End Of File`).statements).toEqual([]))
-  it(`returns context, given`, () => expect(index.create(`Test Context`, `Test On Error`, `Test On End Of File`).context).toEqual(`Test Context`))
-  it(`returns onError, given`, () => expect(index.create(`Test Context`, `Test On Error`, `Test On End Of File`).onError).toEqual(`Test On Error`))
-  it(`returns onEndOfFile, given`, () => expect(index.create(`Test Context`, `Test On Error`, `Test On End Of File`).onEndOfFile).toEqual(`Test On End Of File`))
-  it(`returns a new object every call`, () => expect(index.create(`Test Context`, `Test On Error`, `Test On End Of File`)).not.toBe(index.create(`Test Context`, `Test On Error`, `Test On End Of File`)))
-  it(`returns a different statements every call`, () => expect(index.create(`Test Context`, `Test On Error`, `Test On End Of File`).statements).not.toBe(index.create(`Test Context`, `Test On Error`, `Test On End Of File`).statements))
-  it(`returns the same value every call`, () => expect(index.create(`Test Context`, `Test On Error`, `Test On End Of File`)).toEqual(index.create(`Test Context`, `Test On Error`, `Test On End Of File`)))
+  it(`returns an object`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`)).toEqual(jasmine.any(Object)))
+  it(`returns file, given`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`).file).toEqual(`Test File`))
+  it(`returns statements, an empty array`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`).statements).toEqual([]))
+  it(`returns context, given`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`).context).toEqual(`Test Context`))
+  it(`returns onError, given`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`).onError).toEqual(`Test On Error`))
+  it(`returns onEndOfFile, given`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`).onEndOfFile).toEqual(`Test On End Of File`))
+  it(`returns a new object every call`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`)).not.toBe(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`)))
+  it(`returns a different statements every call`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`).statements).not.toBe(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`).statements))
+  it(`returns the same value every call`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`)).toEqual(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`)))
 })
 
 describe(`line`, () => {
@@ -49,6 +50,7 @@ describe(`line`, () => {
       `Test Existing Statement C`
     ]
     state = {
+      file: `Test File`,
       statements,
       context: `Test Context`,
       onError,
@@ -62,6 +64,7 @@ describe(`line`, () => {
       index.line(state, 3897, `Test Text`, lexedCopy)
     })
     it(`does not modify the lexed statement`, () => expect(lexedCopy).toEqual(lexed))
+    it(`does not replace file`, () => expect(state.file).toEqual(`Test File`))
     it(`does not replace statements`, () => expect(state.statements).toBe(statements))
     it(`does not modify context`, () => expect(state.context).toEqual(`Test Context`))
     it(`does not modify onError`, () => expect(state.onError).toBe(onError))
@@ -104,6 +107,11 @@ describe(`line`, () => {
       text: `Hello, world!`
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     line: {
       promptId: `Test V4 UUID`,
       characters: [`Jeff`, `Jake`, `Phil`],
@@ -117,21 +125,41 @@ describe(`line`, () => {
       text: `Hello, world!`
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     emote: {
       character: `Jeff`,
       emote: `Disenchanted`
     }
   }, {
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 1
+    },
     emote: {
       character: `Jake`,
       emote: `Disenchanted`
     }
   }, {
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 2
+    },
     emote: {
       character: `Phil`,
       emote: `Disenchanted`
     }
   }, {
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 3
+    },
     line: {
       promptId: `Test V4 UUID`,
       characters: [`Jeff`, `Jake`, `Phil`],
@@ -144,16 +172,31 @@ describe(`line`, () => {
       emote: `Disenchanted`
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     emote: {
       character: `Jeff`,
       emote: `Disenchanted`
     }
   }, {
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 1
+    },
     emote: {
       character: `Jake`,
       emote: `Disenchanted`
     }
   }, {
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 2
+    },
     emote: {
       character: `Phil`,
       emote: `Disenchanted`
@@ -164,14 +207,29 @@ describe(`line`, () => {
       characters: [`Jeff`, `Jake`, `Phil`]
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     leave: {
       character: `Jeff`
     }
   }, {
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 1
+    },
     leave: {
       character: `Jake`
     }
   }, {
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 2
+    },
     leave: {
       character: `Phil`
     }
@@ -182,6 +240,11 @@ describe(`line`, () => {
       value: `locked`
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     set: {
       flag: `window`,
       value: `locked`
@@ -196,6 +259,11 @@ describe(`line`, () => {
       name: `fromTheTop`
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     label: {
       name: `fromTheTop`
     }
@@ -205,6 +273,11 @@ describe(`line`, () => {
       label: `fromTheTop`
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     goTo: {
       label: `fromTheTop`
     }
@@ -214,6 +287,11 @@ describe(`line`, () => {
       name: `mountains`
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     background: {
       name: `mountains`
     }
@@ -223,6 +301,11 @@ describe(`line`, () => {
       name: `aTestScript`
     }
   }, [{
+    origin: {
+      file: `Test File`,
+      line: 3897,
+      subStatement: 0
+    },
     include: {
       name: `aTestScript`
     }
