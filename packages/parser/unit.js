@@ -297,3 +297,25 @@ describe(`line`, () => {
     }
   }])
 })
+
+describe(`endOfFile`, () => {
+  const onError = jasmine.createSpy(`onError`)
+  const onEndOfFile = jasmine.createSpy(`onEndOfFile`)
+  afterEach(() => {
+    onError.calls.reset()
+    onEndOfFile.calls.reset()
+  })
+  beforeEach(() => {
+    get(`endOfFile`)({
+      file: `Test File`,
+      statements: `Test Statements`,
+      context: `Test Context`,
+      onError,
+      onEndOfFile
+    })
+  })
+  it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
+  it(`calls onEndOfFile once`, () => expect(onEndOfFile).toHaveBeenCalledTimes(1))
+  it(`calls onEndOfFile with the context`, () => expect(onEndOfFile).toHaveBeenCalledWith(`Test Context`, jasmine.anything()))
+  it(`calls onEndOfFile with the statements`, () => expect(onEndOfFile).toHaveBeenCalledWith(jasmine.anything(), `Test Statements`))
+})

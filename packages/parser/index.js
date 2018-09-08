@@ -116,3 +116,5 @@ export const line = (state, line, text, lexed) => {
     })
   }
 }
+
+export const endOfFile = state => state.onEndOfFile(state.context, state.statements)
