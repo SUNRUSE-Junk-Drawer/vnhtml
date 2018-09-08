@@ -16,8 +16,6 @@ const set = (name, value) => {
 
 const setSpy = name => set(name, jasmine.createSpy(name))
 
-it(`imports uuid/v4`, () => expect(get(`_uuid`)).toBe(require(`uuid`)))
-
 describe(`create`, () => {
   it(`returns an object`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`)).toEqual(jasmine.any(Object)))
   it(`returns file, given`, () => expect(index.create(`Test File`, `Test Context`, `Test On Error`, `Test On End Of File`).file).toEqual(`Test File`))
@@ -33,13 +31,9 @@ describe(`create`, () => {
 describe(`line`, () => {
   const onError = jasmine.createSpy(`onError`)
   const onEndOfFile = jasmine.createSpy(`onEndOfFile`)
-  const uuidv4 = jasmine.createSpy(`uuid/v4`)
-  uuidv4.and.returnValue(`Test V4 UUID`)
-  set(`_uuid`, { v4: uuidv4 })
   afterEach(() => {
     onError.calls.reset()
     onEndOfFile.calls.reset()
-    uuidv4.calls.reset()
   })
   let statements
   let state
@@ -71,7 +65,7 @@ describe(`line`, () => {
     it(`does not modify onEndOfFile`, () => expect(state.onEndOfFile).toBe(onEndOfFile))
     assertions()
   })
-  const runSuccessful = (description, lexed, newStatements, generatesV4Uuid) => run(description, lexed, () => {
+  const runSuccessful = (description, lexed, newStatements) => run(description, lexed, () => {
     it(`appends the new statements`, () => expect(statements).toEqual([jasmine.anything(), jasmine.anything(), jasmine.anything()].concat(newStatements)))
     it(`does not modify the existing statements`, () => expect(statements).toEqual([
       `Test Existing Statement A`,
@@ -80,11 +74,6 @@ describe(`line`, () => {
     ].concat(newStatements.map(newStatement => jasmine.anything()))))
     it(`does not call onError`, () => expect(onError).not.toHaveBeenCalled())
     it(`does not call onEndOfFile`, () => expect(onEndOfFile).not.toHaveBeenCalled())
-    if (generatesV4Uuid) {
-      it(`generates one V4 UUID`, () => expect(uuidv4).toHaveBeenCalledTimes(1))
-    } else {
-      it(`does not generate a V4 UUID`, () => expect(uuidv4).not.toHaveBeenCalled())
-    }
   })
   const runError = (description, lexed, message) => run(description, lexed, () => {
     it(`does not modify the existing statements`, () => expect(statements).toEqual([
@@ -96,7 +85,6 @@ describe(`line`, () => {
     it(`calls onError with the context`, () => expect(onError).toHaveBeenCalledWith(`Test Context`, jasmine.anything(), jasmine.anything()))
     it(`calls onError with the line number`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), 3897, jasmine.anything()))
     it(`calls onError with a message stating ${JSON.stringify(message)}`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), message))
-    it(`does not generate a V4 UUID`, () => expect(uuidv4).not.toHaveBeenCalled())
   })
   runError(`unlexable`, null, `Unparseable; if this should be a statement, please check the documentation for a list of patterns which can be used; otherwise check indentation`)
   xdescribe(`line`, () => { })
@@ -113,11 +101,10 @@ describe(`line`, () => {
       subStatement: 0
     },
     line: {
-      promptId: `Test V4 UUID`,
       characters: [`Jeff`, `Jake`, `Phil`],
       text: `Hello, world!`
     }
-  }], true)
+  }])
   runSuccessful(`lineWithEmoteAndText`, {
     lineWithEmoteAndText: {
       characters: [`Jeff`, `Jake`, `Phil`],
@@ -161,11 +148,10 @@ describe(`line`, () => {
       subStatement: 3
     },
     line: {
-      promptId: `Test V4 UUID`,
       characters: [`Jeff`, `Jake`, `Phil`],
       text: `Hello, world!`
     }
-  }], true)
+  }])
   runSuccessful(`emote`, {
     emote: {
       characters: [`Jeff`, `Jake`, `Phil`],
@@ -201,7 +187,7 @@ describe(`line`, () => {
       character: `Phil`,
       emote: `Disenchanted`
     }
-  }], false)
+  }])
   runSuccessful(`leave`, {
     leave: {
       characters: [`Jeff`, `Jake`, `Phil`]
@@ -233,7 +219,7 @@ describe(`line`, () => {
     leave: {
       character: `Phil`
     }
-  }], false)
+  }])
   runSuccessful(`set`, {
     set: {
       flag: `window`,
@@ -249,7 +235,7 @@ describe(`line`, () => {
       flag: `window`,
       value: `locked`
     }
-  }], false)
+  }])
   xdescribe(`if`, () => { })
   xdescribe(`elseIf`, () => { })
   xdescribe(`else`, () => { })
@@ -267,7 +253,7 @@ describe(`line`, () => {
     label: {
       name: `fromTheTop`
     }
-  }], false)
+  }])
   runSuccessful(`goTo`, {
     goTo: {
       label: `fromTheTop`
@@ -281,7 +267,7 @@ describe(`line`, () => {
     goTo: {
       label: `fromTheTop`
     }
-  }], false)
+  }])
   runSuccessful(`background`, {
     background: {
       name: `mountains`
@@ -295,7 +281,7 @@ describe(`line`, () => {
     background: {
       name: `mountains`
     }
-  }], false)
+  }])
   runSuccessful(`include`, {
     include: {
       name: `aTestScript`
@@ -309,5 +295,5 @@ describe(`line`, () => {
     include: {
       name: `aTestScript`
     }
-  }], false)
+  }])
 })

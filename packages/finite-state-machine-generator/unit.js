@@ -747,7 +747,6 @@ describe(`findLabelsInStatement`, () => {
   containsNoLabels(`line`, {
     origin: `Test Origin`,
     line: {
-      promptId: `Test Prompt ID`,
       characters: [`Test Character A`, `Test Character B`, `Test Character C`],
       text: `Test Text`
     }
@@ -842,7 +841,6 @@ describe(`findLabelsInStatement`, () => {
     containsOneArrayOfLabels(`one option`, {
       origin: `Test Origin A`,
       menu: {
-        promptId: `Test Prompt Id`,
         paths: [{
           origin: `Test Origin B`,
           label: `Test Label A`,
@@ -853,7 +851,6 @@ describe(`findLabelsInStatement`, () => {
     containsTwoArraysOfLabels(`two options`, {
       origin: `Test Origin A`,
       menu: {
-        promptId: `Test Prompt Id`,
         paths: [{
           origin: `Test Origin B`,
           label: `Test Label A`,
@@ -868,7 +865,6 @@ describe(`findLabelsInStatement`, () => {
     containsThreeArraysOfLabels(`three options`, {
       origin: `Test Origin A`,
       menu: {
-        promptId: `Test Prompt Id`,
         paths: [{
           origin: `Test Origin B`,
           label: `Test Label A`,
@@ -887,7 +883,6 @@ describe(`findLabelsInStatement`, () => {
     containsFourArraysOfLabels(`four options`, {
       origin: `Test Origin A`,
       menu: {
-        promptId: `Test Prompt Id`,
         paths: [{
           origin: `Test Origin B`,
           label: `Test Label A`,
@@ -2051,7 +2046,6 @@ describe(`findPromptStatesInStatement`, () => {
     statement = {
       origin: `Test Origin`,
       line: {
-        promptId: `Test Prompt Id`,
         characters: `Test Characters`,
         text: `Test Text`
       }
@@ -2068,7 +2062,6 @@ describe(`findPromptStatesInStatement`, () => {
     it(`hashes the given statement`, () => expect(hashPromptState).toHaveBeenCalledWith({
       origin: `Test Origin`,
       line: {
-        promptId: `Test Prompt Id`,
         characters: `Test Characters`,
         text: `Test Text`
       }
@@ -2085,7 +2078,6 @@ describe(`findPromptStatesInStatement`, () => {
     it(`does not modify the given statement`, () => expect(statement).toEqual({
       origin: `Test Origin`,
       line: {
-        promptId: `Test Prompt Id`,
         characters: `Test Characters`,
         text: `Test Text`
       }
@@ -2108,7 +2100,6 @@ describe(`findPromptStatesInStatement`, () => {
     it(`hashes the given statement`, () => expect(hashPromptState).toHaveBeenCalledWith({
       origin: `Test Origin`,
       line: {
-        promptId: `Test Prompt Id`,
         characters: `Test Characters`,
         text: `Test Text`
       }
@@ -2130,7 +2121,6 @@ describe(`findPromptStatesInStatement`, () => {
       statement: {
         origin: `Test Origin`,
         line: {
-          promptId: `Test Prompt Id`,
           characters: `Test Characters`,
           text: `Test Text`
         }
@@ -2142,7 +2132,6 @@ describe(`findPromptStatesInStatement`, () => {
     it(`does not modify the given statement`, () => expect(statement).toEqual({
       origin: `Test Origin`,
       line: {
-        promptId: `Test Prompt Id`,
         characters: `Test Characters`,
         text: `Test Text`
       }

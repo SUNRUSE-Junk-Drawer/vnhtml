@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid"
-
 export const create = (file, context, onError, onEndOfFile) => {
   return {
     file,
@@ -21,7 +19,6 @@ export const line = (state, line, text, lexed) => {
         subStatement: 0
       },
       line: {
-        promptId: uuidv4(),
         characters: lexed.lineWithText.characters,
         text: lexed.lineWithText.text
       }
@@ -45,7 +42,6 @@ export const line = (state, line, text, lexed) => {
         subStatement: lexed.lineWithEmoteAndText.characters.length
       },
       line: {
-        promptId: uuidv4(),
         characters: lexed.lineWithEmoteAndText.characters,
         text: lexed.lineWithEmoteAndText.text
       }

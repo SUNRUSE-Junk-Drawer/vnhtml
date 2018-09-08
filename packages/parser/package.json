@@ -38,7 +38,5 @@
   "peerDependencies": {
     "@vnhtml/lexer": "0.0.22"
   },
-  "dependencies": {
-    "uuid": "3.3.2"
-  }
+  "dependencies": {}
 }

@@ -46,9 +46,6 @@ Should any callback throw an exception, further calls to `line`, `indent`,
 
 ## Examples of `statements`
 
-Any statement which waits for user input (lines, menus) will include a V4 UUID
-called "promptId".
-
 ### Line
 
 #### vnhtml
@@ -70,7 +67,6 @@ Jeff Jake and Phil:
     "subStatement": 0
   },
   "line": {
-    "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "characters": ["Jeff", "Jake", "Phil"],
     "text": "We're speaking in unison to bring you the good news!\nYou can include any number of lines of dialog like this,\nand they'll be put together into a single statement."
   }
@@ -128,7 +124,6 @@ Jeff Jake and Phil (otherworldly):
     "subStatement": 3
   },
   "line": {
-    "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "characters": ["Jeff", "Jake", "Phil"],
     "text": "We're speaking in unison to bring you the good news!\nYou can include any number of lines of dialog like this,\nand they'll be put together into a single statement."
   }
@@ -153,7 +148,6 @@ Jeff Jake and Phil: This takes less vertical space, however.
     "subStatement": 0
   },
   "line": {
-    "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "characters": ["Jeff", "Jake", "Phil"],
     "text": "This takes less vertical space, however."
   }
@@ -208,7 +202,6 @@ Jeff Jake and Phil (otherworldly): This takes less vertical space, however.
     "subStatement": 3
   },
   "line": {
-    "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "characters": ["Jeff", "Jake", "Phil"],
     "text": "This takes less vertical space, however."
   }
@@ -593,7 +586,6 @@ menu
     "subStatement": 0
   },
   "menu": {
-    "promptId": "48363e91-0a73-476b-884a-241cb57387c0",
     "paths": [{
       "origin": {
         "file": "The name of the file being parsed",
