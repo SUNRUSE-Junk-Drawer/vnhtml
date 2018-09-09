@@ -67,7 +67,16 @@ Jeff Jake and Phil:
     "subStatement": 0
   },
   "line": {
-    "characters": ["Jeff", "Jake", "Phil"],
+    "characters": [{
+      name: "Jeff",
+      normalizedName: "jeff"
+    }, {
+      name: "Jake",
+      normalizedName: "jake"
+    }, {
+      name: "Phil",
+      normalizedName: "phil"
+    }],
     "text": "We're speaking in unison to bring you the good news!\nYou can include any number of lines of dialog like this,\nand they'll be put together into a single statement."
   }
 }]
@@ -94,8 +103,10 @@ Jeff Jake and Phil (otherworldly):
     "subStatement": 0
   },
   "emote": {
-    "character": "Jeff",
-    "emote": "otherworldly"
+    "characterName": "Jeff",
+    "characterNameNormalized": "jeff",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }, {
   "origin": {
@@ -104,8 +115,10 @@ Jeff Jake and Phil (otherworldly):
     "subStatement": 1
   },
   "emote": {
-    "character": "Jake",
-    "emote": "otherworldly"
+    "characterName": "Jake",
+    "characterNameNormalized": "jake",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }, {
   "origin": {
@@ -114,8 +127,10 @@ Jeff Jake and Phil (otherworldly):
     "subStatement": 2
   },
   "emote": {
-    "character": "Phil",
-    "emote": "otherworldly"
+    "characterName": "Phil",
+    "characterNameNormalized": "phil",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }, {
   "origin": {
@@ -124,7 +139,16 @@ Jeff Jake and Phil (otherworldly):
     "subStatement": 3
   },
   "line": {
-    "characters": ["Jeff", "Jake", "Phil"],
+    "characters": [{
+      name: "Jeff",
+      normalizedName: "jeff"
+    }, {
+      name: "Jake",
+      normalizedName: "jake"
+    }, {
+      name: "Phil",
+      normalizedName: "phil"
+    }],
     "text": "We're speaking in unison to bring you the good news!\nYou can include any number of lines of dialog like this,\nand they'll be put together into a single statement."
   }
 }]
@@ -148,7 +172,16 @@ Jeff Jake and Phil: This takes less vertical space, however.
     "subStatement": 0
   },
   "line": {
-    "characters": ["Jeff", "Jake", "Phil"],
+    "characters": [{
+      name: "Jeff",
+      normalizedName: "jeff"
+    }, {
+      name: "Jake",
+      normalizedName: "jake"
+    }, {
+      name: "Phil",
+      normalizedName: "phil"
+    }],
     "text": "This takes less vertical space, however."
   }
 }]
@@ -172,8 +205,10 @@ Jeff Jake and Phil (otherworldly): This takes less vertical space, however.
     "subStatement": 0
   },
   "emote": {
-    "character": "Jeff",
-    "emote": "otherworldly"
+    "characterName": "Jeff",
+    "characterNameNormalized": "jeff",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }, {
   "origin": {
@@ -182,8 +217,10 @@ Jeff Jake and Phil (otherworldly): This takes less vertical space, however.
     "subStatement": 1
   },
   "emote": {
-    "character": "Jake",
-    "emote": "otherworldly"
+    "characterName": "Jake",
+    "characterNameNormalized": "jake",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }, {
   "origin": {
@@ -192,8 +229,10 @@ Jeff Jake and Phil (otherworldly): This takes less vertical space, however.
     "subStatement": 2
   },
   "emote": {
-    "character": "Phil",
-    "emote": "otherworldly"
+    "characterName": "Phil",
+    "characterNameNormalized": "phil",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }, {
   "origin": {
@@ -202,7 +241,16 @@ Jeff Jake and Phil (otherworldly): This takes less vertical space, however.
     "subStatement": 3
   },
   "line": {
-    "characters": ["Jeff", "Jake", "Phil"],
+    "characters": [{
+      name: "Jeff",
+      normalizedName: "jeff"
+    }, {
+      name: "Jake",
+      normalizedName: "jake"
+    }, {
+      name: "Phil",
+      normalizedName: "phil"
+    }],
     "text": "This takes less vertical space, however."
   }
 }]
@@ -226,8 +274,10 @@ Jeff Jake and Phil are otherworldly
     "subStatement": 0
   },
   "emote": {
-    "character": "Jeff",
-    "emote": "otherworldly"
+    "characterName": "Jeff",
+    "characterNameNormalized": "jeff",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }, {
   "origin": {
@@ -236,8 +286,10 @@ Jeff Jake and Phil are otherworldly
     "subStatement": 1
   },
   "emote": {
-    "character": "Jake",
-    "emote": "otherworldly"
+    "characterName": "Jake",
+    "characterNameNormalized": "jake",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }, {
   "origin": {
@@ -246,8 +298,10 @@ Jeff Jake and Phil are otherworldly
     "subStatement": 2
   },
   "emote": {
-    "character": "Phil",
-    "emote": "otherworldly"
+    "characterName": "Phil",
+    "characterNameNormalized": "phil",
+    "emote": "otherworldly",
+    "normalizedEmote": "otherworldly"
   }
 }]
 ```
@@ -270,7 +324,8 @@ Jeff Jake and Phil leave
     "subStatement": 0
   },
   "leave": {
-    "character": "Jeff"
+    "characterName": "Jeff",
+    "characterNameNormalized": "jeff"
   }
 }, {
   "origin": {
@@ -279,7 +334,8 @@ Jeff Jake and Phil leave
     "subStatement": 1
   },
   "leave": {
-    "character": "Jake"
+    "characterName": "Jake",
+    "characterNameNormalized": "jake"
   }
 }, {
   "origin": {
@@ -288,7 +344,8 @@ Jeff Jake and Phil leave
     "subStatement": 2
   },
   "leave": {
-    "character": "Phil"
+    "characterName": "Phil",
+    "characterNameNormalized": "phil"
   }
 }]
 ```
@@ -312,7 +369,9 @@ set window locked
   },
   "set": {
     "flag": "window",
-    "value": "locked
+    "normalizedFlag": "window",
+    "value": "locked",
+    "normalizedValue": "locked"
   }
 }]
 ```
@@ -346,7 +405,9 @@ if window unlocked
       "condition": {
         "flag": {
           "flag": "window",
-          "value": "unlocked"
+          "normalizedFlag": "window",
+          "value": "unlocked",
+          "normalizedValue": "unlocked"
         }
       },
       "then": [{
@@ -356,7 +417,10 @@ if window unlocked
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jeff"],
+          "characters": [{
+            name: "Jeff",
+            normalizedName: "jeff"
+          }],
           "text": "The window's locked!"
         }
       }, {
@@ -366,7 +430,10 @@ if window unlocked
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jake"],
+          "characters": [{
+            name: "Jake",
+            normalizedName: "jake"
+          }],
           "text": "You sure?"
         }
       }]
@@ -397,7 +464,10 @@ else if window open
     "subStatement": 0
   },
   "line": {
-    "characters": ["Jeff"],
+    "characters": [{
+      name: "Jeff",
+      normalizedName: "jeff"
+    }],
     "text": "The window's locked!"
   }
 }, {
@@ -416,7 +486,9 @@ else if window open
       "condition": {
         "flag": {
           "flag": "window",
-          "value": "unlocked"
+          "normalizedFlag": "window",
+          "value": "unlocked",
+          "normalizedValue": "unlocked"
         }
       },
       "then": [{
@@ -426,7 +498,10 @@ else if window open
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jake"],
+          "characters": [{
+            name: "Jake",
+            normalizedName: "jake"
+          }],
           "text": "You sure?"
         }
       }]
@@ -439,7 +514,9 @@ else if window open
       "condition": {
         "flag": {
           "flag": "window",
-          "value": "open"
+          "normalizedFlag": "window",
+          "value": "open",
+          "normalizedValue": "open"
         }
       },
       "then": [{
@@ -449,7 +526,10 @@ else if window open
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jake"],
+          "characters": [{
+            name: "Jake",
+            normalizedName: "jake"
+          }],
           "text": "I implied locked *closed*."
         }
       }]
@@ -482,7 +562,10 @@ else
     "subStatement": 0
   },
   "line": {
-    "characters": ["Jeff"],
+    "characters": [{
+      name: "Jeff",
+      normalizedName: "jeff"
+    }],
     "text": "The window's locked!"
   }
 }, {
@@ -501,7 +584,9 @@ else
       "condition": {
         "flag": {
           "flag": "window",
-          "value": "unlocked"
+          "normalizedFlag": "window",
+          "value": "unlocked",
+          "normalizedValue": "unlocked"
         }
       },
       "then": [{
@@ -511,7 +596,10 @@ else
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jake"],
+          "characters": [{
+            name: "Jake",
+            normalizedName: "jake"
+          }],
           "text": "You sure?"
         }
       }]
@@ -524,7 +612,9 @@ else
       "condition": {
         "flag": {
           "flag": "window",
-          "value": "open"
+          "normalizedFlag": "window",
+          "value": "open",
+          "normalizedValue": "open"
         }
       },
       "then": [{
@@ -534,7 +624,10 @@ else
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jake"],
+          "characters": [{
+            name: "Jake",
+            normalizedName: "jake"
+          }],
           "text": "I implied locked *closed*."
         }
       }]
@@ -552,7 +645,10 @@ else
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jake"],
+          "characters": [{
+            name: "Jake",
+            normalizedName: "jake"
+          }],
           "text": "Looks right from here."
         }
       }]
@@ -600,7 +696,10 @@ menu
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jeff"],
+          "characters": [{
+            name: "Jeff",
+            normalizedName: "jeff"
+          }],
           "text": "Why did I pick this!"
         }
       }, {
@@ -610,7 +709,10 @@ menu
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jake"],
+          "characters": [{
+            name: "Jake",
+            normalizedName: "jake"
+          }],
           "text": "You'll have a right headache..."
         }
       }]
@@ -623,7 +725,10 @@ menu
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jeff"],
+          "characters": [{
+            name: "Jeff",
+            normalizedName: "jeff"
+          }],
           "text": "Bad for me, but so good."
         }
       }]
@@ -636,7 +741,10 @@ menu
           "subStatement": 0
         },
         "line": {
-          "characters": ["Jeff"],
+          "characters": [{
+            name: "Jeff",
+            normalizedName: "jeff"
+          }],
           "text": "Not bad!"
         }
       }]
@@ -663,7 +771,8 @@ label fromTheTop
     "subStatement": 0
   },
   "label": {
-    "name": "fromTheTop"
+    "name": "fromTheTop",
+    "normalizedName": "fromthetop"
   }
 }]
 ```
@@ -686,7 +795,8 @@ go to fromTheTop
     "subStatement": 0
   },
   "goTo": {
-    "label": "fromTheTop"
+    "label": "fromTheTop",
+    "normalizedLabel": "fromthetop"
   }
 }]
 ```
@@ -709,7 +819,8 @@ mountains in background
     "subStatement": 0
   },
   "background": {
-    "name": "mountains"
+    "name": "mountains",
+    "normalizedName": "mountains"
   }
 }]
 ```
@@ -732,7 +843,8 @@ include lengthySidequest
     "subStatement": 0
   },
   "include": {
-    "name": "lengthySidequest"
+    "name": "lengthySidequest",
+    "normalizedName": "lengthysidequest"
   }
 }]
 ```

@@ -31,8 +31,10 @@ export const line = (state, line, text, lexed) => {
         subStatement: i
       },
       emote: {
-        character: character,
-        emote: lexed.lineWithEmoteAndText.emote
+        characterName: character.name,
+        characterNormalizedName: character.normalizedName,
+        emote: lexed.lineWithEmoteAndText.emote,
+        normalizedEmote: lexed.lineWithEmoteAndText.normalizedEmote
       }
     }))
     state.statements.push({
@@ -54,8 +56,10 @@ export const line = (state, line, text, lexed) => {
         subStatement: i
       },
       emote: {
-        character: character,
-        emote: lexed.emote.emote
+        characterName: character.name,
+        characterNormalizedName: character.normalizedName,
+        emote: lexed.emote.emote,
+        normalizedEmote: lexed.emote.normalizedEmote
       }
     }))
   } else if (lexed.leave) {
@@ -66,7 +70,8 @@ export const line = (state, line, text, lexed) => {
         subStatement: i
       },
       leave: {
-        character: character
+        characterName: character.name,
+        characterNormalizedName: character.normalizedName,
       }
     }))
   } else if (lexed.label) {
