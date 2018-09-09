@@ -16,17 +16,6 @@ const set = (name, value) => {
 
 const setSpy = name => set(name, jasmine.createSpy(name))
 
-describe(`normalizeName`, () => {
-  const runEqual = (description, a, b) => it(description, () => expect(get(`normalizeName`)(a)).toEqual(get(`normalizeName`)(b)))
-  const runInequal = (description, a, b) => it(description, () => expect(get(`normalizeName`)(a)).not.toEqual(get(`normalizeName`)(b)))
-  runEqual(`normalizes case`, `Test Label`, `TeSt label`)
-  runEqual(`normalizes white space type`, `Test\tLabel`, `Test Label`)
-  runEqual(`normalizes white space quantity`, `Test      Label`, `Test Label`)
-  runInequal(`does not normalize character choice`, `Test Label`, `Test Lebel`)
-  runInequal(`does not normalize the existence of white space`, `Test Label`, `Test La bel`)
-  it(`returns empty given null`, () => expect(get(`normalizeName`)(null)).toEqual(``))
-})
-
 describe(`combineLabels`, () => {
   const onError = jasmine.createSpy(`onError`)
   afterEach(() => onError.calls.reset())
@@ -595,12 +584,9 @@ describe(`findLabelsInStatement`, () => {
         return `Test Combination Of Labels A B C and D`
     }
   })
-  const normalizeName = setSpy(`normalizeName`)
-  normalizeName.and.returnValue(`Test Normalized Label Name`)
   afterEach(() => {
     findLabelsInStatementArray.calls.reset()
     combineLabels.calls.reset()
-    normalizeName.calls.reset()
   })
   let result
   let inputCopy
@@ -613,7 +599,6 @@ describe(`findLabelsInStatement`, () => {
     it(`does not modify the input`, () => expect(inputCopy).toEqual(input))
     it(`does not call findLabelsInStatementArray`, () => expect(findLabelsInStatementArray).not.toHaveBeenCalled())
     it(`does not call combineLabels`, () => expect(combineLabels).not.toHaveBeenCalled())
-    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   const containsOneArrayOfLabels = (description, input) => describe(description, () => {
     beforeEach(() => {
@@ -628,7 +613,6 @@ describe(`findLabelsInStatement`, () => {
     it(`calls findLabelsInStatementArray with the statement array`, () => expect(findLabelsInStatementArray).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Statements A`, jasmine.anything()))
     it(`calls findLabelsInStatementArray with the next statements`, () => expect(findLabelsInStatementArray).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Next Statements`))
     it(`does not call combineLabels`, () => expect(combineLabels).not.toHaveBeenCalled())
-    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   const containsTwoArraysOfLabels = (description, input) => describe(description, () => {
     beforeEach(() => {
@@ -657,7 +641,6 @@ describe(`findLabelsInStatement`, () => {
     it(`calls combineLabels with onError`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), `Test On Error`, jasmine.anything(), jasmine.anything()))
     it(`calls combineLabels with the labels from the first statement array`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, jasmine.anything()))
     it(`calls combineLabels with the labels from the second statement array`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), jasmine.anything(), `Test Found Labels B`))
-    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   const containsThreeArraysOfLabels = (description, input) => describe(description, () => {
     beforeEach(() => {
@@ -696,7 +679,6 @@ describe(`findLabelsInStatement`, () => {
     })
     it(`calls combineLabels with the labels from the first and second statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, `Test Found Labels B`))
     it(`calls combineLabels with the labels from the first second and third statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A and B`, `Test Found Labels C`))
-    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   const containsFourArraysOfLabels = (description, input) => describe(description, () => {
     beforeEach(() => {
@@ -742,7 +724,6 @@ describe(`findLabelsInStatement`, () => {
     it(`calls combineLabels with the labels from the first and second statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Found Labels A`, `Test Found Labels B`))
     it(`calls combineLabels with the labels from the first second and third statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A and B`, `Test Found Labels C`))
     it(`calls combineLabels with the labels from the first second third and fourth statement arrays`, () => expect(combineLabels).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), `Test Combination Of Labels A B and C`, `Test Found Labels D`))
-    it(`does not call normalizeName`, () => expect(normalizeName).not.toHaveBeenCalled())
   })
   containsNoLabels(`line`, {
     origin: `Test Origin`,
@@ -754,21 +735,26 @@ describe(`findLabelsInStatement`, () => {
   containsNoLabels(`emote`, {
     origin: `Test Origin`,
     emote: {
-      character: `Test Character`,
-      emote: `Test Emote`
+      characterName: `Test Character Name`,
+      characterNormalizedName: `Test Character Normalized Name`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`
     }
   })
   containsNoLabels(`leave`, {
     origin: `Test Origin`,
     leave: {
-      character: `Test Character`
+      characterName: `Test Character Name`,
+      characterNormalizedName: `Test Character Normalized Name`
     }
   })
   containsNoLabels(`set`, {
     origin: `Test Origin`,
     set: {
       flag: `Test Flag`,
-      value: `Test Value`
+      normalizedFlag: `Test Normalized Flag`,
+      value: `Test Value`,
+      normalizedValue: `Test Normalized Value`
     }
   })
   describe(`decision`, () => {
@@ -908,7 +894,8 @@ describe(`findLabelsInStatement`, () => {
       inputCopy = {
         origin: `Test Origin`,
         label: {
-          name: `Test Label Name`
+          name: `Test Label Name`,
+          normalizedName: `Test Normalized Label Name`
         }
       }
       result = get(`findLabelsInStatement`)(`Test Context`, `Test On Error`, inputCopy, `Test Next Statements`)
@@ -921,24 +908,25 @@ describe(`findLabelsInStatement`, () => {
     it(`does not modify the input`, () => expect(inputCopy).toEqual({
       origin: `Test Origin`,
       label: {
-        name: `Test Label Name`
+        name: `Test Label Name`,
+        normalizedName: `Test Normalized Label Name`
       }
     }))
     it(`does not call findLabelsInStatementArray`, () => expect(findLabelsInStatementArray).not.toHaveBeenCalled())
     it(`does not call combineLabels`, () => expect(combineLabels).not.toHaveBeenCalled())
-    it(`calls normalizeName once`, () => expect(normalizeName).toHaveBeenCalledTimes(1))
-    it(`calls normalizeName with the label's name`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Label Name`))
   })
   containsNoLabels(`goTo`, {
     origin: `Test Origin`,
     goTo: {
-      label: `Test Label`
+      label: `Test Label`,
+      normalizedLabel: `Test Normalized Label`
     }
   })
   containsNoLabels(`background`, {
     origin: `Test Origin`,
     background: {
-      name: `Test Name`
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name`
     }
   })
 })
@@ -1269,11 +1257,9 @@ describe(`hashPromptState`, () => {
   let resultB
   const hashStateFlags = setSpy(`hashStateFlags`)
   const hashStateCharacters = setSpy(`hashStateCharacters`)
-  const normalizeName = setSpy(`normalizeName`)
   afterEach(() => {
     hashStateFlags.calls.reset()
     hashStateCharacters.calls.reset()
-    normalizeName.calls.reset()
   })
   const run = (description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, then) => describe(description, () => {
     beforeEach(() => {
@@ -1293,26 +1279,18 @@ describe(`hashPromptState`, () => {
             return hashedStateCharactersB
         }
       })
-      normalizeName.and.callFake(name => {
-        switch (name) {
-          case `Test Background A`:
-            return normalizedStateBackgroundA
-          case `Test Background B`:
-            return normalizedStateBackgroundB
-        }
-      })
       statementACopy = JSON.parse(JSON.stringify(statementA))
       statementBCopy = JSON.parse(JSON.stringify(statementB))
       stateA = {
         flags: `Test Flags A`,
         characters: `Test Characters A`,
-        background: `Test Background A`
+        background: normalizedStateBackgroundA
       }
       stateACopy = JSON.parse(JSON.stringify(stateA))
       stateB = {
         flags: `Test Flags B`,
         characters: `Test Characters B`,
-        background: `Test Background B`
+        background: normalizedStateBackgroundB
       }
       stateBCopy = JSON.parse(JSON.stringify(stateB))
 
@@ -1329,9 +1307,6 @@ describe(`hashPromptState`, () => {
     it(`calls hashStateCharacters twice`, () => expect(hashStateCharacters).toHaveBeenCalledTimes(2))
     it(`calls hashStateCharacters with the first state's flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters A`))
     it(`calls hashStateCharacters with the second state's flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters B`))
-    it(`calls normalizeName twice`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
-    it(`calls normalizeName with the first state's background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background A`))
-    it(`calls normalizeName with the second state's background`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Background B`))
     then()
   })
   const runMatching = (description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB) => run(description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, () => {
@@ -1782,8 +1757,6 @@ describe(`conditionMet`, () => {
   let conditionCopy
   let stateCopy
   let result
-  const normalizeName = setSpy(`normalizeName`)
-  afterEach(() => normalizeName.calls.reset())
   const run = (description, condition, state, then) => describe(description, () => {
     beforeEach(() => {
       conditionCopy = JSON.parse(JSON.stringify(condition))
@@ -1794,32 +1767,22 @@ describe(`conditionMet`, () => {
     it(`does not modify the state`, () => expect(stateCopy).toEqual(state))
     then()
   })
-  const runMatching = (description, condition, state, then) => run(description, condition, state, () => {
+  const runMatching = (description, condition, state) => run(description, condition, state, () => {
     it(`returns true`, () => expect(result).toBe(true))
-    then()
   })
-  const runNotMatching = (description, condition, state, then) => run(description, condition, state, () => {
+  const runNotMatching = (description, condition, state) => run(description, condition, state, () => {
     it(`returns false`, () => expect(result).toBe(false))
-    then()
   })
-  runMatching(`null`, null, `Test State`, () => {
-    it(`does not normalize any names`, () => expect(normalizeName).not.toHaveBeenCalled())
-  })
+  runMatching(`null`, null, `Test State`, () => { })
   describe(`flag`, () => {
     const flagCondition = {
       flag: {
         flag: `Test Condition Flag`,
-        value: `Test Condition Value`
+        normalizedFlag: `Test Normalized Condition Flag`,
+        value: `Test Condition Value`,
+        normalizedValue: `Test Normalized Condition Value`
       }
     }
-    beforeEach(() => normalizeName.and.callFake(name => {
-      switch (name) {
-        case `Test Condition Flag`:
-          return `Test Normalized Condition Flag`
-        case `Test Condition Value`:
-          return `Test Normalized Condition Value`
-      }
-    }))
     runMatching(`when the flag and value match`, flagCondition, {
       flags: [{
         flag: `Test Flag A`,
@@ -1844,10 +1807,6 @@ describe(`conditionMet`, () => {
       }],
       characters: `Test Characters`,
       background: `Test Background`
-    }, () => {
-      it(`normalizes two names`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
-      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
-      it(`normalizes the value`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Value`))
     })
     runNotMatching(`when the flag does not match`, flagCondition, {
       flags: [{
@@ -1873,9 +1832,6 @@ describe(`conditionMet`, () => {
       }],
       characters: `Test Characters`,
       background: `Test Background`
-    }, () => {
-      it(`normalizes one name`, () => expect(normalizeName).toHaveBeenCalledTimes(1))
-      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
     })
     runNotMatching(`when the value does not match`, flagCondition, {
       flags: [{
@@ -1901,10 +1857,6 @@ describe(`conditionMet`, () => {
       }],
       characters: `Test Characters`,
       background: `Test Background`
-    }, () => {
-      it(`normalizes two names`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
-      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
-      it(`normalizes the value`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Value`))
     })
     runNotMatching(`when neither the flag nor value match`, flagCondition, {
       flags: [{
@@ -1930,16 +1882,11 @@ describe(`conditionMet`, () => {
       }],
       characters: `Test Characters`,
       background: `Test Background`
-    }, () => {
-      it(`normalizes one name`, () => expect(normalizeName).toHaveBeenCalledTimes(1))
-      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
     })
     runNotMatching(`when there are no flags`, flagCondition, {
       flags: [],
       characters: `Test Characters`,
       background: `Test Background`
-    }, () => {
-      it(`does not normalize any names`, () => expect(normalizeName).not.toHaveBeenCalled())
     })
     runMatching(`when multiple flags have the same value, but only one has the correct flag`, flagCondition, {
       flags: [{
@@ -1965,10 +1912,6 @@ describe(`conditionMet`, () => {
       }],
       characters: `Test Characters`,
       background: `Test Background`
-    }, () => {
-      it(`normalizes two names`, () => expect(normalizeName).toHaveBeenCalledTimes(2))
-      it(`normalizes the flag`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Flag`))
-      it(`normalizes the value`, () => expect(normalizeName).toHaveBeenCalledWith(`Test Condition Value`))
     })
   })
 })

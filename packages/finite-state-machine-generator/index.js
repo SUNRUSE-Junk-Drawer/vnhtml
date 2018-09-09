@@ -1,5 +1,3 @@
-const normalizeName = name => (name || ``).toLowerCase().split(/\s+/).join(` `)
-
 const combineLabels = (context, onError, a, b) => {
   if (a) {
     if (b) {
@@ -42,7 +40,7 @@ const findLabelsInStatement = (context, onError, statement, nextStatements) => {
   if (statement.label) {
     return [{
       name: statement.label.name,
-      normalizedName: normalizeName(statement.label.name),
+      normalizedName: statement.label.normalizedName,
       statements: nextStatements
     }]
   } else if (statement.decision) {
@@ -75,7 +73,7 @@ const hashStateFlag = flag => `${flag.normalizedFlag}  ${flag.normalizedValue}`
 const hashStateFlags = flags => flags.map(flag => hashStateFlag(flag)).sort().join(`  `)
 const hashStateCharacter = character => `${character.normalizedName}  ${character.normalizedEmote}`
 const hashStateCharacters = characters => characters.map(character => hashStateCharacter(character)).sort().join(`  `)
-const hashPromptState = (statement, state) => `${JSON.stringify(statement.origin.file)}@${statement.origin.line}.${statement.origin.subStatement} ${hashStateFlags(state.flags)}   ${hashStateCharacters(state.characters)}   ${normalizeName(state.background)}`
+const hashPromptState = (statement, state) => `${JSON.stringify(statement.origin.file)}@${statement.origin.line}.${statement.origin.subStatement} ${hashStateFlags(state.flags)}   ${hashStateCharacters(state.characters)}   ${state.background}`
 
 const combinePromptStates = (a, b) => {
   if (a) {
@@ -100,12 +98,11 @@ const conditionMet = (condition, state) => {
     if (!state.flags.length) {
       return false
     }
-    const normalizedFlag = normalizeName(condition.flag.flag)
-    const match = state.flags.find(flag => flag.normalizedFlag == normalizedFlag)
+    const match = state.flags.find(flag => flag.normalizedFlag == condition.flag.normalizedFlag)
     if (!match) {
       return false
     }
-    return normalizeName(condition.flag.value) == match.normalizedValue
+    return condition.flag.normalizedValue == match.normalizedValue
   }
 }
 

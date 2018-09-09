@@ -70,6 +70,8 @@ const indenterCreate = (context, onLine, onIndent, onOutdent, onError, onEndOfFi
   onEndOfFile
 })
 
+const indenterNormalizeName = name => (name || ``).toLowerCase().split(/\s+/).join(` `)
+
 const indenterExtractIndentation = text => /^\s*/.exec(text)[0]
 
 const indenterExtractText = text => text.trim()
@@ -150,8 +152,12 @@ const indenterMatch = text => {
       if (lineWithEmote) {
         return {
           lineWithEmote: {
-            characters: [lineWithEmote[1]],
-            emote: lineWithEmote[2]
+            characters: [{
+              name: lineWithEmote[1],
+              normalizedName: indenterNormalizeName(lineWithEmote[1])
+            }],
+            emote: lineWithEmote[2],
+            normalizedEmote: indenterNormalizeName(lineWithEmote[2])
           }
         }
       }
@@ -163,8 +169,13 @@ const indenterMatch = text => {
             characters: lineWithEmoteAndMultipleCharacters[1]
               .trim()
               .split(/\s+/)
-              .concat([lineWithEmoteAndMultipleCharacters[2]]),
-            emote: lineWithEmoteAndMultipleCharacters[3]
+              .concat([lineWithEmoteAndMultipleCharacters[2]])
+              .map(name => ({
+                name,
+                normalizedName: indenterNormalizeName(name)
+              })),
+            emote: lineWithEmoteAndMultipleCharacters[3],
+            normalizedEmote: indenterNormalizeName(lineWithEmoteAndMultipleCharacters[3])
           }
         }
       }
@@ -173,7 +184,10 @@ const indenterMatch = text => {
       if (line) {
         return {
           line: {
-            characters: [line[1]]
+            characters: [{
+              name: line[1],
+              normalizedName: indenterNormalizeName(line[1])
+            }],
           }
         }
       }
@@ -186,6 +200,10 @@ const indenterMatch = text => {
               .trim()
               .split(/\s+/)
               .concat([lineWithMultipleCharacters[2]])
+              .map(name => ({
+                name,
+                normalizedName: indenterNormalizeName(name)
+              })),
           }
         }
       }
@@ -194,8 +212,12 @@ const indenterMatch = text => {
       if (lineWithEmoteAndText) {
         return {
           lineWithEmoteAndText: {
-            characters: [lineWithEmoteAndText[1]],
+            characters: [{
+              name: lineWithEmoteAndText[1],
+              normalizedName: indenterNormalizeName(lineWithEmoteAndText[1])
+            }],
             emote: lineWithEmoteAndText[2],
+            normalizedEmote: indenterNormalizeName(lineWithEmoteAndText[2]),
             text: lineWithEmoteAndText[3]
           }
         }
@@ -208,8 +230,13 @@ const indenterMatch = text => {
             characters: lineWithEmoteAndMultipleCharactersAndText[1]
               .trim()
               .split(/\s+/)
-              .concat([lineWithEmoteAndMultipleCharactersAndText[2]]),
+              .concat([lineWithEmoteAndMultipleCharactersAndText[2]])
+              .map(name => ({
+                name,
+                normalizedName: indenterNormalizeName(name)
+              })),
             emote: lineWithEmoteAndMultipleCharactersAndText[3],
+            normalizedEmote: indenterNormalizeName(lineWithEmoteAndMultipleCharactersAndText[3]),
             text: lineWithEmoteAndMultipleCharactersAndText[4]
           }
         }
@@ -219,7 +246,10 @@ const indenterMatch = text => {
       if (lineWithText) {
         return {
           lineWithText: {
-            characters: [lineWithText[1]],
+            characters: [{
+              name: lineWithText[1],
+              normalizedName: indenterNormalizeName(lineWithText[1])
+            }],
             text: lineWithText[2]
           }
         }
@@ -232,7 +262,11 @@ const indenterMatch = text => {
             characters: lineWithTextWithMultipleCharacters[1]
               .trim()
               .split(/\s+/)
-              .concat([lineWithTextWithMultipleCharacters[2]]),
+              .concat([lineWithTextWithMultipleCharacters[2]])
+              .map(name => ({
+                name,
+                normalizedName: indenterNormalizeName(name)
+              })),
             text: lineWithTextWithMultipleCharacters[3]
           }
         }
@@ -242,8 +276,12 @@ const indenterMatch = text => {
       if (emote) {
         return {
           emote: {
-            characters: [emote[1]],
-            emote: emote[2]
+            characters: [{
+              name: emote[1],
+              normalizedName: indenterNormalizeName(emote[1])
+            }],
+            emote: emote[2],
+            normalizedEmote: indenterNormalizeName(emote[2])
           }
         }
       }
@@ -255,8 +293,13 @@ const indenterMatch = text => {
             characters: emoteWithMultipleCharacters[1]
               .trim()
               .split(/\s+/)
-              .concat(emoteWithMultipleCharacters[2]),
-            emote: emoteWithMultipleCharacters[3]
+              .concat([emoteWithMultipleCharacters[2]])
+              .map(name => ({
+                name,
+                normalizedName: indenterNormalizeName(name)
+              })),
+            emote: emoteWithMultipleCharacters[3],
+            normalizedEmote: indenterNormalizeName(emoteWithMultipleCharacters[3])
           }
         }
       }
@@ -265,7 +308,10 @@ const indenterMatch = text => {
       if (leaves) {
         return {
           leave: {
-            characters: [leaves[1]]
+            characters: [{
+              name: leaves[1],
+              normalizedName: indenterNormalizeName(leaves[1])
+            }]
           }
         }
       }
@@ -278,6 +324,10 @@ const indenterMatch = text => {
               .trim()
               .split(/\s+/)
               .concat([leave[2]])
+              .map(name => ({
+                name,
+                normalizedName: indenterNormalizeName(name)
+              })),
           }
         }
       }
@@ -287,7 +337,9 @@ const indenterMatch = text => {
         return {
           set: {
             flag: set[1],
-            value: set[2]
+            normalizedFlag: indenterNormalizeName(set[1]),
+            value: set[2],
+            normalizedValue: indenterNormalizeName(set[2])
           }
         }
       }
@@ -297,7 +349,9 @@ const indenterMatch = text => {
         return {
           if: {
             flag: _if[1],
-            value: _if[2]
+            normalizedFlag: indenterNormalizeName(_if[1]),
+            value: _if[2],
+            normalizedValue: indenterNormalizeName(_if[2])
           }
         }
       }
@@ -307,7 +361,9 @@ const indenterMatch = text => {
         return {
           elseIf: {
             flag: elseIf[1],
-            value: elseIf[2]
+            normalizedFlag: indenterNormalizeName(elseIf[1]),
+            value: elseIf[2],
+            normalizedValue: indenterNormalizeName(elseIf[2])
           }
         }
       }
@@ -316,7 +372,8 @@ const indenterMatch = text => {
       if (label) {
         return {
           label: {
-            name: label[1]
+            name: label[1],
+            normalizedName: indenterNormalizeName(label[1])
           }
         }
       }
@@ -325,7 +382,8 @@ const indenterMatch = text => {
       if (goTo) {
         return {
           goTo: {
-            label: goTo[1]
+            label: goTo[1],
+            normalizedLabel: indenterNormalizeName(goTo[1])
           }
         }
       }
@@ -334,7 +392,8 @@ const indenterMatch = text => {
       if (inBackground) {
         return {
           background: {
-            name: inBackground[1]
+            name: inBackground[1],
+            normalizedName: indenterNormalizeName(inBackground[1])
           }
         }
       }
@@ -343,7 +402,8 @@ const indenterMatch = text => {
       if (include) {
         return {
           include: {
-            name: include[1]
+            name: include[1],
+            normalizedName: indenterNormalizeName(include[1])
           }
         }
       }

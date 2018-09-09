@@ -91,8 +91,17 @@ describe(`line`, () => {
   xdescribe(`lineWithEmote`, () => { })
   runSuccessful(`lineWithText`, {
     lineWithText: {
-      characters: [`Jeff`, `Jake`, `Phil`],
-      text: `Hello, world!`
+      characters: [{
+        name: `Test Character Name A`,
+        normalizedName: `Test Character Normalized Name A`
+      }, {
+        name: `Test Character Name B`,
+        normalizedName: `Test Character Normalized Name B`
+      }, {
+        name: `Test Character Name C`,
+        normalizedName: `Test Character Normalized Name C`
+      }],
+      text: `Test Text`
     }
   }, [{
     origin: {
@@ -101,15 +110,34 @@ describe(`line`, () => {
       subStatement: 0
     },
     line: {
-      characters: [`Jeff`, `Jake`, `Phil`],
-      text: `Hello, world!`
+      characters: [{
+        name: `Test Character Name A`,
+        normalizedName: `Test Character Normalized Name A`
+      }, {
+        name: `Test Character Name B`,
+        normalizedName: `Test Character Normalized Name B`
+      }, {
+        name: `Test Character Name C`,
+        normalizedName: `Test Character Normalized Name C`
+      }],
+      text: `Test Text`
     }
   }])
   runSuccessful(`lineWithEmoteAndText`, {
     lineWithEmoteAndText: {
-      characters: [`Jeff`, `Jake`, `Phil`],
-      emote: `Disenchanted`,
-      text: `Hello, world!`
+      characters: [{
+        name: `Test Character Name A`,
+        normalizedName: `Test Character Normalized Name A`
+      }, {
+        name: `Test Character Name B`,
+        normalizedName: `Test Character Normalized Name B`
+      }, {
+        name: `Test Character Name C`,
+        normalizedName: `Test Character Normalized Name C`
+      }],
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`,
+      text: `Test Text`
     }
   }, [{
     origin: {
@@ -118,8 +146,10 @@ describe(`line`, () => {
       subStatement: 0
     },
     emote: {
-      character: `Jeff`,
-      emote: `Disenchanted`
+      characterName: `Test Character Name A`,
+      characterNormalizedName: `Test Character Normalized Name A`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`
     }
   }, {
     origin: {
@@ -128,8 +158,10 @@ describe(`line`, () => {
       subStatement: 1
     },
     emote: {
-      character: `Jake`,
-      emote: `Disenchanted`
+      characterName: `Test Character Name B`,
+      characterNormalizedName: `Test Character Normalized Name B`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`
     }
   }, {
     origin: {
@@ -138,8 +170,10 @@ describe(`line`, () => {
       subStatement: 2
     },
     emote: {
-      character: `Phil`,
-      emote: `Disenchanted`
+      characterName: `Test Character Name C`,
+      characterNormalizedName: `Test Character Normalized Name C`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`
     }
   }, {
     origin: {
@@ -148,14 +182,33 @@ describe(`line`, () => {
       subStatement: 3
     },
     line: {
-      characters: [`Jeff`, `Jake`, `Phil`],
-      text: `Hello, world!`
+      characters: [{
+        name: `Test Character Name A`,
+        normalizedName: `Test Character Normalized Name A`
+      }, {
+        name: `Test Character Name B`,
+        normalizedName: `Test Character Normalized Name B`
+      }, {
+        name: `Test Character Name C`,
+        normalizedName: `Test Character Normalized Name C`
+      }],
+      text: `Test Text`
     }
   }])
   runSuccessful(`emote`, {
     emote: {
-      characters: [`Jeff`, `Jake`, `Phil`],
-      emote: `Disenchanted`
+      characters: [{
+        name: `Test Character Name A`,
+        normalizedName: `Test Character Normalized Name A`
+      }, {
+        name: `Test Character Name B`,
+        normalizedName: `Test Character Normalized Name B`
+      }, {
+        name: `Test Character Name C`,
+        normalizedName: `Test Character Normalized Name C`
+      }],
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`
     }
   }, [{
     origin: {
@@ -164,8 +217,10 @@ describe(`line`, () => {
       subStatement: 0
     },
     emote: {
-      character: `Jeff`,
-      emote: `Disenchanted`
+      characterName: `Test Character Name A`,
+      characterNormalizedName: `Test Character Normalized Name A`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`
     }
   }, {
     origin: {
@@ -174,8 +229,10 @@ describe(`line`, () => {
       subStatement: 1
     },
     emote: {
-      character: `Jake`,
-      emote: `Disenchanted`
+      characterName: `Test Character Name B`,
+      characterNormalizedName: `Test Character Normalized Name B`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`
     }
   }, {
     origin: {
@@ -184,13 +241,24 @@ describe(`line`, () => {
       subStatement: 2
     },
     emote: {
-      character: `Phil`,
-      emote: `Disenchanted`
+      characterName: `Test Character Name C`,
+      characterNormalizedName: `Test Character Normalized Name C`,
+      emote: `Test Emote`,
+      normalizedEmote: `Test Normalized Emote`
     }
   }])
   runSuccessful(`leave`, {
     leave: {
-      characters: [`Jeff`, `Jake`, `Phil`]
+      characters: [{
+        name: `Test Character Name A`,
+        normalizedName: `Test Character Normalized Name A`
+      }, {
+        name: `Test Character Name B`,
+        normalizedName: `Test Character Normalized Name B`
+      }, {
+        name: `Test Character Name C`,
+        normalizedName: `Test Character Normalized Name C`
+      }]
     }
   }, [{
     origin: {
@@ -199,7 +267,8 @@ describe(`line`, () => {
       subStatement: 0
     },
     leave: {
-      character: `Jeff`
+      characterName: `Test Character Name A`,
+      characterNormalizedName: `Test Character Normalized Name A`
     }
   }, {
     origin: {
@@ -208,7 +277,8 @@ describe(`line`, () => {
       subStatement: 1
     },
     leave: {
-      character: `Jake`
+      characterName: `Test Character Name B`,
+      characterNormalizedName: `Test Character Normalized Name B`
     }
   }, {
     origin: {
@@ -217,13 +287,16 @@ describe(`line`, () => {
       subStatement: 2
     },
     leave: {
-      character: `Phil`
+      characterName: `Test Character Name C`,
+      characterNormalizedName: `Test Character Normalized Name C`
     }
   }])
   runSuccessful(`set`, {
     set: {
-      flag: `window`,
-      value: `locked`
+      flag: `Test Flag`,
+      normalizedFlag: `Test Normalized Flag`,
+      value: `Test Value`,
+      normalizedValue: `Test Normalized Value`
     }
   }, [{
     origin: {
@@ -232,8 +305,10 @@ describe(`line`, () => {
       subStatement: 0
     },
     set: {
-      flag: `window`,
-      value: `locked`
+      flag: `Test Flag`,
+      normalizedFlag: `Test Normalized Flag`,
+      value: `Test Value`,
+      normalizedValue: `Test Normalized Value`
     }
   }])
   xdescribe(`if`, () => { })
@@ -242,7 +317,8 @@ describe(`line`, () => {
   xdescribe(`menu`, () => { })
   runSuccessful(`label`, {
     label: {
-      name: `fromTheTop`
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name`
     }
   }, [{
     origin: {
@@ -251,12 +327,14 @@ describe(`line`, () => {
       subStatement: 0
     },
     label: {
-      name: `fromTheTop`
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name`
     }
   }])
   runSuccessful(`goTo`, {
     goTo: {
-      label: `fromTheTop`
+      label: `Test Label`,
+      normalizedLabel: `Test Normalized Label`
     }
   }, [{
     origin: {
@@ -265,12 +343,14 @@ describe(`line`, () => {
       subStatement: 0
     },
     goTo: {
-      label: `fromTheTop`
+      label: `Test Label`,
+      normalizedLabel: `Test Normalized Label`
     }
   }])
   runSuccessful(`background`, {
     background: {
-      name: `mountains`
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name`
     }
   }, [{
     origin: {
@@ -279,12 +359,14 @@ describe(`line`, () => {
       subStatement: 0
     },
     background: {
-      name: `mountains`
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name`
     }
   }])
   runSuccessful(`include`, {
     include: {
-      name: `aTestScript`
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name`
     }
   }, [{
     origin: {
@@ -293,7 +375,8 @@ describe(`line`, () => {
       subStatement: 0
     },
     include: {
-      name: `aTestScript`
+      name: `Test Name`,
+      normalizedName: `Test Normalized Name`
     }
   }])
 })
