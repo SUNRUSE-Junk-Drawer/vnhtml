@@ -16,6 +16,79 @@ const set = (name, value) => {
 
 const setSpy = name => set(name, jasmine.createSpy(name))
 
+describe(`objectContainsKey`, () => {
+  const run = (description, object, key, expectedResult) => describe(description, () => {
+    let objectCopy
+    let actualResult
+    beforeEach(() => {
+      objectCopy = JSON.parse(JSON.stringify(object))
+      actualResult = get(`objectContainsKey`)(objectCopy, key)
+    })
+    it(`does not modify the given object`, () => expect(objectCopy).toEqual(object))
+    it(`returns ${expectedResult}`, () => expect(actualResult).toEqual(expectedResult))
+  })
+  
+  const runClash = (key, then) => [{
+    name: `null`,
+    value: null
+  }, {
+    name: `zero`,
+    value: 0
+  }, {
+    name: `false`,
+    value: false
+  }, {
+    name: `an empty string`,
+    value: ``
+  }, {
+    name: `truthy`,
+    value: `Test Clashing Truthy Value`
+  }].forEach(clash => describe(`given an object in which ${key} is ${clash.name}`, () => {
+    const object = {
+      "Test Key Referring To Null": null,
+      "Test Key Referring To Zero": 0,
+      "Test Key Referring To False": false,
+      "Test Key Referring To A Truthy Value": `Test Truthy Value`,
+      "Test Key Referring To An Empty String": ``
+    }
+    object[key] = clash.value
+    run(`look-up of non-existent key`, object, `Test Non-Existent Key`, false)
+    run(`look-up of key with a value of null`, object, `Test Key Referring To Null`, true)
+    run(`look-up of key with a value of empty string`, object, `Test Key Referring To An Empty String`, true)
+    run(`look-up of key with a value of zero`, object, `Test Key Referring To Zero`, true)
+    run(`look-up of key with a value of false`, object, `Test Key Referring To False`, true)
+    run(`look-up of key with a truthy value`, object, `Test Key Referring To A Truthy Value`, true)
+    then(object)
+  }))
+  
+  runClash(`hasOwnProperty`, object => {
+    run(`Look-up of hasOwnProperty`, object, `hasOwnProperty`, true)
+    run(`Look-up of constructor`, object, `constructor`, false)
+  })
+  runClash(`constructor`, object => {
+    run(`Look-up of hasOwnProperty`, object, `hasOwnProperty`, false)
+    run(`Look-up of constructor`, object, `constructor`, true)
+  })
+
+  describe(`given an object which does not contain keys which clash with those defined on the object prototype`, () => {
+    const object = {
+      "Test Key Referring To Null": null,
+      "Test Key Referring To Zero": 0,
+      "Test Key Referring To False": false,
+      "Test Key Referring To A Truthy Value": `Test Truthy Value`,
+      "Test Key Referring To An Empty String": ``
+    }
+    run(`Look-up of hasOwnProperty`, object, `hasOwnProperty`, false)
+    run(`Look-up of constructor`, object, `constructor`, false)
+    run(`Look-up of non-existent key`, object, `Test Non-Existent Key`, false)
+    run(`Look-up of key with a value of null`, object, `Test Key Referring To Null`, true)
+    run(`Look-up of key with a value of empty string`, object, `Test Key Referring To An Empty String`, true)
+    run(`Look-up of key with a value of zero`, object, `Test Key Referring To Zero`, true)
+    run(`Look-up of key with a value of false`, object, `Test Key Referring To False`, true)
+    run(`Look-up of key with a truthy value`, object, `Test Key Referring To A Truthy Value`, true)
+  })
+})
+
 describe(`combineLabels`, () => {
   const onError = jasmine.createSpy(`onError`)
   afterEach(() => onError.calls.reset())
