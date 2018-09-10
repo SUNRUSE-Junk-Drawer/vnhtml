@@ -1,5 +1,6 @@
 const objectContainsKey = (object, key) => Object.prototype.hasOwnProperty.call(object, key)
 const getObjectKeyValue = (object, key) => objectContainsKey(object, key) ? object[key] : null
+const setObjectKeyValue = (object, key, value) => object[key] = value
 
 const combineLabels = (context, onError, a, b) => {
   if (a) {
