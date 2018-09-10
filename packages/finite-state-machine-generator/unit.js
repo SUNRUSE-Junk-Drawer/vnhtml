@@ -162,6 +162,24 @@ describe(`getObjectKeyValue`, () => {
   })
 })
 
+describe(`setObjectKeyValue`, () => {
+  let object
+  beforeEach(() => {
+    object = {
+      "Test Existing Key A": 3243,
+      "Test Existing Key B": 298,
+      "Test Existing Key C": 482
+    }
+    get(`setObjectKeyValue`)(object, `Test New Key`, `Test New Value`)
+  })
+  it(`does not modify existing properties`, () => {
+    expect(object[`Test Existing Key A`]).toEqual(3243)
+    expect(object[`Test Existing Key B`]).toEqual(298)
+    expect(object[`Test Existing Key C`]).toEqual(482)
+  })
+  it(`adds no further properties`, () => expect(Object.keys(object).length).toEqual(4))
+})
+
 describe(`combineLabels`, () => {
   const onError = jasmine.createSpy(`onError`)
   afterEach(() => onError.calls.reset())
