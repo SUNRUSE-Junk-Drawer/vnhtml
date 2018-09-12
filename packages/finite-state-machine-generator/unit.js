@@ -687,7 +687,7 @@ describe(`findLabelsInStatement`, () => {
 
 describe(`createState`, () => {
   it(`returns an object`, () => expect(get(`createState`)()).toEqual(jasmine.any(Object)))
-  it(`returns flags, an empty array`, () => expect(get(`createState`)().flags).toEqual([]))
+  it(`returns flags, an empty object`, () => expect(get(`createState`)().flags).toEqual({}))
   it(`returns characters, an empty array`, () => expect(get(`createState`)().characters).toEqual([]))
   it(`returns background, null`, () => expect(get(`createState`)().background).toBeNull({}))
   it(`returns the same value every call`, () => expect(get(`createState`)()).toEqual(get(`createState`)()))
@@ -697,83 +697,81 @@ describe(`createState`, () => {
 })
 
 describe(`hashStateFlag`, () => {
-  it(`hashes the same when the normalized values are same`, () => expect(get(`hashStateFlag`)({
+  it(`hashes the same when the normalized values are same`, () => expect(get(`hashStateFlag`)(`Test Normalized Flag`, {
     flag: `Test Flag A`,
-    normalizedFlag: `Test Normalized Flag`,
     value: `Test Value A`,
     normalizedValue: `Test Normalized Value`
-  })).toEqual(get(`hashStateFlag`)({
+  })).toEqual(get(`hashStateFlag`)(`Test Normalized Flag`, {
     flag: `Test Flag B`,
-    normalizedFlag: `Test Normalized Flag`,
     value: `Test Value B`,
     normalizedValue: `Test Normalized Value`
   })))
-  it(`hashes differently should the normalized flag change`, () => expect(get(`hashStateFlag`)({
+  it(`hashes differently should the normalized flag change`, () => expect(get(`hashStateFlag`)(`Test Normalized Flag A`, {
     flag: `Test Flag A`,
-    normalizedFlag: `Test Normalized Flag A`,
     value: `Test Value A`,
     normalizedValue: `Test Normalized Value`
-  })).not.toEqual(get(`hashStateFlag`)({
+  })).not.toEqual(get(`hashStateFlag`)(`Test Normalized Flag B`, {
     flag: `Test Flag B`,
-    normalizedFlag: `Test Normalized Flag B`,
     value: `Test Value B`,
     normalizedValue: `Test Normalized Value`
   })))
-  it(`hashes differently should the normalized value change`, () => expect(get(`hashStateFlag`)({
+  it(`hashes differently should the normalized value change`, () => expect(get(`hashStateFlag`)(`Test Normalized Flag`, {
     flag: `Test Flag A`,
-    normalizedFlag: `Test Normalized Flag`,
     value: `Test Value A`,
     normalizedValue: `Test Normalized Value A`
-  })).not.toEqual(get(`hashStateFlag`)({
+  })).not.toEqual(get(`hashStateFlag`)(`Test Normalized Flag`, {
     flag: `Test Flag B`,
-    normalizedFlag: `Test Normalized Flag`,
     value: `Test Value B`,
     normalizedValue: `Test Normalized Value B`
   })))
-  it(`separates the flag and value`, () => expect(get(`hashStateFlag`)({
+  it(`separates the flag and value`, () => expect(get(`hashStateFlag`)(`Test Normalized Flag A`, {
     flag: `Test Flag A`,
-    normalizedFlag: `Test Normalized Flag A`,
     value: `Test Value A`,
     normalizedValue: `Test Normalized Value`
-  })).not.toEqual(get(`hashStateFlag`)({
+  })).not.toEqual(get(`hashStateFlag`)(`Test Normalized Flag`, {
     flag: `Test Flag B`,
-    normalizedFlag: `Test Normalized Flag`,
     value: `Test Value B`,
     normalizedValue: `A Test Normalized Value`
   })))
-  it(`separates the value and flag`, () => expect(get(`hashStateFlag`)({
+  it(`separates the value and flag`, () => expect(get(`hashStateFlag`)(`A Test Normalized Flag`, {
     flag: `Test Flag A`,
-    normalizedFlag: `A Test Normalized Flag`,
     value: `Test Value A`,
     normalizedValue: `Test Normalized Value`
-  })).not.toEqual(get(`hashStateFlag`)({
+  })).not.toEqual(get(`hashStateFlag`)(`Test Normalized Flag A`, {
     flag: `Test Flag B`,
-    normalizedFlag: `Test Normalized Flag A`,
     value: `Test Value B`,
     normalizedValue: `Test Normalized Value`
   })))
   it(`still sorts by normalized flag`, () => {
     const hashes = [{
-      flag: `Test Flag`,
       normalizedFlag: `Test Normalized Flag C`,
-      value: `Test Value`,
-      normalizedValue: `Test Normalized Value D`
+      flag: {
+        flag: `Test Flag`,
+        value: `Test Value`,
+        normalizedValue: `Test Normalized Value D`
+      }
     }, {
-      flag: `Test Flag`,
       normalizedFlag: `Test Normalized Flag A`,
-      value: `Test Value`,
-      normalizedValue: `Test Normalized Value B`
+      flag: {
+        flag: `Test Flag`,
+        value: `Test Value`,
+        normalizedValue: `Test Normalized Value B`
+      }
     }, {
-      flag: `Test Flag`,
       normalizedFlag: `Test Normalized Flag D`,
-      value: `Test Value`,
-      normalizedValue: `Test Normalized Value C`
+      flag: {
+        flag: `Test Flag`,
+        value: `Test Value`,
+        normalizedValue: `Test Normalized Value C`
+      }
     }, {
-      flag: `Test Flag`,
       normalizedFlag: `Test Normalized Flag B`,
-      value: `Test Value`,
-      normalizedValue: `Test Normalized Value A`
-    }].map(flag => get(`hashStateFlag`)(flag))
+      flag: {
+        flag: `Test Flag`,
+        value: `Test Value`,
+        normalizedValue: `Test Normalized Value A`
+      }
+    }].map(flag => get(`hashStateFlag`)(flag.normalizedFlag, flag.flag))
     const sortedHashes = hashes.slice().sort()
     const sortedIndices = sortedHashes.map(hash => hashes.indexOf(hash))
     expect(sortedIndices).toEqual([1, 3, 0, 2])
@@ -791,12 +789,14 @@ describe(`hashStateFlags`, () => {
   afterEach(() => hashStateFlag.calls.reset())
   const run = (description, hashedA, hashedB, then) => describe(description, () => {
     beforeEach(() => {
-      unhashedA = hashedA.map((hashed, i) => `Test Unhashed A ${i}`)
-      unhashedACopy = unhashedA.slice()
-      unhashedB = hashedB.map((hashed, i) => `Test Unhashed B ${i}`)
-      unhashedBCopy = unhashedB.slice()
+      unhashedA = {}
+      hashedA.forEach((hashed, i) => unhashedA[`Test Unhashed Key A ${i}`] = `Test Unhashed Value A ${i}`)
+      unhashedACopy = JSON.parse(JSON.stringify(unhashedA))
+      unhashedB = {}
+      hashedB.forEach((hashed, i) => unhashedB[`Test Unhashed Key B ${i}`] = `Test Unhashed Value B ${i}`)
+      unhashedBCopy = JSON.parse(JSON.stringify(unhashedB))
       hashStateFlag.and.callFake(flag => {
-        const match = /^Test Unhashed ([A-Z]) (\d+)$/.exec(flag)
+        const match = /^Test Unhashed Key ([A-Z]) (\d+)$/.exec(flag)
         switch (match[1]) {
           case `A`:
             return hashedA[match[2]]
@@ -808,8 +808,8 @@ describe(`hashStateFlags`, () => {
       resultB = get(`hashStateFlags`)(unhashedB)
     })
     it(`calls hashStateFlag once per flag`, () => expect(hashStateFlag).toHaveBeenCalledTimes(hashedA.length + hashedB.length))
-    it(`calls hashStateFlag for every flag from the first set`, () => unhashedACopy.forEach(unhashed => expect(hashStateFlag).toHaveBeenCalledWith(unhashed)))
-    it(`calls hashStateFlag for every flag from the second set`, () => unhashedBCopy.forEach(unhashed => expect(hashStateFlag).toHaveBeenCalledWith(unhashed)))
+    it(`calls hashStateFlag for every flag from the first set`, () => hashedA.forEach((hashed, i) => expect(hashStateFlag).toHaveBeenCalledWith(`Test Unhashed Key A ${i}`, `Test Unhashed Value A ${i}`)))
+    it(`calls hashStateFlag for every flag from the second set`, () => hashedB.forEach((hashed, i) => expect(hashStateFlag).toHaveBeenCalledWith(`Test Unhashed Key B ${i}`, `Test Unhashed Value B ${i}`)))
     it(`does not modify the first set of flags`, () => expect(unhashedA).toEqual(unhashedACopy))
     it(`does not modify the second set of flags`, () => expect(unhashedB).toEqual(unhashedBCopy))
     then()
