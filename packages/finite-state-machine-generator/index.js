@@ -2,69 +2,25 @@ const objectContainsKey = (object, key) => Object.prototype.hasOwnProperty.call(
 const getObjectKeyValue = (object, key) => objectContainsKey(object, key) ? object[key] : null
 const setObjectKeyValue = (object, key, value) => object[key] = value
 
-const combineLabels = (context, onError, a, b) => {
-  if (a) {
-    if (b) {
-      const combined = a.slice()
-      b.forEach(label => {
-        const existing = combined.find(other => other.normalizedName == label.normalizedName)
-        if (existing) {
-          onError(context, `unknown`, `The label "${existing.name}" is defined multiple times`)
-        } else {
-          combined.push(label)
-        }
-      })
-      return combined
-    } else {
-      return a
-    }
-  } else {
-    return b
-  }
+const findLabelsInStatementArray = (context, onError, labels, statements) => {
+  statements.forEach((statement, i) => findLabelsInStatement(context, onError, labels, statement, statements.slice(i + 1)))
 }
 
-const findLabelsInStatementArray = (context, onError, statements, nextStatements) => {
-  if (!statements.length) {
-    return null
-  }
-
-  let output
-  for (let i = 0; i < statements.length; i++) {
-    const nextLabels = findLabelsInStatement(context, onError, statements[i], statements.slice(i + 1).concat(nextStatements))
-    if (output) {
-      output = combineLabels(context, onError, output, nextLabels)
-    } else {
-      output = nextLabels
-    }
-  }
-  return output
-}
-
-const findLabelsInStatement = (context, onError, statement, nextStatements) => {
+const findLabelsInStatement = (context, onError, labels, statement, nextStatements) => {
   if (statement.label) {
-    return [{
-      name: statement.label.name,
-      normalizedName: statement.label.normalizedName,
-      statements: nextStatements
-    }]
+    if (objectContainsKey(labels, statement.label.normalizedName)) {
+      onError(context, statement.origin.line, `The label "${statement.label.name}" is defined multiple times`)
+    } else {
+      setObjectKeyValue(labels, statement.label.normalizedName, {
+        name: statement.label.name,
+        statements: nextStatements
+      })
+    }
   } else if (statement.decision) {
-    let output = findLabelsInStatementArray(context, onError, statement.decision.paths[0].then, nextStatements)
-    statement.decision.paths
-      .slice(1)
-      .forEach(path => {
-        output = combineLabels(context, onError, output, findLabelsInStatementArray(context, onError, path.then, nextStatements))
-      })
-    return output
+    statement.decision.paths.forEach(path => findLabelsInStatementArray(context, onError, labels, path.then.concat(nextStatements)))
   } else if (statement.menu) {
-    let output = findLabelsInStatementArray(context, onError, statement.menu.paths[0].then, nextStatements)
-    statement.menu.paths
-      .slice(1)
-      .forEach(path => {
-        output = combineLabels(context, onError, output, findLabelsInStatementArray(context, onError, path.then, nextStatements))
-      })
-    return output
+    statement.menu.paths.forEach(path => findLabelsInStatementArray(context, onError, labels, path.then.concat(nextStatements)))
   }
-  return null
 }
 
 const createState = () => ({
