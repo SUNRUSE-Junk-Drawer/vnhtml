@@ -35,22 +35,6 @@ const hashStateCharacter = (normalizedName, character) => `${normalizedName}  ${
 const hashStateCharacters = characters => Object.keys(characters).map(normalizedName => hashStateCharacter(normalizedName, characters[normalizedName])).sort().join(`  `)
 const hashPromptState = (statement, state) => `${JSON.stringify(statement.origin.file)}@${statement.origin.line}.${statement.origin.subStatement} ${hashStateFlags(state.flags)}   ${hashStateCharacters(state.characters)}   ${state.background}`
 
-const combinePromptStates = (a, b) => {
-  if (a) {
-    if (b) {
-      return a.concat(b.filter(label => !a.some(other => other.hash == label.hash)))
-    } else {
-      return a
-    }
-  } else {
-    return b
-  }
-}
-
-const findPromptStateByHash = (promptStates, hash) => promptStates.find(promptState => promptState.hash == hash) || null
-const replacePromptState = (promptStates, replacement) => promptStates.map(promptState => promptState.hash == replacement.hash ? replacement : promptState)
-const promptStatesContainHash = (promptStates, hash) => promptStates.some(promptState => promptState.hash == hash)
-
 const conditionMet = (condition, state) => {
   if (!condition) {
     return true
@@ -63,40 +47,5 @@ const conditionMet = (condition, state) => {
       return false
     }
     return condition.flag.normalizedValue == match.normalizedValue
-  }
-}
-
-const findPromptStatesInStatementArray = (context, onError, statements, state, promptStates, labels) => {
-  if (statements.length) {
-    return findPromptStatesInStatement(context, onError, statements[0], statements.slice(1), state, promptStates, labels)
-  } else {
-    return {
-      promptState: null,
-      promptStates
-    }
-  }
-}
-
-const findPromptStatesInStatement = (context, onError, statement, nextStatements, state, promptStates, labels) => {
-  const hash = hashPromptState(statement, state)
-  if (promptStatesContainHash(promptStates, hash)) {
-    return {
-      hash,
-      promptStates
-    }
-  }
-
-  const next = findPromptStatesInStatementArray(context, onError, nextStatements, promptStates.concat({
-    hash
-  }), labels)
-
-  return {
-    hash,
-    promptStates: replacePromptState(next.promptStates, {
-      hash,
-      statement,
-      state,
-      next: next.hash
-    })
   }
 }
