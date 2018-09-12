@@ -3,7 +3,7 @@
     "synchronizeVersions": "babel-node synchronizeVersions"
   },
   "dependencies": {
-    "@babel/core": "7.0.0",
+    "@babel/core": "7.0.1",
     "@babel/node": "7.0.0",
     "@babel/preset-env": "7.0.0"
   }
