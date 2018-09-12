@@ -688,7 +688,7 @@ describe(`findLabelsInStatement`, () => {
 describe(`createState`, () => {
   it(`returns an object`, () => expect(get(`createState`)()).toEqual(jasmine.any(Object)))
   it(`returns flags, an empty object`, () => expect(get(`createState`)().flags).toEqual({}))
-  it(`returns characters, an empty array`, () => expect(get(`createState`)().characters).toEqual([]))
+  it(`returns characters, an empty oobject`, () => expect(get(`createState`)().characters).toEqual({}))
   it(`returns background, null`, () => expect(get(`createState`)().background).toBeNull({}))
   it(`returns the same value every call`, () => expect(get(`createState`)()).toEqual(get(`createState`)()))
   it(`returns a new instance every call`, () => expect(get(`createState`)()).not.toBe(get(`createState`)()))
@@ -849,83 +849,81 @@ describe(`hashStateFlags`, () => {
 })
 
 describe(`hashStateCharacter`, () => {
-  it(`hashes the same when the normalized values are same`, () => expect(get(`hashStateCharacter`)({
+  it(`hashes the same when the normalized values are same`, () => expect(get(`hashStateCharacter`)(`Test Normalized Name`, {
     name: `Test Name A`,
-    normalizedName: `Test Normalized Name`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote`
-  })).toEqual(get(`hashStateCharacter`)({
+  })).toEqual(get(`hashStateCharacter`)(`Test Normalized Name`, {
     name: `Test Name B`,
-    normalizedName: `Test Normalized Name`,
     emote: `Test Emote B`,
     normalizedEmote: `Test Normalized Emote`
   })))
-  it(`hashes differently should the normalized name change`, () => expect(get(`hashStateCharacter`)({
+  it(`hashes differently should the normalized name change`, () => expect(get(`hashStateCharacter`)(`Test Normalized Name A`, {
     name: `Test Name A`,
-    normalizedName: `Test Normalized Name A`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote`
-  })).not.toEqual(get(`hashStateCharacter`)({
+  })).not.toEqual(get(`hashStateCharacter`)(`Test Normalized Name B`, {
     name: `Test Name B`,
-    normalizedName: `Test Normalized Name B`,
     emote: `Test Emote B`,
     normalizedEmote: `Test Normalized Emote`
   })))
-  it(`hashes differently should the normalized emote change`, () => expect(get(`hashStateCharacter`)({
+  it(`hashes differently should the normalized emote change`, () => expect(get(`hashStateCharacter`)(`Test Normalized Name`, {
     name: `Test Name A`,
-    normalizedName: `Test Normalized Name`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote A`
-  })).not.toEqual(get(`hashStateCharacter`)({
+  })).not.toEqual(get(`hashStateCharacter`)(`Test Normalized Name`, {
     name: `Test Name B`,
-    normalizedName: `Test Normalized Name`,
     emote: `Test Emote B`,
     normalizedEmote: `Test Normalized Emote B`
   })))
-  it(`separates the name and emote`, () => expect(get(`hashStateCharacter`)({
+  it(`separates the name and emote`, () => expect(get(`hashStateCharacter`)(`Test Normalized Name A`, {
     name: `Test Name A`,
-    normalizedName: `Test Normalized Name A`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote`
-  })).not.toEqual(get(`hashStateCharacter`)({
+  })).not.toEqual(get(`hashStateCharacter`)(`Test Normalized Name`, {
     name: `Test Name B`,
-    normalizedName: `Test Normalized Name`,
     emote: `Test Emote B`,
     normalizedEmote: `A Test Normalized Emote`
   })))
-  it(`separates the emote and name`, () => expect(get(`hashStateCharacter`)({
+  it(`separates the emote and name`, () => expect(get(`hashStateCharacter`)(`A Test Normalized Name`, {
     name: `Test Name A`,
-    normalizedName: `A Test Normalized Name`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote`
-  })).not.toEqual(get(`hashStateCharacter`)({
+  })).not.toEqual(get(`hashStateCharacter`)(`Test Normalized Name A`, {
     name: `Test Name B`,
-    normalizedName: `Test Normalized Name A`,
     emote: `Test Emote B`,
     normalizedEmote: `Test Normalized Emote`
   })))
   it(`still sorts by normalized name`, () => {
     const hashes = [{
-      name: `Test Name`,
       normalizedName: `Test Normalized Name C`,
-      emote: `Test Emote`,
-      normalizedEmote: `Test Normalized Emote D`
+      character: {
+        name: `Test Name`,
+        emote: `Test Emote`,
+        normalizedEmote: `Test Normalized Emote D`
+      }
     }, {
-      name: `Test Name`,
       normalizedName: `Test Normalized Name A`,
-      emote: `Test Emote`,
-      normalizedEmote: `Test Normalized Emote B`
+      character: {
+        name: `Test Name`,
+        emote: `Test Emote`,
+        normalizedEmote: `Test Normalized Emote B`
+      }
     }, {
-      name: `Test Name`,
       normalizedName: `Test Normalized Name D`,
-      emote: `Test Emote`,
-      normalizedEmote: `Test Normalized Emote C`
+      character: {
+        name: `Test Name`,
+        emote: `Test Emote`,
+        normalizedEmote: `Test Normalized Emote C`
+      }
     }, {
-      name: `Test Name`,
       normalizedName: `Test Normalized Name B`,
-      emote: `Test Emote`,
-      normalizedEmote: `Test Normalized Emote A`
-    }].map(name => get(`hashStateCharacter`)(name))
+      character: {
+        name: `Test Name`,
+        emote: `Test Emote`,
+        normalizedEmote: `Test Normalized Emote A`
+      }
+    }].map(character => get(`hashStateCharacter`)(character.normalizedName, character))
     const sortedHashes = hashes.slice().sort()
     const sortedIndices = sortedHashes.map(hash => hashes.indexOf(hash))
     expect(sortedIndices).toEqual([1, 3, 0, 2])
@@ -943,12 +941,14 @@ describe(`hashStateCharacters`, () => {
   afterEach(() => hashStateCharacter.calls.reset())
   const run = (description, hashedA, hashedB, then) => describe(description, () => {
     beforeEach(() => {
-      unhashedA = hashedA.map((hashed, i) => `Test Unhashed A ${i}`)
-      unhashedACopy = unhashedA.slice()
-      unhashedB = hashedB.map((hashed, i) => `Test Unhashed B ${i}`)
-      unhashedBCopy = unhashedB.slice()
+      unhashedA = {}
+      hashedA.forEach((hashed, i) => unhashedA[`Test Unhashed Key A ${i}`] = `Test Unhashed Value A ${i}`)
+      unhashedACopy = JSON.parse(JSON.stringify(unhashedA))
+      unhashedB = {}
+      hashedB.forEach((hashed, i) => unhashedB[`Test Unhashed Key B ${i}`] = `Test Unhashed Value B ${i}`)
+      unhashedBCopy = JSON.parse(JSON.stringify(unhashedB))
       hashStateCharacter.and.callFake(character => {
-        const match = /^Test Unhashed ([A-Z]) (\d+)$/.exec(character)
+        const match = /^Test Unhashed Key ([A-Z]) (\d+)$/.exec(character)
         switch (match[1]) {
           case `A`:
             return hashedA[match[2]]
@@ -960,8 +960,8 @@ describe(`hashStateCharacters`, () => {
       resultB = get(`hashStateCharacters`)(unhashedB)
     })
     it(`calls hashStateCharacter once per character`, () => expect(hashStateCharacter).toHaveBeenCalledTimes(hashedA.length + hashedB.length))
-    it(`calls hashStateCharacter for every character from the first set`, () => unhashedACopy.forEach(unhashed => expect(hashStateCharacter).toHaveBeenCalledWith(unhashed)))
-    it(`calls hashStateCharacter for every character from the second set`, () => unhashedBCopy.forEach(unhashed => expect(hashStateCharacter).toHaveBeenCalledWith(unhashed)))
+    it(`calls hashStateCharacter for every character from the first set`, () => hashedA.forEach((hashed, i) => expect(hashStateCharacter).toHaveBeenCalledWith(`Test Unhashed Key A ${i}`, `Test Unhashed Value A ${i}`)))
+    it(`calls hashStateCharacter for every character from the second set`, () => hashedB.forEach((hashed, i) => expect(hashStateCharacter).toHaveBeenCalledWith(`Test Unhashed Key B ${i}`, `Test Unhashed Value B ${i}`)))
     it(`does not modify the first set of characters`, () => expect(unhashedA).toEqual(unhashedACopy))
     it(`does not modify the second set of characters`, () => expect(unhashedB).toEqual(unhashedBCopy))
     then()

@@ -25,14 +25,14 @@ const findLabelsInStatement = (context, onError, labels, statement, nextStatemen
 
 const createState = () => ({
   flags: {},
-  characters: [],
+  characters: {},
   background: null
 })
 
 const hashStateFlag = (normalizedFlag, flag) => `${normalizedFlag}  ${flag.normalizedValue}`
 const hashStateFlags = flags => Object.keys(flags).map(normalizedFlag => hashStateFlag(normalizedFlag, flags[normalizedFlag])).sort().join(`  `)
-const hashStateCharacter = character => `${character.normalizedName}  ${character.normalizedEmote}`
-const hashStateCharacters = characters => characters.map(character => hashStateCharacter(character)).sort().join(`  `)
+const hashStateCharacter = (normalizedName, character) => `${normalizedName}  ${character.normalizedEmote}`
+const hashStateCharacters = characters => Object.keys(characters).map(normalizedName => hashStateCharacter(normalizedName, characters[normalizedName])).sort().join(`  `)
 const hashPromptState = (statement, state) => `${JSON.stringify(statement.origin.file)}@${statement.origin.line}.${statement.origin.subStatement} ${hashStateFlags(state.flags)}   ${hashStateCharacters(state.characters)}   ${state.background}`
 
 const combinePromptStates = (a, b) => {
