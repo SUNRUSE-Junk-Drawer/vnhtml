@@ -1002,12 +1002,8 @@ describe(`hashStateCharacters`, () => {
 
 describe(`hashPromptState`, () => {
   let statementACopy
-  let stateA
-  let stateACopy
   let resultA
   let statementBCopy
-  let stateB
-  let stateBCopy
   let resultB
   const hashStateFlags = setSpy(`hashStateFlags`)
   const hashStateCharacters = setSpy(`hashStateCharacters`)
@@ -1015,46 +1011,32 @@ describe(`hashPromptState`, () => {
     hashStateFlags.calls.reset()
     hashStateCharacters.calls.reset()
   })
-  const run = (description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, then) => describe(description, () => {
+  const run = (description, statementA, hashedFlagsA, hashedCharactersA, normalizedBackgroundA, statementB, hashedFlagsB, hashedCharactersB, normalizedBackgroundB, then) => describe(description, () => {
     beforeEach(() => {
       hashStateFlags.and.callFake(flags => {
         switch (flags) {
           case `Test Flags A`:
-            return hashedStateFlagsA
+            return hashedFlagsA
           case `Test Flags B`:
-            return hashedStateFlagsB
+            return hashedFlagsB
         }
       })
       hashStateCharacters.and.callFake(characters => {
         switch (characters) {
           case `Test Characters A`:
-            return hashedStateCharactersA
+            return hashedCharactersA
           case `Test Characters B`:
-            return hashedStateCharactersB
+            return hashedCharactersB
         }
       })
       statementACopy = JSON.parse(JSON.stringify(statementA))
       statementBCopy = JSON.parse(JSON.stringify(statementB))
-      stateA = {
-        flags: `Test Flags A`,
-        characters: `Test Characters A`,
-        background: normalizedStateBackgroundA
-      }
-      stateACopy = JSON.parse(JSON.stringify(stateA))
-      stateB = {
-        flags: `Test Flags B`,
-        characters: `Test Characters B`,
-        background: normalizedStateBackgroundB
-      }
-      stateBCopy = JSON.parse(JSON.stringify(stateB))
 
-      resultA = get(`hashPromptState`)(statementACopy, stateA)
-      resultB = get(`hashPromptState`)(statementBCopy, stateB)
+      resultA = get(`hashPromptState`)(statementACopy, `Test Flags A`, `Test Characters A`, normalizedBackgroundA)
+      resultB = get(`hashPromptState`)(statementBCopy, `Test Flags B`, `Test Characters B`, normalizedBackgroundB)
     })
     it(`does not modify the first statement`, () => expect(statementACopy).toEqual(statementA))
     it(`does not modify the second statement`, () => expect(statementBCopy).toEqual(statementB))
-    it(`does not modify the first state`, () => expect(stateA).toEqual(stateACopy))
-    it(`does not modify the second state`, () => expect(stateB).toEqual(stateBCopy))
     it(`calls hashStateFlags twice`, () => expect(hashStateFlags).toHaveBeenCalledTimes(2))
     it(`calls hashStateFlags with the first state's flags`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags A`))
     it(`calls hashStateFlags with the second state's flags`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags B`))
