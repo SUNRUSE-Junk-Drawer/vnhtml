@@ -163,40 +163,90 @@ describe(`getObjectKeyValue`, () => {
 })
 
 describe(`setObjectKeyValue`, () => {
-  describe(`where the property does not exist`, () => {
-    let object
-    beforeEach(() => {
-      object = {
-        "Test Existing Key A": 3243,
-        "Test Existing Key B": 298,
-        "Test Existing Key C": 482
-      }
-      get(`setObjectKeyValue`)(object, `Test New Key`, `Test New Value`)
+  describe(`object`, () => {
+    describe(`where the property does not exist`, () => {
+      let object
+      beforeEach(() => {
+        object = {
+          "Test Existing Key A": 3243,
+          "Test Existing Key B": 298,
+          "Test Existing Key C": 482
+        }
+        get(`setObjectKeyValue`)(object, `Test New Key`, `Test New Value`)
+      })
+      it(`does not modify existing properties`, () => {
+        expect(object[`Test Existing Key A`]).toEqual(3243)
+        expect(object[`Test Existing Key B`]).toEqual(298)
+        expect(object[`Test Existing Key C`]).toEqual(482)
+      })
+      it(`sets the specified property`, () => expect(object[`Test New Key`]).toEqual(`Test New Value`))
+      it(`adds no further properties`, () => expect(Object.keys(object).length).toEqual(4))
     })
-    it(`does not modify existing properties`, () => {
-      expect(object[`Test Existing Key A`]).toEqual(3243)
-      expect(object[`Test Existing Key B`]).toEqual(298)
-      expect(object[`Test Existing Key C`]).toEqual(482)
+    describe(`where the property already exists`, () => {
+      let object
+      beforeEach(() => {
+        object = {
+          "Test Existing Key A": 3243,
+          "Test Existing Key B": 298,
+          "Test Existing Key C": 482
+        }
+        get(`setObjectKeyValue`)(object, `Test Existing Key B`, `Test New Value`)
+      })
+      it(`does not modify existing properties`, () => {
+        expect(object[`Test Existing Key A`]).toEqual(3243)
+        expect(object[`Test Existing Key C`]).toEqual(482)
+      })
+      it(`sets the specified property`, () => expect(object[`Test Existing Key B`]).toEqual(`Test New Value`))
+      it(`adds no further properties`, () => expect(Object.keys(object).length).toEqual(3))
     })
-    it(`sets the specified property`, () => expect(object[`Test New Key`]).toEqual(`Test New Value`))
-    it(`adds no further properties`, () => expect(Object.keys(object).length).toEqual(4))
   })
-  describe(`where the property already exists`, () => {
-    let object
-    beforeEach(() => {
-      object = {
-        "Test Existing Key A": 3243,
-        "Test Existing Key B": 298,
-        "Test Existing Key C": 482
-      }
-      get(`setObjectKeyValue`)(object, `Test Existing Key B`, `Test New Value`)
+  describe(`array`, () => {
+    describe(`where the property does not exist`, () => {
+      let array
+      beforeEach(() => {
+        array = []
+        array[5] = 48927
+        array[11] = 763
+        array[21] = 8361
+        get(`setObjectKeyValue`)(array, 14, `Test New Value`)
+      })
+      it(`does not modify existing properties`, () => {
+        expect(array[5]).toEqual(48927)
+        expect(array[11]).toEqual(763)
+        expect(array[21]).toEqual(8361)
+      })
+      it(`sets the specified property`, () => expect(array[14]).toEqual(`Test New Value`))
+      it(`adds no further properties`, () => {
+        const range = (from, to) => {for (let i = from; i <= to; i++) expect(array[i]).toBeUndefined()}
+        range(-25, 4)
+        range(6, 10)
+        range(12, 13)
+        range(15, 20)
+        range(22, 25)
+      })
     })
-    it(`does not modify existing properties`, () => {
-      expect(object[`Test Existing Key A`]).toEqual(3243)
-      expect(object[`Test Existing Key C`]).toEqual(482)
+    describe(`where the property already exists`, () => {
+      let array
+      beforeEach(() => {
+        array = []
+        array[5] = 48927
+        array[11] = 763
+        array[21] = 8361
+        get(`setObjectKeyValue`)(array, 11, `Test New Value`)
+      })
+      it(`does not modify existing properties`, () => {
+        expect(array[5]).toEqual(48927)
+        expect(array[21]).toEqual(8361)
+      })
+      it(`sets the specified property`, () => expect(array[11]).toEqual(`Test New Value`))
+      it(`adds no further properties`, () => {
+        const range = (from, to) => {for (let i = from; i <= to; i++) expect(array[i]).toBeUndefined()}
+        range(-25, 4)
+        range(6, 10)
+        range(12, 20)
+        range(22, 25)
+      })
     })
-    it(`sets the specified property`, () => expect(object[`Test Existing Key B`]).toEqual(`Test New Value`))
-    it(`adds no further properties`, () => expect(Object.keys(object).length).toEqual(3))
   })
 })
 
