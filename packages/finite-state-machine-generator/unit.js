@@ -178,6 +178,7 @@ describe(`setObjectKeyValue`, () => {
       expect(object[`Test Existing Key B`]).toEqual(298)
       expect(object[`Test Existing Key C`]).toEqual(482)
     })
+    it(`sets the specified property`, () => expect(object[`Test New Key`]).toEqual(`Test New Value`))
     it(`adds no further properties`, () => expect(Object.keys(object).length).toEqual(4))
   })
   describe(`where the property already exists`, () => {
