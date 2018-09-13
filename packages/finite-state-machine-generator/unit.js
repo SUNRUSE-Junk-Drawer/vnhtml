@@ -884,7 +884,7 @@ describe(`hashFlag`, () => {
   })
 })
 
-describe(`hashStateFlags`, () => {
+describe(`hashFlags`, () => {
   let unhashedA
   let unhashedACopy
   let unhashedB
@@ -910,8 +910,8 @@ describe(`hashStateFlags`, () => {
             return hashedB[match[2]]
         }
       })
-      resultA = get(`hashStateFlags`)(unhashedA)
-      resultB = get(`hashStateFlags`)(unhashedB)
+      resultA = get(`hashFlags`)(unhashedA)
+      resultB = get(`hashFlags`)(unhashedB)
     })
     it(`calls hashFlag once per flag`, () => expect(hashFlag).toHaveBeenCalledTimes(hashedA.length + hashedB.length))
     it(`calls hashFlag for every flag from the first set`, () => hashedA.forEach((hashed, i) => expect(hashFlag).toHaveBeenCalledWith(`Test Unhashed Key A ${i}`, `Test Unhashed Value A ${i}`)))
@@ -1111,15 +1111,15 @@ describe(`hashPromptState`, () => {
   let resultA
   let statementBCopy
   let resultB
-  const hashStateFlags = setSpy(`hashStateFlags`)
+  const hashFlags = setSpy(`hashFlags`)
   const hashStateCharacters = setSpy(`hashStateCharacters`)
   afterEach(() => {
-    hashStateFlags.calls.reset()
+    hashFlags.calls.reset()
     hashStateCharacters.calls.reset()
   })
   const run = (description, statementA, hashedFlagsA, hashedCharactersA, normalizedBackgroundA, statementB, hashedFlagsB, hashedCharactersB, normalizedBackgroundB, then) => describe(description, () => {
     beforeEach(() => {
-      hashStateFlags.and.callFake(flags => {
+      hashFlags.and.callFake(flags => {
         switch (flags) {
           case `Test Flags A`:
             return hashedFlagsA
@@ -1143,9 +1143,9 @@ describe(`hashPromptState`, () => {
     })
     it(`does not modify the first statement`, () => expect(statementACopy).toEqual(statementA))
     it(`does not modify the second statement`, () => expect(statementBCopy).toEqual(statementB))
-    it(`calls hashStateFlags twice`, () => expect(hashStateFlags).toHaveBeenCalledTimes(2))
-    it(`calls hashStateFlags with the first state's flags`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags A`))
-    it(`calls hashStateFlags with the second state's flags`, () => expect(hashStateFlags).toHaveBeenCalledWith(`Test Flags B`))
+    it(`calls hashFlags twice`, () => expect(hashFlags).toHaveBeenCalledTimes(2))
+    it(`calls hashFlags with the first state's flags`, () => expect(hashFlags).toHaveBeenCalledWith(`Test Flags A`))
+    it(`calls hashFlags with the second state's flags`, () => expect(hashFlags).toHaveBeenCalledWith(`Test Flags B`))
     it(`calls hashStateCharacters twice`, () => expect(hashStateCharacters).toHaveBeenCalledTimes(2))
     it(`calls hashStateCharacters with the first state's flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters A`))
     it(`calls hashStateCharacters with the second state's flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters B`))
