@@ -1106,7 +1106,7 @@ describe(`hashCharacters`, () => {
   runNotMatching(`separates character hashes well with spaces (reverse)`, [`Test Hashed Character A`, `Test Hashed Character B`], [`est Hashed Character A`, `Test Hashed Character B T`])
 })
 
-describe(`hashPromptState`, () => {
+describe(`hash`, () => {
   let statementACopy
   let resultA
   let statementBCopy
@@ -1138,8 +1138,8 @@ describe(`hashPromptState`, () => {
       statementACopy = JSON.parse(JSON.stringify(statementA))
       statementBCopy = JSON.parse(JSON.stringify(statementB))
 
-      resultA = get(`hashPromptState`)(statementACopy, `Test Flags A`, `Test Characters A`, normalizedBackgroundA)
-      resultB = get(`hashPromptState`)(statementBCopy, `Test Flags B`, `Test Characters B`, normalizedBackgroundB)
+      resultA = get(`hash`)(statementACopy, `Test Flags A`, `Test Characters A`, normalizedBackgroundA)
+      resultB = get(`hash`)(statementBCopy, `Test Flags B`, `Test Characters B`, normalizedBackgroundB)
     })
     it(`does not modify the first statement`, () => expect(statementACopy).toEqual(statementA))
     it(`does not modify the second statement`, () => expect(statementBCopy).toEqual(statementB))
