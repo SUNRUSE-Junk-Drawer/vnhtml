@@ -1036,7 +1036,7 @@ describe(`hashCharacter`, () => {
   })
 })
 
-describe(`hashStateCharacters`, () => {
+describe(`hashCharacters`, () => {
   let unhashedA
   let unhashedACopy
   let unhashedB
@@ -1062,8 +1062,8 @@ describe(`hashStateCharacters`, () => {
             return hashedB[match[2]]
         }
       })
-      resultA = get(`hashStateCharacters`)(unhashedA)
-      resultB = get(`hashStateCharacters`)(unhashedB)
+      resultA = get(`hashCharacters`)(unhashedA)
+      resultB = get(`hashCharacters`)(unhashedB)
     })
     it(`calls hashCharacter once per character`, () => expect(hashCharacter).toHaveBeenCalledTimes(hashedA.length + hashedB.length))
     it(`calls hashCharacter for every character from the first set`, () => hashedA.forEach((hashed, i) => expect(hashCharacter).toHaveBeenCalledWith(`Test Unhashed Key A ${i}`, `Test Unhashed Value A ${i}`)))
@@ -1112,10 +1112,10 @@ describe(`hashPromptState`, () => {
   let statementBCopy
   let resultB
   const hashFlags = setSpy(`hashFlags`)
-  const hashStateCharacters = setSpy(`hashStateCharacters`)
+  const hashCharacters = setSpy(`hashCharacters`)
   afterEach(() => {
     hashFlags.calls.reset()
-    hashStateCharacters.calls.reset()
+    hashCharacters.calls.reset()
   })
   const run = (description, statementA, hashedFlagsA, hashedCharactersA, normalizedBackgroundA, statementB, hashedFlagsB, hashedCharactersB, normalizedBackgroundB, then) => describe(description, () => {
     beforeEach(() => {
@@ -1127,7 +1127,7 @@ describe(`hashPromptState`, () => {
             return hashedFlagsB
         }
       })
-      hashStateCharacters.and.callFake(characters => {
+      hashCharacters.and.callFake(characters => {
         switch (characters) {
           case `Test Characters A`:
             return hashedCharactersA
@@ -1146,9 +1146,9 @@ describe(`hashPromptState`, () => {
     it(`calls hashFlags twice`, () => expect(hashFlags).toHaveBeenCalledTimes(2))
     it(`calls hashFlags with the first state's flags`, () => expect(hashFlags).toHaveBeenCalledWith(`Test Flags A`))
     it(`calls hashFlags with the second state's flags`, () => expect(hashFlags).toHaveBeenCalledWith(`Test Flags B`))
-    it(`calls hashStateCharacters twice`, () => expect(hashStateCharacters).toHaveBeenCalledTimes(2))
-    it(`calls hashStateCharacters with the first state's flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters A`))
-    it(`calls hashStateCharacters with the second state's flags`, () => expect(hashStateCharacters).toHaveBeenCalledWith(`Test Characters B`))
+    it(`calls hashCharacters twice`, () => expect(hashCharacters).toHaveBeenCalledTimes(2))
+    it(`calls hashCharacters with the first state's flags`, () => expect(hashCharacters).toHaveBeenCalledWith(`Test Characters A`))
+    it(`calls hashCharacters with the second state's flags`, () => expect(hashCharacters).toHaveBeenCalledWith(`Test Characters B`))
     then()
   })
   const runMatching = (description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB) => run(description, statementA, hashedStateFlagsA, hashedStateCharactersA, normalizedStateBackgroundA, statementB, hashedStateFlagsB, hashedStateCharactersB, normalizedStateBackgroundB, () => {
