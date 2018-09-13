@@ -217,7 +217,7 @@ describe(`setObjectKeyValue`, () => {
       })
       it(`sets the specified property`, () => expect(array[14]).toEqual(`Test New Value`))
       it(`adds no further properties`, () => {
-        const range = (from, to) => {for (let i = from; i <= to; i++) expect(array[i]).toBeUndefined()}
+        const range = (from, to) => { for (let i = from; i <= to; i++) expect(array[i]).toBeUndefined() }
         range(-25, 4)
         range(6, 10)
         range(12, 13)
@@ -240,7 +240,7 @@ describe(`setObjectKeyValue`, () => {
       })
       it(`sets the specified property`, () => expect(array[11]).toEqual(`Test New Value`))
       it(`adds no further properties`, () => {
-        const range = (from, to) => {for (let i = from; i <= to; i++) expect(array[i]).toBeUndefined()}
+        const range = (from, to) => { for (let i = from; i <= to; i++) expect(array[i]).toBeUndefined() }
         range(-25, 4)
         range(6, 10)
         range(12, 20)
