@@ -1,6 +1,7 @@
 const objectContainsKey = (object, key) => Object.prototype.hasOwnProperty.call(object, key)
 const getObjectKeyValue = (object, key) => objectContainsKey(object, key) ? object[key] : null
 const setObjectKeyValue = (object, key, value) => object[key] = value
+const removeObjectKeyValue = (object, key) => delete object[key]
 
 const findLabelsInStatementArray = (context, onError, labels, statements) => {
   statements.forEach((statement, i) => findLabelsInStatement(context, onError, labels, statement, statements.slice(i + 1)))

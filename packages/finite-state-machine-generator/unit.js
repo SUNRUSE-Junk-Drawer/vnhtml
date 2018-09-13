@@ -250,6 +250,42 @@ describe(`setObjectKeyValue`, () => {
   })
 })
 
+describe(`removeObjectKeyValue`, () => {
+  describe(`where the property does not exist`, () => {
+    let object
+    beforeEach(() => {
+      object = {
+        "Test Existing Key A": 3243,
+        "Test Existing Key B": 298,
+        "Test Existing Key C": 482
+      }
+      get(`removeObjectKeyValue`)(object, `Test Existing Key D`)
+    })
+    it(`does not modify other properties`, () => {
+      expect(object[`Test Existing Key A`]).toEqual(3243)
+      expect(object[`Test Existing Key B`]).toEqual(298)
+      expect(object[`Test Existing Key C`]).toEqual(482)
+    })
+    it(`includes no further properties`, () => expect(Object.keys(object).length).toEqual(3))
+  })
+  describe(`where the property exists`, () => {
+    let object
+    beforeEach(() => {
+      object = {
+        "Test Existing Key A": 3243,
+        "Test Existing Key B": 298,
+        "Test Existing Key C": 482
+      }
+      get(`removeObjectKeyValue`)(object, `Test Existing Key B`)
+    })
+    it(`does not modify other properties`, () => {
+      expect(object[`Test Existing Key A`]).toEqual(3243)
+      expect(object[`Test Existing Key C`]).toEqual(482)
+    })
+    it(`includes no further properties`, () => expect(Object.keys(object).length).toEqual(2))
+  })
+})
+
 describe(`findLabelsInStatementArray`, () => {
   const findLabelsInStatement = setSpy(`findLabelsInStatement`)
   afterEach(() => findLabelsInStatement.calls.reset())
