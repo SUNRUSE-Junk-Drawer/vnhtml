@@ -30,8 +30,8 @@ const createState = () => ({
   background: null
 })
 
-const hashStateFlag = (normalizedFlag, flag) => `${normalizedFlag}  ${flag.normalizedValue}`
-const hashStateFlags = flags => Object.keys(flags).map(normalizedFlag => hashStateFlag(normalizedFlag, flags[normalizedFlag])).sort().join(`  `)
+const hashFlag = (normalizedFlag, flag) => `${normalizedFlag}  ${flag.normalizedValue}`
+const hashStateFlags = flags => Object.keys(flags).map(normalizedFlag => hashFlag(normalizedFlag, flags[normalizedFlag])).sort().join(`  `)
 const hashStateCharacter = (normalizedName, character) => `${normalizedName}  ${character.normalizedEmote}`
 const hashStateCharacters = characters => Object.keys(characters).map(normalizedName => hashStateCharacter(normalizedName, characters[normalizedName])).sort().join(`  `)
 const hashPromptState = (statement, flags, characters, background) => `${JSON.stringify(statement.origin.file)}@${statement.origin.line}.${statement.origin.subStatement} ${hashStateFlags(flags)}   ${hashStateCharacters(characters)}   ${background}`
