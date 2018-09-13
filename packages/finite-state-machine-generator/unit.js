@@ -954,48 +954,48 @@ describe(`hashFlags`, () => {
   runNotMatching(`separates flag hashes well with spaces (reverse)`, [`Test Hashed Flag A`, `Test Hashed Flag B`], [`est Hashed Flag A`, `Test Hashed Flag B T`])
 })
 
-describe(`hashStateCharacter`, () => {
-  it(`hashes the same when the normalized values are same`, () => expect(get(`hashStateCharacter`)(`Test Normalized Name`, {
+describe(`hashCharacter`, () => {
+  it(`hashes the same when the normalized values are same`, () => expect(get(`hashCharacter`)(`Test Normalized Name`, {
     name: `Test Name A`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote`
-  })).toEqual(get(`hashStateCharacter`)(`Test Normalized Name`, {
+  })).toEqual(get(`hashCharacter`)(`Test Normalized Name`, {
     name: `Test Name B`,
     emote: `Test Emote B`,
     normalizedEmote: `Test Normalized Emote`
   })))
-  it(`hashes differently should the normalized name change`, () => expect(get(`hashStateCharacter`)(`Test Normalized Name A`, {
+  it(`hashes differently should the normalized name change`, () => expect(get(`hashCharacter`)(`Test Normalized Name A`, {
     name: `Test Name A`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote`
-  })).not.toEqual(get(`hashStateCharacter`)(`Test Normalized Name B`, {
+  })).not.toEqual(get(`hashCharacter`)(`Test Normalized Name B`, {
     name: `Test Name B`,
     emote: `Test Emote B`,
     normalizedEmote: `Test Normalized Emote`
   })))
-  it(`hashes differently should the normalized emote change`, () => expect(get(`hashStateCharacter`)(`Test Normalized Name`, {
+  it(`hashes differently should the normalized emote change`, () => expect(get(`hashCharacter`)(`Test Normalized Name`, {
     name: `Test Name A`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote A`
-  })).not.toEqual(get(`hashStateCharacter`)(`Test Normalized Name`, {
+  })).not.toEqual(get(`hashCharacter`)(`Test Normalized Name`, {
     name: `Test Name B`,
     emote: `Test Emote B`,
     normalizedEmote: `Test Normalized Emote B`
   })))
-  it(`separates the name and emote`, () => expect(get(`hashStateCharacter`)(`Test Normalized Name A`, {
+  it(`separates the name and emote`, () => expect(get(`hashCharacter`)(`Test Normalized Name A`, {
     name: `Test Name A`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote`
-  })).not.toEqual(get(`hashStateCharacter`)(`Test Normalized Name`, {
+  })).not.toEqual(get(`hashCharacter`)(`Test Normalized Name`, {
     name: `Test Name B`,
     emote: `Test Emote B`,
     normalizedEmote: `A Test Normalized Emote`
   })))
-  it(`separates the emote and name`, () => expect(get(`hashStateCharacter`)(`A Test Normalized Name`, {
+  it(`separates the emote and name`, () => expect(get(`hashCharacter`)(`A Test Normalized Name`, {
     name: `Test Name A`,
     emote: `Test Emote A`,
     normalizedEmote: `Test Normalized Emote`
-  })).not.toEqual(get(`hashStateCharacter`)(`Test Normalized Name A`, {
+  })).not.toEqual(get(`hashCharacter`)(`Test Normalized Name A`, {
     name: `Test Name B`,
     emote: `Test Emote B`,
     normalizedEmote: `Test Normalized Emote`
@@ -1029,7 +1029,7 @@ describe(`hashStateCharacter`, () => {
         emote: `Test Emote`,
         normalizedEmote: `Test Normalized Emote A`
       }
-    }].map(character => get(`hashStateCharacter`)(character.normalizedName, character))
+    }].map(character => get(`hashCharacter`)(character.normalizedName, character))
     const sortedHashes = hashes.slice().sort()
     const sortedIndices = sortedHashes.map(hash => hashes.indexOf(hash))
     expect(sortedIndices).toEqual([1, 3, 0, 2])
@@ -1043,8 +1043,8 @@ describe(`hashStateCharacters`, () => {
   let unhashedBCopy
   let resultA
   let resultB
-  const hashStateCharacter = setSpy(`hashStateCharacter`)
-  afterEach(() => hashStateCharacter.calls.reset())
+  const hashCharacter = setSpy(`hashCharacter`)
+  afterEach(() => hashCharacter.calls.reset())
   const run = (description, hashedA, hashedB, then) => describe(description, () => {
     beforeEach(() => {
       unhashedA = {}
@@ -1053,7 +1053,7 @@ describe(`hashStateCharacters`, () => {
       unhashedB = {}
       hashedB.forEach((hashed, i) => unhashedB[`Test Unhashed Key B ${i}`] = `Test Unhashed Value B ${i}`)
       unhashedBCopy = JSON.parse(JSON.stringify(unhashedB))
-      hashStateCharacter.and.callFake(character => {
+      hashCharacter.and.callFake(character => {
         const match = /^Test Unhashed Key ([A-Z]) (\d+)$/.exec(character)
         switch (match[1]) {
           case `A`:
@@ -1065,9 +1065,9 @@ describe(`hashStateCharacters`, () => {
       resultA = get(`hashStateCharacters`)(unhashedA)
       resultB = get(`hashStateCharacters`)(unhashedB)
     })
-    it(`calls hashStateCharacter once per character`, () => expect(hashStateCharacter).toHaveBeenCalledTimes(hashedA.length + hashedB.length))
-    it(`calls hashStateCharacter for every character from the first set`, () => hashedA.forEach((hashed, i) => expect(hashStateCharacter).toHaveBeenCalledWith(`Test Unhashed Key A ${i}`, `Test Unhashed Value A ${i}`)))
-    it(`calls hashStateCharacter for every character from the second set`, () => hashedB.forEach((hashed, i) => expect(hashStateCharacter).toHaveBeenCalledWith(`Test Unhashed Key B ${i}`, `Test Unhashed Value B ${i}`)))
+    it(`calls hashCharacter once per character`, () => expect(hashCharacter).toHaveBeenCalledTimes(hashedA.length + hashedB.length))
+    it(`calls hashCharacter for every character from the first set`, () => hashedA.forEach((hashed, i) => expect(hashCharacter).toHaveBeenCalledWith(`Test Unhashed Key A ${i}`, `Test Unhashed Value A ${i}`)))
+    it(`calls hashCharacter for every character from the second set`, () => hashedB.forEach((hashed, i) => expect(hashCharacter).toHaveBeenCalledWith(`Test Unhashed Key B ${i}`, `Test Unhashed Value B ${i}`)))
     it(`does not modify the first set of characters`, () => expect(unhashedA).toEqual(unhashedACopy))
     it(`does not modify the second set of characters`, () => expect(unhashedB).toEqual(unhashedBCopy))
     then()
