@@ -36,17 +36,11 @@ const hashCharacter = (normalizedName, character) => `${normalizedName}  ${chara
 const hashCharacters = characters => Object.keys(characters).map(normalizedName => hashCharacter(normalizedName, characters[normalizedName])).sort().join(`  `)
 const hash = (statement, flags, characters, background) => `${JSON.stringify(statement.origin.file)}@${statement.origin.line}.${statement.origin.subStatement} ${hashFlags(flags)}   ${hashCharacters(characters)}   ${background}`
 
-const conditionMet = (condition, state) => {
+const conditionMet = (condition, flags) => {
   if (!condition) {
     return true
   } else {
-    if (!state.flags.length) {
-      return false
-    }
-    const match = state.flags.find(flag => flag.normalizedFlag == condition.flag.normalizedFlag)
-    if (!match) {
-      return false
-    }
-    return condition.flag.normalizedValue == match.normalizedValue
+    const flag = getObjectKeyValue(flags, condition.flag.normalizedFlag)
+    return !!flag && flag.normalizedValue == condition.flag.normalizedValue
   }
 }

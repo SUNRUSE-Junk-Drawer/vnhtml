@@ -1168,26 +1168,30 @@ describe(`hash`, () => {
 })
 
 describe(`conditionMet`, () => {
+  const getObjectKeyValue = setSpy(`getObjectKeyValue`)
+  afterEach(() => getObjectKeyValue.calls.reset())
   let conditionCopy
-  let stateCopy
   let result
-  const run = (description, condition, state, then) => describe(description, () => {
+  const run = (description, condition, setup, then) => describe(description, () => {
     beforeEach(() => {
       conditionCopy = JSON.parse(JSON.stringify(condition))
-      stateCopy = JSON.parse(JSON.stringify(state))
-      result = get(`conditionMet`)(conditionCopy, stateCopy)
+      setup()
+      result = get(`conditionMet`)(conditionCopy, `Test Flags`)
     })
     it(`does not modify the condition`, () => expect(conditionCopy).toEqual(condition))
-    it(`does not modify the state`, () => expect(stateCopy).toEqual(state))
     then()
   })
-  const runMatching = (description, condition, state) => run(description, condition, state, () => {
+  const runMatching = (description, condition, setup, then) => run(description, condition, setup, () => {
     it(`returns true`, () => expect(result).toBe(true))
+    then()
   })
-  const runNotMatching = (description, condition, state) => run(description, condition, state, () => {
+  const runNotMatching = (description, condition, setup, then) => run(description, condition, setup, () => {
     it(`returns false`, () => expect(result).toBe(false))
+    then()
   })
-  runMatching(`null`, null, `Test State`, () => { })
+  runMatching(`null`, null, () => { }, () => {
+    it(`does not get key/values from objects`, () => expect(getObjectKeyValue).not.toHaveBeenCalled())
+  })
   describe(`flag`, () => {
     const flagCondition = {
       flag: {
@@ -1197,135 +1201,45 @@ describe(`conditionMet`, () => {
         normalizedValue: `Test Normalized Condition Value`
       }
     }
-    runMatching(`when the flag and value match`, flagCondition, {
-      flags: [{
-        flag: `Test Flag A`,
-        normalizedFlag: `Test Normalized Flag A`,
-        value: `Test Value A`,
-        normalizedValue: `Test Normalized Value A`
-      }, {
-        flag: `Test Flag B`,
-        normalizedFlag: `Test Normalized Flag B`,
-        value: `Test Value B`,
-        normalizedValue: `Test Normalized Value B`
-      }, {
-        flag: `Test Flag C`,
-        normalizedFlag: `Test Normalized Condition Flag`,
-        value: `Test Value C`,
-        normalizedValue: `Test Normalized Condition Value`
-      }, {
-        flag: `Test Flag D`,
-        normalizedFlag: `Test Normalized Flag D`,
-        value: `Test Value D`,
-        normalizedValue: `Test Normalized Value D`
-      }],
-      characters: `Test Characters`,
-      background: `Test Background`
+    runNotMatching(`when the flag is not set`, flagCondition, () => getObjectKeyValue.and.returnValue(null), () => {
+      it(`gets one key/value from an object`, () => expect(getObjectKeyValue).toHaveBeenCalledTimes(1))
+      it(`gets one key/value from the given flags`, () => expect(getObjectKeyValue).toHaveBeenCalledWith(`Test Flags`, jasmine.anything()))
+      it(`gets the flag from the given flags`, () => expect(getObjectKeyValue).toHaveBeenCalledWith(jasmine.anything(), `Test Normalized Condition Flag`))
     })
-    runNotMatching(`when the flag does not match`, flagCondition, {
-      flags: [{
-        flag: `Test Flag A`,
-        normalizedFlag: `Test Normalized Flag A`,
-        value: `Test Value A`,
-        normalizedValue: `Test Normalized Value A`
-      }, {
-        flag: `Test Flag B`,
-        normalizedFlag: `Test Normalized Flag B`,
-        value: `Test Value B`,
-        normalizedValue: `Test Normalized Value B`
-      }, {
-        flag: `Test Flag C`,
-        normalizedFlag: `Test Other Normalized Condition Flag`,
-        value: `Test Value C`,
-        normalizedValue: `Test Normalized Condition Value`
-      }, {
-        flag: `Test Flag D`,
-        normalizedFlag: `Test Normalized Flag D`,
-        value: `Test Value D`,
-        normalizedValue: `Test Normalized Value D`
-      }],
-      characters: `Test Characters`,
-      background: `Test Background`
+    let extractedFlag
+    runNotMatching(`when the flag is set with a different value`, flagCondition, () => {
+      extractedFlag = {
+        flag: `Test Flag`,
+        value: `Test Flag Value`,
+        normalizedValue: `Test Normalized Flag Value`
+      }
+      getObjectKeyValue.and.returnValue(extractedFlag)
+    }, () => {
+      it(`does not modify the extracted flag`, () => expect(extractedFlag).toEqual({
+        flag: `Test Flag`,
+        value: `Test Flag Value`,
+        normalizedValue: `Test Normalized Flag Value`
+      }))
+      it(`gets one key/value from an object`, () => expect(getObjectKeyValue).toHaveBeenCalledTimes(1))
+      it(`gets one key/value from the given flags`, () => expect(getObjectKeyValue).toHaveBeenCalledWith(`Test Flags`, jasmine.anything()))
+      it(`gets the flag from the given flags`, () => expect(getObjectKeyValue).toHaveBeenCalledWith(jasmine.anything(), `Test Normalized Condition Flag`))
     })
-    runNotMatching(`when the value does not match`, flagCondition, {
-      flags: [{
-        flag: `Test Flag A`,
-        normalizedFlag: `Test Normalized Flag A`,
-        value: `Test Value A`,
-        normalizedValue: `Test Normalized Value A`
-      }, {
-        flag: `Test Flag B`,
-        normalizedFlag: `Test Normalized Flag B`,
-        value: `Test Value B`,
-        normalizedValue: `Test Normalized Value B`
-      }, {
-        flag: `Test Flag C`,
-        normalizedFlag: `Test Normalized Condition Flag`,
-        value: `Test Value C`,
-        normalizedValue: `Test Other Normalized Condition Value`
-      }, {
-        flag: `Test Flag D`,
-        normalizedFlag: `Test Normalized Flag D`,
-        value: `Test Value D`,
-        normalizedValue: `Test Normalized Value D`
-      }],
-      characters: `Test Characters`,
-      background: `Test Background`
-    })
-    runNotMatching(`when neither the flag nor value match`, flagCondition, {
-      flags: [{
-        flag: `Test Flag A`,
-        normalizedFlag: `Test Normalized Flag A`,
-        value: `Test Value A`,
-        normalizedValue: `Test Normalized Value A`
-      }, {
-        flag: `Test Flag B`,
-        normalizedFlag: `Test Normalized Flag B`,
-        value: `Test Value B`,
-        normalizedValue: `Test Normalized Value B`
-      }, {
-        flag: `Test Flag C`,
-        normalizedFlag: `Test Other Normalized Condition Flag`,
-        value: `Test Value C`,
-        normalizedValue: `Test Other Normalized Condition Value`
-      }, {
-        flag: `Test Flag D`,
-        normalizedFlag: `Test Normalized Flag D`,
-        value: `Test Value D`,
-        normalizedValue: `Test Normalized Value D`
-      }],
-      characters: `Test Characters`,
-      background: `Test Background`
-    })
-    runNotMatching(`when there are no flags`, flagCondition, {
-      flags: [],
-      characters: `Test Characters`,
-      background: `Test Background`
-    })
-    runMatching(`when multiple flags have the same value, but only one has the correct flag`, flagCondition, {
-      flags: [{
-        flag: `Test Flag A`,
-        normalizedFlag: `Test Normalized Flag A`,
-        value: `Test Value A`,
-        normalizedValue: `Test Normalized Value A`
-      }, {
-        flag: `Test Flag B`,
-        normalizedFlag: `Test Normalized Flag B`,
-        value: `Test Value B`,
+    runMatching(`when the flag is set with a different value`, flagCondition, () => {
+      extractedFlag = {
+        flag: `Test Flag`,
+        value: `Test Flag Value`,
         normalizedValue: `Test Normalized Condition Value`
-      }, {
-        flag: `Test Flag C`,
-        normalizedFlag: `Test Normalized Condition Flag`,
-        value: `Test Value C`,
+      }
+      getObjectKeyValue.and.returnValue(extractedFlag)
+    }, () => {
+      it(`does not modify the extracted flag`, () => expect(extractedFlag).toEqual({
+        flag: `Test Flag`,
+        value: `Test Flag Value`,
         normalizedValue: `Test Normalized Condition Value`
-      }, {
-        flag: `Test Flag D`,
-        normalizedFlag: `Test Normalized Flag D`,
-        value: `Test Value D`,
-        normalizedValue: `Test Normalized Condition Value`
-      }],
-      characters: `Test Characters`,
-      background: `Test Background`
+      }))
+      it(`gets one key/value from an object`, () => expect(getObjectKeyValue).toHaveBeenCalledTimes(1))
+      it(`gets one key/value from the given flags`, () => expect(getObjectKeyValue).toHaveBeenCalledWith(`Test Flags`, jasmine.anything()))
+      it(`gets the flag from the given flags`, () => expect(getObjectKeyValue).toHaveBeenCalledWith(jasmine.anything(), `Test Normalized Condition Flag`))
     })
   })
 })
