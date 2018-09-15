@@ -286,6 +286,52 @@ describe(`removeObjectKeyValue`, () => {
   })
 })
 
+describe(`createCloneTemplate/createCloneInstance`, () => {
+  let original
+  let originalCopy
+  let template
+  beforeEach(() => {
+    original = {
+      a: `Test A`,
+      b: [`Test B`, {
+        a: `Test C`,
+        b: [`Test D`, {
+          a: `Test E`,
+          b: [`Test F`, `Test G`, `Test H`],
+          c: `Test I`
+        }, `Test J`],
+        c: `Test K`
+      }, `Test L`],
+      c: `Test M`
+    }
+    originalCopy = JSON.parse(JSON.stringify(original))
+    template = get(`createCloneTemplate`)(originalCopy)
+  })
+  describe(`no clones`, () => {
+    it(`does not modify the given object`, () => expect(originalCopy).toEqual(original))
+  })
+  describe(`one clone`, () => {
+    let clone
+    beforeEach(() => clone = get(`createCloneInstance`)(template))
+    it(`does not modify the given object`, () => expect(originalCopy).toEqual(original))
+    it(`clones to the same value`, () => expect(clone).toEqual(original))
+    it(`clones to distinct objects and arrays`, () => expect(clone.b[1].b[1].b).not.toBe(original.b[1].b[1].b))
+  })
+  describe(`two clones`, () => {
+    let cloneA
+    let cloneB
+    beforeEach(() => {
+      cloneA = get(`createCloneInstance`)(template)
+      cloneB = get(`createCloneInstance`)(template)
+    })
+    it(`does not modify the given object`, () => expect(originalCopy).toEqual(original))
+    it(`clones to the same value the first time`, () => expect(cloneA).toEqual(original))
+    it(`clones to distinct objects and arrays the first time`, () => expect(cloneA.b[1].b[1].b).not.toBe(original.b[1].b[1].b))
+    it(`clones to the same value the second time`, () => expect(cloneB).toEqual(original))
+    it(`clones to distinct objects and arrays the second time`, () => expect(cloneB.b[1].b[1].b).not.toBe(original.b[1].b[1].b))
+  })
+})
+
 describe(`findLabelsInStatementArray`, () => {
   const findLabelsInStatement = setSpy(`findLabelsInStatement`)
   afterEach(() => findLabelsInStatement.calls.reset())

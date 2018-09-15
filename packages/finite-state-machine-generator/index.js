@@ -3,6 +3,9 @@ const getObjectKeyValue = (object, key) => objectContainsKey(object, key) ? obje
 const setObjectKeyValue = (object, key, value) => object[key] = value
 const removeObjectKeyValue = (object, key) => delete object[key]
 
+const createCloneTemplate = object => JSON.stringify(object)
+const createCloneInstance = template => JSON.parse(template)
+
 const findLabelsInStatementArray = (context, onError, labels, statements) => {
   statements.forEach((statement, i) => findLabelsInStatement(context, onError, labels, statement, statements.slice(i + 1)))
 }
