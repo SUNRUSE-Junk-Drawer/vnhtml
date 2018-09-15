@@ -148,66 +148,6 @@ const indenterMatch = text => {
       }
 
     default:
-      const lineWithEmote = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
-      if (lineWithEmote) {
-        return {
-          lineWithEmote: {
-            characters: [{
-              name: lineWithEmote[1],
-              normalizedName: indenterNormalizeName(lineWithEmote[1])
-            }],
-            emote: lineWithEmote[2],
-            normalizedEmote: indenterNormalizeName(lineWithEmote[2])
-          }
-        }
-      }
-
-      const lineWithEmoteAndMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:$/i.exec(text)
-      if (lineWithEmoteAndMultipleCharacters) {
-        return {
-          lineWithEmote: {
-            characters: lineWithEmoteAndMultipleCharacters[1]
-              .trim()
-              .split(/\s+/)
-              .concat([lineWithEmoteAndMultipleCharacters[2]])
-              .map(name => ({
-                name,
-                normalizedName: indenterNormalizeName(name)
-              })),
-            emote: lineWithEmoteAndMultipleCharacters[3],
-            normalizedEmote: indenterNormalizeName(lineWithEmoteAndMultipleCharacters[3])
-          }
-        }
-      }
-
-      const line = /^(\S+)\s*:$/i.exec(text)
-      if (line) {
-        return {
-          line: {
-            characters: [{
-              name: line[1],
-              normalizedName: indenterNormalizeName(line[1])
-            }],
-          }
-        }
-      }
-
-      const lineWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:$/i.exec(text)
-      if (lineWithMultipleCharacters) {
-        return {
-          line: {
-            characters: lineWithMultipleCharacters[1]
-              .trim()
-              .split(/\s+/)
-              .concat([lineWithMultipleCharacters[2]])
-              .map(name => ({
-                name,
-                normalizedName: indenterNormalizeName(name)
-              })),
-          }
-        }
-      }
-
       const lineWithEmoteAndText = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
       if (lineWithEmoteAndText) {
         return {
