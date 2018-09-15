@@ -47,10 +47,6 @@ Jeff leaves
 Greeta and Fred leave
 
 James Jess and Bart leave
-
-Greg:
-  Dialog can additionally be placed on a following line, like this.
-  It's useful when there is a lot, or a line break is desired in a specific place.
 ```
 
 ### Backgrounds

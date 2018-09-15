@@ -46,120 +46,12 @@ Should any callback throw an exception, further calls to `line`, `indent`,
 
 ## Examples of `statements`
 
-### Line
-
-#### vnhtml
-
-```vnhtml
-Jeff Jake and Phil:
-  We're speaking in unison to bring you the good news!
-  You can include any number of lines of dialog like this,
-  and they'll be put together into a single statement.
-```
-
-#### Statements
-
-```json
-[{
-  "origin": {
-    "file": "The name of the file being parsed",
-    "line": 473,
-    "subStatement": 0
-  },
-  "line": {
-    "characters": [{
-      name: "Jeff",
-      normalizedName: "jeff"
-    }, {
-      name: "Jake",
-      normalizedName: "jake"
-    }, {
-      name: "Phil",
-      normalizedName: "phil"
-    }],
-    "text": "We're speaking in unison to bring you the good news!\nYou can include any number of lines of dialog like this,\nand they'll be put together into a single statement."
-  }
-}]
-```
-
-### Line with emote
-
-#### vnhtml
-
-```vnhtml
-Jeff Jake and Phil (otherworldly):
-  We're speaking in unison to bring you the good news!
-  You can include any number of lines of dialog like this,
-  and they'll be put together into a single statement.
-```
-
-#### Statements
-
-```json
-[{
-  "origin": {
-    "file": "The name of the file being parsed",
-    "line": 473,
-    "subStatement": 0
-  },
-  "emote": {
-    "characterName": "Jeff",
-    "characterNameNormalized": "jeff",
-    "emote": "otherworldly",
-    "normalizedEmote": "otherworldly"
-  }
-}, {
-  "origin": {
-    "file": "The name of the file being parsed",
-    "line": 473,
-    "subStatement": 1
-  },
-  "emote": {
-    "characterName": "Jake",
-    "characterNameNormalized": "jake",
-    "emote": "otherworldly",
-    "normalizedEmote": "otherworldly"
-  }
-}, {
-  "origin": {
-    "file": "The name of the file being parsed",
-    "line": 473,
-    "subStatement": 2
-  },
-  "emote": {
-    "characterName": "Phil",
-    "characterNameNormalized": "phil",
-    "emote": "otherworldly",
-    "normalizedEmote": "otherworldly"
-  }
-}, {
-  "origin": {
-    "file": "The name of the file being parsed",
-    "line": 473,
-    "subStatement": 3
-  },
-  "line": {
-    "characters": [{
-      name: "Jeff",
-      normalizedName: "jeff"
-    }, {
-      name: "Jake",
-      normalizedName: "jake"
-    }, {
-      name: "Phil",
-      normalizedName: "phil"
-    }],
-    "text": "We're speaking in unison to bring you the good news!\nYou can include any number of lines of dialog like this,\nand they'll be put together into a single statement."
-  }
-}]
-```
-
 ### Line with text
 
 #### vnhtml
 
 ```vnhtml
-Jeff Jake and Phil: This takes less vertical space, however.
+Jeff Jake and Phil: This is the line of dialog spoken in unison.
 ```
 
 #### Statements
@@ -182,7 +74,7 @@ Jeff Jake and Phil: This takes less vertical space, however.
       name: "Phil",
       normalizedName: "phil"
     }],
-    "text": "This takes less vertical space, however."
+    "text": "This is the line of dialog spoken in unison."
   }
 }]
 ```
@@ -192,7 +84,7 @@ Jeff Jake and Phil: This takes less vertical space, however.
 #### vnhtml
 
 ```vnhtml
-Jeff Jake and Phil (otherworldly): This takes less vertical space, however.
+Jeff Jake and Phil (otherworldly): This is the line of dialog spoken in unison.
 ```
 
 #### Statements
@@ -251,7 +143,7 @@ Jeff Jake and Phil (otherworldly): This takes less vertical space, however.
       name: "Phil",
       normalizedName: "phil"
     }],
-    "text": "This takes less vertical space, however."
+    "text": "This is the line of dialog spoken in unison."
   }
 }]
 ```

@@ -2,20 +2,16 @@ if Lights Off
   set Lights On
   LitOffice in background
 
-  Jeff (relieved):
-    Phew!
+  Jeff (relieved): Phew!
 
-  Evelyn (smirking):
-    You always were afraid of the dark.
+  Evelyn (smirking): You always were afraid of the dark.
 
-  Jeff (annoyed):
-    That's not true!  It's an acquired phobia!
+  Jeff (annoyed): That's not true!  It's an acquired phobia!
 else
   set Lights Off
   UnlitOffice in background
   Evelyn is smirking
 
-  Jeff (annoyed):
-    Hey!  What'd you do that for!
+  Jeff (annoyed): Hey!  What'd you do that for!
 
 go to MainMenu
