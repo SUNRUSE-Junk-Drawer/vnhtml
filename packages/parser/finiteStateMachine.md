@@ -13,8 +13,8 @@ it, but if no exception is made, these statements are handled as followed.
 The following statements do not have any "special" functionality regarding state
 changes; they are just part of whatever block is being parsed.
 
-- lineWithText
-- lineWithEmoteAndText
+- line
+- lineWithEmote
 - emote
 - leave
 - set

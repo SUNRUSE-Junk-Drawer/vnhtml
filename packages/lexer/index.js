@@ -148,66 +148,66 @@ const indenterMatch = text => {
       }
 
     default:
-      const lineWithEmoteAndText = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
-      if (lineWithEmoteAndText) {
+      const lineWithEmote = /^(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
+      if (lineWithEmote) {
         return {
-          lineWithEmoteAndText: {
+          lineWithEmote: {
             characters: [{
-              name: lineWithEmoteAndText[1],
-              normalizedName: indenterNormalizeName(lineWithEmoteAndText[1])
+              name: lineWithEmote[1],
+              normalizedName: indenterNormalizeName(lineWithEmote[1])
             }],
-            emote: lineWithEmoteAndText[2],
-            normalizedEmote: indenterNormalizeName(lineWithEmoteAndText[2]),
-            text: lineWithEmoteAndText[3]
+            emote: lineWithEmote[2],
+            normalizedEmote: indenterNormalizeName(lineWithEmote[2]),
+            text: lineWithEmote[3]
           }
         }
       }
 
-      const lineWithEmoteAndMultipleCharactersAndText = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
-      if (lineWithEmoteAndMultipleCharactersAndText) {
+      const lineWithEmoteAndMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*\(\s*(\S+)\s*\)\s*:\s*(\S.*)$/i.exec(text)
+      if (lineWithEmoteAndMultipleCharacters) {
         return {
-          lineWithEmoteAndText: {
-            characters: lineWithEmoteAndMultipleCharactersAndText[1]
+          lineWithEmote: {
+            characters: lineWithEmoteAndMultipleCharacters[1]
               .trim()
               .split(/\s+/)
-              .concat([lineWithEmoteAndMultipleCharactersAndText[2]])
+              .concat([lineWithEmoteAndMultipleCharacters[2]])
               .map(name => ({
                 name,
                 normalizedName: indenterNormalizeName(name)
               })),
-            emote: lineWithEmoteAndMultipleCharactersAndText[3],
-            normalizedEmote: indenterNormalizeName(lineWithEmoteAndMultipleCharactersAndText[3]),
-            text: lineWithEmoteAndMultipleCharactersAndText[4]
+            emote: lineWithEmoteAndMultipleCharacters[3],
+            normalizedEmote: indenterNormalizeName(lineWithEmoteAndMultipleCharacters[3]),
+            text: lineWithEmoteAndMultipleCharacters[4]
           }
         }
       }
 
-      const lineWithText = /^(\S+)\s*:\s*(\S.*)$/i.exec(text)
-      if (lineWithText) {
+      const line = /^(\S+)\s*:\s*(\S.*)$/i.exec(text)
+      if (line) {
         return {
-          lineWithText: {
+          line: {
             characters: [{
-              name: lineWithText[1],
-              normalizedName: indenterNormalizeName(lineWithText[1])
+              name: line[1],
+              normalizedName: indenterNormalizeName(line[1])
             }],
-            text: lineWithText[2]
+            text: line[2]
           }
         }
       }
 
-      const lineWithTextWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:\s*(\S.*)$/i.exec(text)
-      if (lineWithTextWithMultipleCharacters) {
+      const lineWithMultipleCharacters = /^(\S.*)\s+and\s+(\S+)\s*:\s*(\S.*)$/i.exec(text)
+      if (lineWithMultipleCharacters) {
         return {
-          lineWithText: {
-            characters: lineWithTextWithMultipleCharacters[1]
+          line: {
+            characters: lineWithMultipleCharacters[1]
               .trim()
               .split(/\s+/)
-              .concat([lineWithTextWithMultipleCharacters[2]])
+              .concat([lineWithMultipleCharacters[2]])
               .map(name => ({
                 name,
                 normalizedName: indenterNormalizeName(name)
               })),
-            text: lineWithTextWithMultipleCharacters[3]
+            text: lineWithMultipleCharacters[3]
           }
         }
       }

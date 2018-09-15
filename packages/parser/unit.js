@@ -87,8 +87,8 @@ describe(`line`, () => {
     it(`calls onError with a message stating ${JSON.stringify(message)}`, () => expect(onError).toHaveBeenCalledWith(jasmine.anything(), jasmine.anything(), message))
   })
   runError(`unlexable`, null, `Unparseable; if this should be a statement, please check the documentation for a list of patterns which can be used; otherwise check indentation`)
-  runSuccessful(`lineWithText`, {
-    lineWithText: {
+  runSuccessful(`line`, {
+    line: {
       characters: [{
         name: `Test Character Name A`,
         normalizedName: `Test Character Normalized Name A`
@@ -121,8 +121,8 @@ describe(`line`, () => {
       text: `Test Text`
     }
   }])
-  runSuccessful(`lineWithEmoteAndText`, {
-    lineWithEmoteAndText: {
+  runSuccessful(`lineWithEmote`, {
+    lineWithEmote: {
       characters: [{
         name: `Test Character Name A`,
         normalizedName: `Test Character Normalized Name A`

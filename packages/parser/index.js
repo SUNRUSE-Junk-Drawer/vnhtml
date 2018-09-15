@@ -11,7 +11,7 @@ export const create = (file, context, onError, onEndOfFile) => {
 export const line = (state, line, text, lexed) => {
   if (!lexed) {
     state.onError(state.context, line, `Unparseable; if this should be a statement, please check the documentation for a list of patterns which can be used; otherwise check indentation`)
-  } else if (lexed.lineWithText) {
+  } else if (lexed.line) {
     state.statements.push({
       origin: {
         file: state.file,
@@ -19,12 +19,12 @@ export const line = (state, line, text, lexed) => {
         subStatement: 0
       },
       line: {
-        characters: lexed.lineWithText.characters,
-        text: lexed.lineWithText.text
+        characters: lexed.line.characters,
+        text: lexed.line.text
       }
     })
-  } else if (lexed.lineWithEmoteAndText) {
-    lexed.lineWithEmoteAndText.characters.forEach((character, i) => state.statements.push({
+  } else if (lexed.lineWithEmote) {
+    lexed.lineWithEmote.characters.forEach((character, i) => state.statements.push({
       origin: {
         file: state.file,
         line,
@@ -33,19 +33,19 @@ export const line = (state, line, text, lexed) => {
       emote: {
         characterName: character.name,
         characterNormalizedName: character.normalizedName,
-        emote: lexed.lineWithEmoteAndText.emote,
-        normalizedEmote: lexed.lineWithEmoteAndText.normalizedEmote
+        emote: lexed.lineWithEmote.emote,
+        normalizedEmote: lexed.lineWithEmote.normalizedEmote
       }
     }))
     state.statements.push({
       origin: {
         file: state.file,
         line,
-        subStatement: lexed.lineWithEmoteAndText.characters.length
+        subStatement: lexed.lineWithEmote.characters.length
       },
       line: {
-        characters: lexed.lineWithEmoteAndText.characters,
-        text: lexed.lineWithEmoteAndText.text
+        characters: lexed.lineWithEmote.characters,
+        text: lexed.lineWithEmote.text
       }
     })
   } else if (lexed.emote) {
